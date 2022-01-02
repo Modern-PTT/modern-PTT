@@ -1,0 +1,8 @@
+{
+  "name": "wp1101-final",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:lydia7635/modern-PTT.git",
+  "author": "lydia7635 <lydia7635@gmail.com>",
+  "license": "MIT"
+}
