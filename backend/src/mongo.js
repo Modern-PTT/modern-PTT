@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv-defaults";
+import dataInit from "./upload";
 
 async function connect() {
   dotenv.config();
@@ -20,7 +21,7 @@ async function connect() {
   const db = mongoose.connection;
   db.on("error", (err) => console.log(err));
   db.once('open', () => {
-    // dataInit();
+    dataInit();
     console.log("Open Mongo database");
   });
 }

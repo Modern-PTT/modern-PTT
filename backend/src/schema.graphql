@@ -42,7 +42,6 @@ type Article {
 type Comment {
   cid: ID!                      # (super key)
   article: Article!             # 所屬文章
-  board: Board!                 # 所屬看板
   deleted: Boolean!
   
   type: String!                 # 推、噓、箭頭

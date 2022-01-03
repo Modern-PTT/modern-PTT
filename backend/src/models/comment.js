@@ -11,10 +11,6 @@ const CommentSchema = new mongoose.Schema(
       type: mongoose.Types.ObjectId,
       ref: "Article"      
     },
-    board: {
-      type: mongoose.Types.ObjectId,
-      ref: "Board"
-    },
     deleted: Boolean,
 
     type: String,

@@ -31,7 +31,6 @@ const ArticleSchema = new mongoose.Schema(
       ref: "Comment"
     }],
     ip: String,       // not record country name
-    URL: String,
     last_modified_time: Date
   }
 );
