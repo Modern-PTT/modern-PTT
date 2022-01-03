@@ -1,32 +1,28 @@
 # Date type. See resolvers/Date.js
 scalar Time
-scalar AID                      # 文章專屬 ID
 
 type Board {
-  bid: ID!
-  
   # board summary
-  type: string!                 # "board" or "category"
-  class: string!                # 類別 (4 chars)
-  brdname: string!              # up to 12 chars (English)
-  title: string                 # 板標，可中文，可為 null
-  moderator: string!            # 板主
+  brdname: String!              # up to 12 chars (English) (super key)
+  type: String!                 # "board" or "category"
+  class: String!                # 類別 (4 chars)
+  title: String                 # 板標，可中文，可為 null
+  moderator: [User!]            # 板主
   nuser: Int!                   # 人氣
 
   # board details
   post_limit_logins: Int        # 發文的登入門檻
 
   # contents
-  Articles: [Article!]         # if type === "board"
+  articles: [Article!]          # if type === "board"
   boards: [Board!]              # if type === "category"
 }
 
 type Article {
-  aid: AID!
-  bid: ID!                      # 所屬看板 ID
+  aid: String!                  # (super key)
 
   # summary
-  brdname: String!              # 所屬看板名稱 (English)
+  board: Board!                 # 所屬看板
   title: String!
   create_time: Time!            # 發文時間
   owner: User!                  # 文章作者
@@ -44,9 +40,9 @@ type Article {
 }
 
 type Comment {
-  cid: ID!
-  aid: AID!                     # 所屬文章 ID
-  bid: ID!                      # 所屬看板 ID
+  cid: ID!                      # (super key)
+  article: Article!             # 所屬文章
+  board: Board!                 # 所屬看板
   deleted: Boolean!
   
   type: String!                 # 推、噓、箭頭
@@ -58,11 +54,9 @@ type Comment {
 }
 
 type User {
-  uid: ID!
-  
-  # summary (public)
-  username: String!
-  nickname: String!
+   # summary (public)
+  username: String!             # (super key)
+  nickname: String
   login_days: Int!
   last_login: Time!
   last_location: Location!
@@ -85,12 +79,8 @@ type Location {
   country: String!
 }
 
-type Token {
-  token: String                 # can be null if authentication failed
-}
-
 type Mail {
-  mid: ID!
+  mid: ID!                      # (super key)
 
   title: String!
   sender: MailSender!
@@ -103,17 +93,21 @@ type MailSender {
   system: String
 }
 
-# See resolvers/Query.js
-type Query {
-  hotBoards: [Board!]
-  hotArticles: [Article!]
-  category(bid: ID): [Board!]                 # can be null if in root category
-  board(bid: ID!): Board!
-  article(aid: AID!): Article
-
-  searchBoard(input: SearchBoardInput!): [Board!]
-  searchArticle(input: SearchArticleInput!): [Article!]
+type Token {
+  token: String                 # can be null if authentication failed
 }
+
+# See resolvers/Query.js
+# type Query {
+#   hotBoards: [Board!]
+#   hotArticles: [Article!]
+#   category(catname: String!): [Board!]                 # can be null if in root category
+#   board(brdname: String!): Board!
+#   article(aid: String!): Article
+
+#   searchBoard(input: SearchBoardInput!): [Board!]
+#   searchArticle(input: SearchArticleInput!): [Article!]
+# }
 
 # Input for searching boards
 input SearchBoardInput {
@@ -127,92 +121,83 @@ input SearchArticleInput {
 }
 
 # See resolvers/Mutation.js
-type Mutation {
-  signup(username: String!, password: String!): Token!
-  login(username: String!, password: String!): Token!
-  logout: User
+# type Mutation {
+#   signup(username: String!, password: String!): User
+#   login(username: String!, password: String!): Token
+#   logout(username: String!): User
 
-  # Create an article
-  createArticle(input: CreateArticleInput!): AID        # return null if failed
-  # Update an article
-  updateArticle(input: UpdateArticleInput!): AID        # return null if failed
-  # Delete an article
-  deleteArticle(input: DeleteArticleInput!): AID        # return null if failed
+#   # Create an article
+#   createArticle(input: CreateArticleInput!): String     # return null if failed
+#   # Update an article
+#   updateArticle(input: UpdateArticleInput!): String     # return null if failed
+#   # Delete an article
+#   deleteArticle(input: DeleteArticleInput!): String     # return null if failed
 
-  # create a comment
-  createComment(input: CreateCommentInput!): ID         # return cid. return null if failed
-  # modify a comment
-  modifyComment(input: ModifyCommentInput!): ID         # return cid. return null if failed. only for moderator and article owner
-  # delete a comment
-  deleteComment(input: DeleteCommentInput!): ID         # return cid. return null if failed. only for moderator and article owner
+#   # create a comment
+#   createComment(input: CreateCommentInput!): ID         # return cid. return null if failed
+#   # modify a comment
+#   modifyComment(input: ModifyCommentInput!): ID         # return cid. return null if failed. only for moderator and article owner
+#   # delete a comment
+#   deleteComment(input: DeleteCommentInput!): ID         # return cid. return null if failed. only for moderator and article owner
 
-  # add a favorite board
-  createFavBoard(input: CreateFavBoardInput!): ID       # return bid. return null if failed
-  # move a favorite board
-  moveFavBoard(input: MoveFavBoardInput!): ID           # return bid. return null if failed
-  # delete a favorite board
-  deleteFavBoard(input: DeleteFavBoardInput!): bid      # return bid. return null if failed
-}
+#   # add a favorite board
+#   createFavBoard(input: CreateFavBoardInput!): ID       # return bid. return null if failed
+#   # move a favorite board
+#   moveFavBoard(input: MoveFavBoardInput!): ID           # return bid. return null if failed
+#   # delete a favorite board
+#   deleteFavBoard(input: DeleteFavBoardInput!): bid      # return bid. return null if failed
+# }
 
 input CreateArticleInput {
-  token: String!
-  bid: ID!
+  brdname: String!
   title: String!
   content: String!
 }
 
 input UpdateArticleInput {
-  token: String!
-  aid: AID!
+  aid: String!
   title: String                   # null if not change
   content: String                 # null if not change
   comment_reply: [CommentReply!]  # null if not change
 }
 
 input CommentReply {
-  cid: Int!
+  cid: ID!
   reply: String!
 }
 
 input DeleteArticleInput {
-  token: String!
-  aid: AID!
+  aid: String!
 }
 
 input CreateCommentInput {
-  token: String!
-  aid: AID!
+  aid: String!
   comment: String!
 }
 
 input UpdateCommentInput {
-  token: String!
   cid: ID!
   comment: String!
 }
 
 input DeleteCommentInput {
-  token: String!
   cid: ID!
 }
 
 input CreateFavBoardInput {
-  token: String!
-  bid: ID!
+  brdname: String!
 }
 
 input MoveFavBoardInput {
-  token: String!
-  bid: ID!
+  brdname: String!
   order: Int!
 }
 
 input DeleteFavBoardInput {
-  token: String!
-  bid: ID!
+  brdname: String!
 }
 
 # See resolvers/Subscription.js
-type Subscription {
-  
-}
+# type Subscription {
+
+# }
