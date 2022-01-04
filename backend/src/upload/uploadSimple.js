@@ -1,8 +1,12 @@
-import { ArticleModel, BoardModel, CommentModel, UserModel } from './models';
-import { createArticle } from './utilities/articleUtil';
-import { createUser } from './utilities/userUtil';
+import { ArticleModel, BoardModel, CommentModel, UserModel } from '../models';
+import { createArticle } from '../utilities/articleUtil';
+import { createUser } from '../utilities/userUtil';
 
 const defaultUsers = [
+  {
+    username: "SYSOP",
+    password: "passSYSOP",
+  },
   {
     username: "test123",
     password: "passWrong",
@@ -22,6 +26,10 @@ const defaultBoards = [
     brdname: "Test",
     type: "board",
     class: "測試",
+    moderator: [
+      "SYSOP",
+      "test456"
+    ],
     title: "[測試] 測試板開張～",
     post_limit_logins: 0,
   },
@@ -39,15 +47,15 @@ const defaultArticles = [
     brdname: "Test",
     title: "[測試] 第一篇測試",
     content: "xxxxxtestxxxxx",
-    username: "test123",
+    owner: "test123",
     plaincomments: [
       {
-        username: "test456",
+        owner: "test456",
         type: "推",
         content: "Hello?",
       },
       {
-        username: "test789",
+        owner: "test789",
         type: "→",
         content: "Hi~~~",
       },
@@ -57,10 +65,10 @@ const defaultArticles = [
     brdname: "Gossiping",
     title: "[問卦] 今天會不會下雨？",
     content: "^^",
-    username: "test123",
+    owner: "test123",
     plaincomments: [
       {
-        username: "test789",
+        owner: "test789",
         type: "噓",
         content: "紅的喜氣",
       },
@@ -70,7 +78,7 @@ const defaultArticles = [
     brdname: "Test",
     title: "[測試] 第二篇測試",
     content: "222xxxxxtestxxxxx",
-    username: "test456",
+    owner: "test456",
   },
 ];
 

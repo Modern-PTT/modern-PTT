@@ -7,17 +7,10 @@ const CommentSchema = new mongoose.Schema(
       unique: true,
       required: true
     },
-    article: {
-      type: mongoose.Types.ObjectId,
-      ref: "Article"      
-    },
     deleted: Boolean,
 
     type: String,
-    owner: {
-      type: mongoose.Types.ObjectId,
-      ref: "User"
-    },
+    owner: String,
     content: String,
     reply: String,
     ip: String,

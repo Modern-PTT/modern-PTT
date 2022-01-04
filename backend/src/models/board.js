@@ -11,10 +11,7 @@ const BoardSchema = new mongoose.Schema(
     type: String,
     class: String,
     title: String,
-    moderator: [{
-      type: mongoose.Types.ObjectId,
-      ref: "User"
-    }],
+    moderator: [String],
     //nuser: Number,  // store in server memory
     
     // details

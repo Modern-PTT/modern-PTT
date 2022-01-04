@@ -7,7 +7,7 @@ type Board {
   type: String!                 # "board" or "category"
   class: String!                # 類別 (4 chars)
   title: String                 # 板標，可中文，可為 null
-  moderator: [User!]            # 板主
+  moderator: [String!]          # 板主 (username array)
   nuser: Int!                   # 人氣
 
   # board details
@@ -22,13 +22,14 @@ type Article {
   aid: String!                  # (super key)
 
   # summary
-  board: Board!                 # 所屬看板
+  board: String!                # 所屬看板 (brdname)
   title: String!
   create_time: Time!            # 發文時間
-  owner: User!                  # 文章作者
+  owner: String!                # 文章作者 (username)
   type: String!                 # "normal", "re", "fw"
   deleted: Boolean!
   push: Int!                    # 推文數
+  neutral: Int!                 # 箭頭數
   boo: Int!                     # 噓文數
 
   # detail
@@ -41,11 +42,10 @@ type Article {
 
 type Comment {
   cid: ID!                      # (super key)
-  article: Article!             # 所屬文章
   deleted: Boolean!
   
   type: String!                 # 推、噓、箭頭
-  owner: User!                  # 留言者
+  owner: String!                # 留言者 (username)
   content: String!              # support only plaintext (Limit: 1000 chars?)
   reply: String                 # reply from article owner
   location: Location!

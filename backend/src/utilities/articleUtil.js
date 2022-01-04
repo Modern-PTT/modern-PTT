@@ -13,6 +13,19 @@ const checkArticle = async (aid, errFunc) => {
 
 const pushNewComment = async (article, comment) => {
   article.comments = [...article.comments, comment];
+  switch(comment.type) {
+    case "推":
+      ++article.push;
+      break;
+    case "噓":
+      ++article.boo;
+      break;
+    case "→":
+      ++article.neutral;
+      break;
+    default:
+      break;
+  }
   await article.save();
 }
 
@@ -23,11 +36,11 @@ const createArticle = async (article) => {
   }
   article.board = board;  
 
-  const owner = await checkUser(article.username, "createArticle");
-  if(!owner) {
-    throw new Error(`owner named ${article.username} not found for createArticle`);
+  const user = await checkUser(article.owner, "createArticle");
+  if(user) {
+    ++user.post;  
+    await user.save();  
   }
-  article.owner = owner;
 
   if(!article.create_time) {
     article.create_time = new Date();
@@ -39,6 +52,7 @@ const createArticle = async (article) => {
   article.type = "normal";
   article.deleted = false;
   article.push = 0;
+  article.neutral = 0;
   article.boo = 0;
 
   article.ip = "8.8.8.8",
@@ -51,7 +65,6 @@ const createArticle = async (article) => {
   }
 
   delete article.brdname;
-  delete article.username;
 
   const newArticle = new ArticleModel(article);
   await newArticle.save();

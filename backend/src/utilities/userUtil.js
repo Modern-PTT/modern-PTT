@@ -1,4 +1,7 @@
 import { UserModel } from "../models";
+import bcrypt from "bcrypt";
+
+const saltRounds = 10;
 
 const checkUser = (username, errFunc) => {
   if(!username) {
@@ -8,14 +11,15 @@ const checkUser = (username, errFunc) => {
 }
 
 const createUser = async (user) => {
-  user.realname = "測試人員";
+  user.realname = "XXX";
   user.first_login = new Date();
 
   user.login_days = 1;
   user.last_login = user.first_login;
-  user.last_ip = "8.8.8.8";
+  user.last_ip = "127.0.0.1";
   user.post = 0;
   user.money = 0;
+  user.password = bcrypt.hashSync(user.password, saltRounds);
 
   const newUser = new UserModel(user);
   await newUser.save();

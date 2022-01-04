@@ -15,13 +15,11 @@ const ArticleSchema = new mongoose.Schema(
     },
     title: String,
     create_time: Date,
-    owner: {
-      type: mongoose.Types.ObjectId,
-      ref: "User"
-    },
+    owner: String,
     type: String,
     deleted: Boolean,
     push: Number,
+    neutral: Number,
     boo: Number,
 
     // detail
