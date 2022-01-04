@@ -9,10 +9,7 @@ const ArticleSchema = new mongoose.Schema(
     },
 
     // summary
-    board: {
-      type: mongoose.Types.ObjectId,
-      ref: "Board"
-    },
+    brdname: String,
     title: String,
     create_time: Date,
     owner: String,

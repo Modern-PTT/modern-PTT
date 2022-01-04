@@ -33,8 +33,7 @@ const createArticle = async (article) => {
   const board = await checkBoard(article.brdname, "createArticle");
   if(!board) {
     throw new Error(`board named ${article.brdname} not found for createArticle`);
-  }
-  article.board = board;  
+  }  
 
   const user = await checkUser(article.owner, "createArticle");
   if(user) {
@@ -63,8 +62,6 @@ const createArticle = async (article) => {
     plaincomments = JSON.parse(JSON.stringify(article.plaincomments));
     delete article.plaincomments;
   }
-
-  delete article.brdname;
 
   const newArticle = new ArticleModel(article);
   await newArticle.save();
