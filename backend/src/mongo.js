@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv-defaults";
-import dataInit from "./upload/uploadSimple";
+import dataInit from "./upload/uploadMore";
 
 async function connect() {
   dotenv.config();

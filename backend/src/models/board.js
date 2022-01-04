@@ -11,7 +11,7 @@ const BoardSchema = new mongoose.Schema(
     type: String,
     class: String,
     title: String,
-    moderator: [String],
+    moderators: [String],
     //nuser: Number,  // store in server memory
     
     // details

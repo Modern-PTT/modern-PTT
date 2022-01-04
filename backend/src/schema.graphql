@@ -7,7 +7,7 @@ type Board {
   type: String!                 # "board" or "category"
   class: String!                # 類別 (4 chars)
   title: String                 # 板標，可中文，可為 null
-  moderator: [String!]          # 板主 (username array)
+  moderators: [String!]          # 板主 (username array)
   nuser: Int!                   # 人氣
 
   # board details

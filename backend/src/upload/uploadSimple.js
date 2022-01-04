@@ -26,7 +26,7 @@ const defaultBoards = [
     brdname: "Test",
     type: "board",
     class: "測試",
-    moderator: [
+    moderators: [
       "SYSOP",
       "test456"
     ],
