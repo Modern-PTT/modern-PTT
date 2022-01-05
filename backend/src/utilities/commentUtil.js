@@ -1,6 +1,5 @@
 import { CommentModel } from "../models";
 import { checkArticle, pushNewComment } from "./articleUtil";
-import { checkUser } from "./userUtil";
 import { v4 as uuidv4 } from "uuid";
 
 const createComment = async(aid, comment) => {
@@ -10,14 +9,13 @@ const createComment = async(aid, comment) => {
   }
 
   comment.cid = uuidv4();
-  comment.deleted = false;
-  comment.ip = "8.8.8.8";
-  comment.create_time = new Date();
+  comment.deleted = ("deleted" in comment)? comment.deleted : false;
+  comment.ip = (comment.ip)? comment.ip : "140.112.172.11";
+  comment.create_time = (comment.create_time)? comment.create_time : new Date();
 
   const newComment = new CommentModel(comment);
   await newComment.save();
   await pushNewComment(article, newComment);
-
 }
 
 export {

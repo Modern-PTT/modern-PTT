@@ -48,7 +48,7 @@ const defaultArticles = [
     title: "[測試] 第一篇測試",
     content: "xxxxxtestxxxxx",
     owner: "test123",
-    plaincomments: [
+    plainComments: [
       {
         owner: "test456",
         type: "推",
@@ -66,7 +66,7 @@ const defaultArticles = [
     title: "[問卦] 今天會不會下雨？",
     content: "^^",
     owner: "test123",
-    plaincomments: [
+    plainComments: [
       {
         owner: "test789",
         type: "噓",

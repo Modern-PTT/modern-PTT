@@ -50,27 +50,27 @@ const createArticle = async (article) => {
   }
 
   article.type = "normal";
-  article.deleted = false;
+  article.deleted = ("deleted" in article)? article.deleted : false;
   article.push = 0;
   article.neutral = 0;
   article.boo = 0;
 
-  article.ip = "8.8.8.8",
+  article.ip = (article.ip)? article.ip : "140.112.172.11",
   article.modified_time = article.create_time;
 
-  let plaincomments = null;
-  if(article.plaincomments) {
-    plaincomments = JSON.parse(JSON.stringify(article.plaincomments));
-    delete article.plaincomments;
+  let plainComments = null;
+  if(article.plainComments && article.plainComments.length !== 0) {
+    plainComments = JSON.parse(JSON.stringify(article.plainComments));
+    delete article.plainComments;
   }
 
   const newArticle = new ArticleModel(article);
   await newArticle.save();
-  pushNewArticle(board, newArticle);
+  await pushNewArticle(board, newArticle);
 
   // create comments
-  if(plaincomments) {
-    for(let comment of plaincomments) {
+  if(plainComments) {
+    for(let comment of plainComments) {
       await createComment(article.aid, comment);
     }
   }
