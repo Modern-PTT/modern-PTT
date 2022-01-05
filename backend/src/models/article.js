@@ -26,7 +26,7 @@ const ArticleSchema = new mongoose.Schema(
       ref: "Comment"
     }],
     ip: String,       // not record country name
-    last_modified_time: Date
+    modified_time: Date
   }
 );
 

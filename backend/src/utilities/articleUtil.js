@@ -26,6 +26,7 @@ const pushNewComment = async (article, comment) => {
     default:
       break;
   }
+  article.modified_time = comment.create_time;
   await article.save();
 }
 
@@ -55,7 +56,7 @@ const createArticle = async (article) => {
   article.boo = 0;
 
   article.ip = "8.8.8.8",
-  article.last_modified_time = article.create_time;
+  article.modified_time = article.create_time;
 
   let plaincomments = null;
   if(article.plaincomments) {

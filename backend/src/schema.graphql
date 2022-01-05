@@ -37,7 +37,7 @@ type Article {
   comments: [Comment!]
   location: Location!
   URL: String
-  last_modified_time: Time     # 最後編輯時間
+  modified_time: Time     # 最後編輯時間
 }
 
 type Comment {
