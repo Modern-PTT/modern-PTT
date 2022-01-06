@@ -1,5 +1,8 @@
-import { toArticleURL, toAIDc } from "../utilities/converter";
-import geoip from "geoip-lite";
+import {
+  toArticleURL,
+  toAIDc,
+  getLocation
+} from "../utilities/converter";
 
 const Article = {
   aidc(parent, args, { db }, info) {
@@ -17,20 +20,7 @@ const Article = {
   },
   
   location(parent, args, { db }, info) {
-    const ip = parent.ip;
-    const geo = geoip.lookup(ip);
-    if(geo !== null) {
-      return {
-        ip,
-        country: `${geo.country}, ${geo.city}`,
-      }
-    }
-    else {
-      return {
-        ip,
-        country: "private",
-      }
-    }
+    return getLocation(parent.ip);
   },
 
   URL(parent, args, { db }, info) {

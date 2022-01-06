@@ -1,3 +1,5 @@
+import geoip from "geoip-lite";
+
 const hashStr = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_";
 
 const toArticleURL = (brdname, aid) => {
@@ -19,4 +21,21 @@ const toAIDc = (aidu, brdname) => {
   return `#${aidc}(${brdname})`;
 }
 
-export { toArticleURL, toAIDc };
+const getLocation = (ip) => {
+  const geo = geoip.lookup(ip);
+  if(geo !== null) {
+    return {
+      ip,
+      country: `${geo.country}, ${geo.city}`,
+    }
+  }
+  else {
+    return {
+      ip,
+      country: "private",
+    }
+  }
+
+}
+
+export { toArticleURL, toAIDc, getLocation };

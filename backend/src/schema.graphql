@@ -7,7 +7,7 @@ type Board {
   type: String!                 # "board" or "category"
   class: String!                # 類別 (4 chars)
   title: String                 # 板標，可中文，可為 null
-  moderators: [String!]          # 板主 (username array)
+  moderators: [String!]         # 板主 (username array)
   nuser: Int!                   # 人氣
 
   # board details
@@ -33,11 +33,11 @@ type Article {
   boo: Int!                     # 噓文數
 
   # detail
-  content: String              # support only plaintext
+  content: String               # support only plaintext
   comments: [Comment!]
   location: Location!
   URL: String
-  modified_time: Time     # 最後編輯時間
+  modified_time: Time           # 最後編輯時間
 }
 
 type Comment {
@@ -88,7 +88,7 @@ type Mail {
 
 type MailSender {
   type: String!                 # "user" or "system"
-  user: User
+  user: String
   system: String
 }
 
@@ -102,7 +102,9 @@ type Query {
   board(brdname: String!): Board
   article(aid: String!): Article
   allBoards: [Board!]
-#   hotBoards: [Board!]
+  hotBoards: [Board!]
+  newestArticles(limit: Int): [Article!]
+  # allArticles: [Article!]
 #   hotArticles: [Article!]
 
 #   searchBoard(input: SearchBoardInput!): [Board!]
@@ -172,6 +174,7 @@ input DeleteArticleInput {
 
 input CreateCommentInput {
   aid: String!
+  type: String!
   comment: String!
 }
 
