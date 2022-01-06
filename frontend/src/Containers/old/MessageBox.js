@@ -1,7 +1,7 @@
 // import logo from './logo.svg';
 // import './App.css';
 
-import Message from "../hooks/Message"
+import Message from "../../hooks/Message"
 import styled from 'styled-components';
 
 const WrapperRow = styled.div`

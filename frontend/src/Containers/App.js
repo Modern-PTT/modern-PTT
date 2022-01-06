@@ -1,12 +1,14 @@
 // import logo from './logo.svg';
 // import './App.css';
 import { useState } from "react";
-import ArticleBox from "./ArticleBox"
+import ArticleBox from "./MainSpace/ArticleBox"
 import Navbar from "../Components/Navbar"
-import LeftList from "../Components/LeftList"
+import LeftList from "../Components/DashBoard"
 import styled from 'styled-components';
 import BoardList from "../Components/BoardList";
-import RightBoardList from "../Components/RightBoardList"
+import RightBoardList from "../Components/BoardList"
+import AirticleList from "./MainSpace/AirticleList";
+
 
 const WrapperRow = styled.div`
   display: flex;
@@ -19,35 +21,36 @@ const WrapperRow = styled.div`
   margin: auto;
 `;
 
-const WrapperColumn = styled.div`
+const Column = styled.div`
   display: flex;
   flex-direction: column;
-  maxWidth: 90vh;
-  margin: auto;
-`;
 
+`;
+const Row = styled.div`
+  display: flex;
+  flex-direction: column;
+
+`;
 
 function App() {
   const [atHome, setAtHome] = useState(true)
 
   return (
-        <WrapperColumn>
+        <Column>
           <Navbar/>
           <WrapperRow>
-            {atHome
-            ?<>
-              <LeftList/>
-              <RightBoardList/>
-            </>
-            :
-            <>
-              <BoardList/>
-              <ArticleBox/>
-            </>
-            }
-            
+            <LeftList/>
+              {atHome
+                ? 
+                  // <RightBoardList/>
+                  <BoardList/>
+                  // <Column>
+                    /* <AirticleList/> */
+                  // </Column>
+                : <ArticleBox/>
+              } 
           </WrapperRow>
-        </WrapperColumn>
+        </Column>
 
   );
 }
