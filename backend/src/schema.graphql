@@ -20,9 +20,9 @@ type Board {
 
 type Article {
   aid: String!                  # (super key)
-
+  aidc: String                  # AIDc
   # summary
-  board: String!                # 所屬看板 (brdname)
+  brdname: String!              # 所屬看板 (brdname)
   title: String!
   create_time: Time!            # 發文時間
   owner: String!                # 文章作者 (username)
@@ -75,7 +75,7 @@ type User {
 
 type Location {
   ip: String!
-  country: String!
+  country: String
 }
 
 type Mail {
@@ -97,16 +97,17 @@ type Token {
 }
 
 # See resolvers/Query.js
-# type Query {
+type Query {
+#   category(catname: String!): [Board!]                 # can be null if in root category
+  board(brdname: String!): Board
+  article(aid: String!): Article
+  allBoards: [Board!]
 #   hotBoards: [Board!]
 #   hotArticles: [Article!]
-#   category(catname: String!): [Board!]                 # can be null if in root category
-#   board(brdname: String!): Board!
-#   article(aid: String!): Article
 
 #   searchBoard(input: SearchBoardInput!): [Board!]
 #   searchArticle(input: SearchArticleInput!): [Article!]
-# }
+}
 
 # Input for searching boards
 input SearchBoardInput {

@@ -16,5 +16,20 @@ const makeAIDu = (timestamp, random) => {
   return `M.${timestampSec}.A.${random}`;
 };
 
+let hot_brdname_list = [
+  "Gossiping",
+  "Stock",
+  "C_Chat",
+  "NBA",
+  "Baseball",
+];
 
-export { createRandom, makeAIDu };
+const getHotBrdnameList = () => {
+  return hot_brdname_list;
+}
+
+export {
+  createRandom,
+  makeAIDu,
+  getHotBrdnameList,
+};
