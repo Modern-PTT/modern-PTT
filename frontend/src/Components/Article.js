@@ -9,6 +9,7 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import { Divider } from '@material-ui/core';
+import TextField from '@material-ui/core/TextField';
 // import Message from '../hooks/Message';
 
 
@@ -30,6 +31,16 @@ const useStyles = makeStyles({
     marginBottom: 12,
   },
 });
+
+const useTextStyles = makeStyles((theme) => ({
+  root: {
+    '& > *': {
+      margin: theme.spacing(1),
+      // width: 'auto',
+    },
+  },
+}));
+
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -87,6 +98,7 @@ const data =
 
 export default function Airticle() {
   const classes = useStyles();
+  const classesText = useTextStyles();
   const bull = <span className={classes.bullet}>•</span>;
 
   return (
@@ -133,7 +145,9 @@ export default function Airticle() {
                 
                 ))}
             </CardContent>
-
+            <form className={classesText.root} noValidate autoComplete="off">
+              <TextField id="outlined-basic" label="Outlined" variant="outlined" />
+            </form>
             <CardActions>
                 <Button size="small">留言</Button>
             </CardActions>

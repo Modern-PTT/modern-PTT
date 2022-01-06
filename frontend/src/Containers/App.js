@@ -1,9 +1,12 @@
 // import logo from './logo.svg';
 // import './App.css';
+import { useState } from "react";
 import ArticleBox from "./ArticleBox"
 import Navbar from "../Components/Navbar"
 import LeftList from "../Components/LeftList"
 import styled from 'styled-components';
+import BoardList from "../Components/BoardList";
+import RightBoardList from "../Components/RightBoardList"
 
 const WrapperRow = styled.div`
   display: flex;
@@ -25,14 +28,27 @@ const WrapperColumn = styled.div`
 
 
 function App() {
+  const [atHome, setAtHome] = useState(true)
+
   return (
-    <WrapperColumn>
-      <Navbar/>
-      <WrapperRow>
-        <LeftList/>
-        <ArticleBox/>
-      </WrapperRow>
-    </WrapperColumn>
+        <WrapperColumn>
+          <Navbar/>
+          <WrapperRow>
+            {atHome
+            ?<>
+              <LeftList/>
+              <RightBoardList/>
+            </>
+            :
+            <>
+              <BoardList/>
+              <ArticleBox/>
+            </>
+            }
+            
+          </WrapperRow>
+        </WrapperColumn>
+
   );
 }
 

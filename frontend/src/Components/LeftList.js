@@ -54,9 +54,37 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const BoardListData = [
+    {
+      ename: "Ntu",
+      cname: "台灣大學",
+      board_id: 124565432,
+      board_detail: "這是台灣大學版！！"
+    },
+    {
+      ename: "Ntcu",
+      cname: "交通大學",
+      board_id: 12456543333,
+        board_detail: "這是交通大學版！！"
+    },
+    {
+      ename: "Ntust",
+      cname: "台灣科技大學",
+      board_id: 1245654213,
+      board_detail: "這是台灣科技大學版！！"
+    },
+    {
+      ename: "Ntnu",
+      cname: "台灣師範大學",
+      board_id: 1245654324,
+      board_detail: "這是NTNU版！！"
+    }
+  ]
+
 function ListItemLink(props) {
   return <ListItem button component="a" {...props} />;
 }
+
 
 export default function SimpleList() {
   const classes = useStyles();
@@ -64,27 +92,26 @@ export default function SimpleList() {
   return (
     <div className={classes.root}>
       <List component="nav" aria-label="main mailbox folders">
-        <ListItem button>
+        <ListItem button id="popular">
           <ListItemIcon>
             <InboxIcon />
           </ListItemIcon>
-          <ListItemText primary="Inbox" />
+          <ListItemText primary="熱門看板" />
         </ListItem>
-        <ListItem button>
+        <ListItem button id ="seperate" value="seperates" onClick={(e)=>console.log(e.target.value)}>
           <ListItemIcon>
             <DraftsIcon />
           </ListItemIcon>
-          <ListItemText primary="Drafts" />
+          <ListItemText primary="分類看板" />
         </ListItem>
       </List>
       <Divider />
       <List component="nav" aria-label="secondary mailbox folders">
-        <ListItem button>
-          <ListItemText primary="Trash" />
-        </ListItem>
-        <ListItemLink href="#simple-list">
-          <ListItemText primary="Spam" />
-        </ListItemLink>
+      {BoardListData.map((item)=>(
+          <ListItem button id={item.ename}>
+            <ListItemText primary={item.ename} secondary={item.board_detail}/>
+          </ListItem>
+      ))}
       </List>
     </div>
   );
