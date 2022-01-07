@@ -1,5 +1,13 @@
 import * as React from 'react';
 import  {DataGrid}  from '@material-ui/data-grid';
+import styled from 'styled-components';
+
+//set styled div
+const StyledDiv = styled.div`
+    height: 400px;
+    width: 80%;
+    max-width: 1200px;
+`
 
 const GET_ALLBOARDS_QUERY ={
   "data": {
@@ -116,29 +124,33 @@ const columns = [
   {
     field: 'brdname',
     headerName: 'BoardName',
-    width: 200,
+    flex: 1
+    // width: 200,
     // editable: true,
   },
   {
     field: 'class',
     headerName: 'class',
+    flex: .5
     // type: 'number',
-    width: 110,
-    editable: true,
+    // width: 110,
+    // editable: true,
   },
   {
     field: 'title',
     headerName: 'title',
+    flex: 1
     // type: 'number',
-    width: 250,
-    editable: true,
+    // width: 250,
+    // editable: true,
   },
   {
     field: 'moderators',
     headerName: 'moderators',
+    flex: .3
     // type: 'number',
-    width: 110,
-    editable: true,
+    // width: 110,
+    // editable: true,
   }
 //   {
 //     field: 'fullName',
@@ -154,24 +166,24 @@ const columns = [
 ];
 
 const rows = [
-  { id: 1, BoardName: 'Snow', BoradEName: 'Jon', detail: 35 },
-  { id: 2, BoardName: 'Snow', BoradEName: 'Jon', detail: 35 },
-  { id: 3, BoardName: 'Snow', BoradEName: 'Jon', detail: 35 },
-  { id: 4, BoardName: 'Snow', BoradEName: 'Jon', detail: 35 }
+  { id: 1, BoardName: 'Snow', BoardEName: 'Jon', detail: 35 },
+  { id: 2, BoardName: 'Snow', BoardEName: 'Jon', detail: 35 },
+  { id: 3, BoardName: 'Snow', BoardEName: 'Jon', detail: 35 },
+  { id: 4, BoardName: 'Snow', BoardEName: 'Jon', detail: 35 }
 
 ];
 
 export default function DataTable() {
   return (
-    <div style={{ height: 400, width: '100%' }}>
+    <StyledDiv>
       <DataGrid
         // rows={rows}
         rows={GET_ALLBOARDS_QUERY.data.allBoards}
         columns={columns}
-        pageSize={5}
+        pageSize={50}
         // checkboxSelection
         disableSelectionOnClick
       />
-    </div>
+    </StyledDiv>
   );
 }

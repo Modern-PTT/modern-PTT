@@ -1,9 +1,21 @@
+import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import Divider from '@material-ui/core/Divider';
+import InboxIcon from '@material-ui/icons/Inbox';
+import DraftsIcon from '@material-ui/icons/Drafts';
+import styled from 'styled-components';
+
 // import React from 'react';
 // import { makeStyles } from '@material-ui/core/styles';
 // import List from '@material-ui/core/List';
 // import ListItem from '@material-ui/core/ListItem';
 // import ListItemText from '@material-ui/core/ListItemText';
 // import Divider from '@material-ui/core/Divider';
+
 
 // const useStyles = makeStyles((theme) => ({
 //   root: {
@@ -36,15 +48,16 @@
 //   );
 // }
 
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import Divider from '@material-ui/core/Divider';
-import InboxIcon from '@material-ui/icons/Inbox';
-import DraftsIcon from '@material-ui/icons/Drafts';
+//do styling
+const StyledDiv = styled.div`
+  /* position: fixed; */
+  /* top: 0; */
+  /* left: 5%; */
+  border: solid 1px grey;
+  border-radius: 10px;
+`
+
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -90,7 +103,7 @@ export default function SimpleList() {
   const classes = useStyles();
 
   return (
-    <div className={classes.root}>
+    <StyledDiv className={classes.root}>
       <List component="nav" aria-label="main mailbox folders">
         <ListItem button id="popular">
           <ListItemIcon>
@@ -98,7 +111,7 @@ export default function SimpleList() {
           </ListItemIcon>
           <ListItemText primary="熱門看板" />
         </ListItem>
-        <ListItem button id ="seperate" value="seperates" onClick={(e)=>console.log(e.target.value)}>
+        <ListItem button id ="separate" value="separates" onClick={(e)=>console.log(e.target.value)}>
           <ListItemIcon>
             <DraftsIcon />
           </ListItemIcon>
@@ -113,6 +126,6 @@ export default function SimpleList() {
           </ListItem>
       ))}
       </List>
-    </div>
+    </StyledDiv>
   );
 }

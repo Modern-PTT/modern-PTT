@@ -316,7 +316,7 @@ const GET_BOARD_QUERY =
       }
     }
 
-const GET_NEWEST_AIRTICLES_QUERY = {
+const GET_NEWEST_ARTICLES_QUERY = {
     "data": {
       "newestArticles": [
         {
@@ -349,11 +349,11 @@ const GET_NEWEST_AIRTICLES_QUERY = {
 
 
 
-const AirticleList = () =>{
+const ArticleList = () =>{
 
     return(
         // <Button variant="contained">Default</Button>
-        <>{GET_NEWEST_AIRTICLES_QUERY.data.newestArticles.map((item)=>(
+        <>{GET_NEWEST_ARTICLES_QUERY.data.newestArticles.map((item)=>(
             <ArticleCard
                 brdname={item.brdname}
                 title={item.title}
@@ -365,4 +365,4 @@ const AirticleList = () =>{
     )
 }
 
-export default AirticleList;
+export default ArticleList;

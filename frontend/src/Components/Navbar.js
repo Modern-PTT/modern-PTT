@@ -15,7 +15,13 @@ import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 
+
+
+
 const useStyles = makeStyles((theme) => ({
+  appBar:{
+    boxShadow: 'none',
+  },
   grow: {
     flexGrow: 1,
   },
@@ -163,7 +169,7 @@ export default function PrimarySearchAppBar() {
 
   return (
     <div className={classes.grow}>
-      <AppBar position="static">
+      <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
           {/* <IconButton
             edge="start"
@@ -174,7 +180,7 @@ export default function PrimarySearchAppBar() {
             <MenuIcon />
           </IconButton> */}
           <Typography className={classes.title} variant="h6" noWrap>
-            MordenPTT
+            ModernPTT
           </Typography>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
