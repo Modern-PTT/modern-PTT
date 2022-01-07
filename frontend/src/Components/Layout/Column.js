@@ -6,5 +6,5 @@ const Column = styled.div`
   justify-content: ${props=>props.justify};
   align-items: ${props=>props.align};
 `;
-
+//center flex-start flex-end space-between space-around
 export default Column;

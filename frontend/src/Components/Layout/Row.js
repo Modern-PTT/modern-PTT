@@ -6,5 +6,5 @@ const Row = styled.div`
   justify-content: ${props=>props.justify};
   align-items: ${props=>props.align};
 `;
- 
 export default Row;
+//center flex-start flex-end space-between space-around

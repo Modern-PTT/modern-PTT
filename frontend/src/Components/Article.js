@@ -10,6 +10,8 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import { Divider } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
+import Row from './Layout/Row';
+
 // import Message from '../hooks/Message';
 
 
@@ -51,10 +53,10 @@ const Wrapper = styled.div`
   margin: auto;
 `;
 
-const Row = styled.div`
-  display: flex;
-  flex-direction: row;
-`;
+// const Row = styled.div`
+//   display: flex;
+//   flex-direction: row;
+// `;
 const msgState = (input)=>{
   if (input == "1")return "👍"
   else if (input == "2")return "👎🏼"
@@ -96,6 +98,7 @@ const data =
     }
 
 
+
 export default function Airticle() {
   const classes = useStyles();
   const classesText = useTextStyles();
@@ -105,7 +108,7 @@ export default function Airticle() {
       <Wrapper>
         <Card className={classes.root} variant="outlined">
             <CardContent>
-                <Row>
+                <Row justify=''>
                     <Typography className={classes.title} color="textSecondary" gutterBottom>
                     <>標題｜{data.title}</>
                     <Button size="small">Learn More</Button>
