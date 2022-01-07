@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 //set styled div
 const StyledDiv = styled.div`
-    height: 400px;
+    height: 60vh;
     width: 80%;
     max-width: 1200px;
 `
@@ -152,17 +152,6 @@ const columns = [
     // width: 110,
     // editable: true,
   }
-//   {
-//     field: 'fullName',
-//     headerName: 'Full name',
-//     description: 'This column has a value getter and is not sortable.',
-//     sortable: false,
-//     width: 160,
-//     valueGetter: (params) =>
-//       `${params.getValue(params.id, 'firstName') || ''} ${
-//         params.getValue(params.id, 'lastName') || ''
-//       }`,
-//   },
 ];
 
 const rows = [
@@ -177,10 +166,9 @@ export default function DataTable() {
   return (
     <StyledDiv>
       <DataGrid
-        // rows={rows}
         rows={GET_ALLBOARDS_QUERY.data.allBoards}
         columns={columns}
-        pageSize={50}
+        pageSize={10}
         // checkboxSelection
         disableSelectionOnClick
       />
