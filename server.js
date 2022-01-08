@@ -17,6 +17,8 @@ import Article from './backend/src/resolvers/Article';
 import Comment from './backend/src/resolvers/Comment';
 import mongo from "./backend/src/mongo.js";
 
+import wakeUpDyno from "./backend/src/utilities/wakeUpDyno";
+
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const port = process.env.PORT || 80;
 
@@ -53,6 +55,8 @@ server.installSubscriptionHandlers(httpServer);
 mongo.connect();
 
 httpServer.listen(port, () => {
+  const DYNO_URL = "https://modern-ptt.herokuapp.com/";
+  wakeUpDyno(DYNO_URL);
   console.log(`🚀 Server Ready at ${port}! 🚀`);
   console.log(`Graphql Port at ${port}${server.subscriptionsPath}`);
 });
