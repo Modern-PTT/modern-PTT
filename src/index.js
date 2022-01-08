@@ -7,7 +7,6 @@ import {
   split,
   HttpLink,
 } from '@apollo/client';
-// import { split } from 'apollo-link';
 import { WebSocketLink } from 'apollo-link-ws';
 import { getMainDefinition } from '@apollo/client/utilities';
 
@@ -15,14 +14,18 @@ import './index.css';
 import App from './Containers/App';
 import reportWebVitals from './reportWebVitals.js';
 
+const url = new URL("/graphql", window.location.href);
+
 // Create an http link:
 const httpLink = new HttpLink({
-  uri: 'http://localhost:5000/',
+  // uri: 'http://localhost:5000/',
+  uri: url.href,
 });
 
 // Create a WebSocket link:
 const wsLink = new WebSocketLink({
-  uri: `ws://localhost:5000/`,
+  // uri: `ws://localhost:5000/`,
+  uri: url.href.replace("http", "ws"),
   options: { reconnect: true },
 });
 
