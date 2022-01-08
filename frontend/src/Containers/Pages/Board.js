@@ -8,7 +8,7 @@ import ArticleCard from '../../Components/ArticleCard'
 import { useParams, useHistory } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 import { GET_BOARD_ARTICLES_QUERY } from "../../graphql";
-// import {}
+import { useEffect} from 'react';
 
 //query某看板後拿回的簡要文章列表
 
@@ -23,19 +23,24 @@ const Wrapper = styled.div`
   margin: auto;
 `;
 
-const Board = () =>{
+const Board =  () =>{
   const {brdname} = useParams()
-  const {data, error, loading} = useQuery(GET_BOARD_ARTICLES_QUERY,{
+  console.log(brdname)
+  const {data, error, loading} =  useQuery(GET_BOARD_ARTICLES_QUERY,{
     variables: {
       brdname: brdname,
-    },
+    }
   })
+  
+  useEffect(() => {
+    // console.log(data);
+  }, [data])
 
 
     return(
       <Wrapper>
            {/* <Button variant="contained">Default</Button> */}
-          <>{data.newestArticles.map((item)=>(
+          <>{data.articles.map((item)=>(
               <ArticleCard
                   brdname={item.brdname}
                   title={item.title}

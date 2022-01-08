@@ -2,6 +2,7 @@ import { getHotBrdnameList } from "../utilities/creater";
 
 const Query = {
   async board(parent, { brdname }, { db }, info) {
+    console.log(brdname)
     return await db.BoardModel.findOne({brdname});
   },
 
