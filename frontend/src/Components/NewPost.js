@@ -37,7 +37,7 @@ const Wrapper = styled.div`
 `;
 const useStyles = makeStyles({
     root: {
-      minWidth: 600,
+      minWidth: 700,
     },
     bullet: {
       display: 'flex',

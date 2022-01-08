@@ -142,7 +142,15 @@ export default function Airticle() {
   const classes = useStyles();
   const classesText = useTextStyles();
   const bull = <span className={classes.bullet}>•</span>;
+  let testdate = 1637848118000
 
+  const secondToDate = (seconds)=>{
+      const date = seconds.getDate() //15
+      const day = seconds.getDay()  //5
+      const month = seconds.getMonth()  //6
+      const year = seconds.getFullYear()  //2016
+      return date
+  }
   return (
       <Wrapper>
         <Card className={classes.root} variant="outlined">
@@ -195,13 +203,20 @@ export default function Airticle() {
                 
                 ))}
             </CardContent>
-            <Row>
+            <Row justify="space-around"align="center">
+              <div>
+                <ThumbUpAltOutlinedIcon/>
+                <ThumbDownOutlinedIcon/>
+                <ArrowRightAltIcon/>
+              </div>
               <form className={classesText.root} noValidate autoComplete="off">
                 <TextField id="outlined-basic"  variant="outlined" />
               </form>
-              <CardActions>
+              {/* <CardActions > */}
+                <Row justify="flex-end">
                   <Button size="small">留言</Button>
-              </CardActions>
+                </Row>
+              {/* </CardActions> */}
             </Row>
 
         </Card>
