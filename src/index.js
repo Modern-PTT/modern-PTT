@@ -13,7 +13,7 @@ import { getMainDefinition } from '@apollo/client/utilities';
 
 import './index.css';
 import App from './Containers/App';
-import reportWebVitals from './reportWebVitals';
+import reportWebVitals from './reportWebVitals.js';
 
 // Create an http link:
 const httpLink = new HttpLink({
