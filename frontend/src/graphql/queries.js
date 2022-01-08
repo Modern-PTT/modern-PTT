@@ -62,14 +62,14 @@ query board($brdname: String!){
 
 // query - 所有看板 list
 export const GET_ALLBOARDS_QUERY = gql`
-query allBoards{
-    allBoards{
-        brdname
-        type
-        class
-        title
-        moderators
-      }
-}
+query {
+    boards {
+      brdname
+      type
+      class
+      title
+      moderators
+    }
+  }
 `;
 

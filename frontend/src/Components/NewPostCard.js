@@ -22,7 +22,7 @@ import Select from '@material-ui/core/Select';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import InputBase from '@material-ui/core/InputBase';
 // import Message from '../hooks/Message';
-
+import Alert from '@mui/material/Alert';
 
 
 
@@ -69,7 +69,7 @@ const msgState = (input)=>{
 
 
 
-export default function Airticle() {
+export default function NewPostCard() {
     const classes = useStyles();
     const classesText = useTextStyles();
     const bull = <span className={classes.bullet}>•</span>;
@@ -90,7 +90,11 @@ export default function Airticle() {
     }  
 
     const sendPost = ()=>{
-        if(!title && !body)console.log("NewPost create!")
+        if(!title || !body){
+          return(
+            <Alert severity="error">This is an error alert — check it out!</Alert>
+          )
+        }
         else console.log("title and body can't be bull")
     }
 
@@ -163,14 +167,3 @@ export default function Airticle() {
     );
     }
 
-// const Airticle = () =>{
-
-//     return(
-//         <Wrapper>
-//             <Button variant="contained">Default</Button>
-//         </Wrapper>
-
-//     )
-// }
-
-// export default Airticle;

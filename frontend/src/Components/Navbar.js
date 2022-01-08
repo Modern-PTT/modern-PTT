@@ -20,6 +20,9 @@ import Tooltip from '@mui/material/Tooltip';
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 
+import Link from '@mui/material/Link';
+
+
 const useStyles = makeStyles((theme) => ({
   appBar:{
     boxShadow: 'none',
@@ -215,9 +218,12 @@ export default function PrimarySearchAppBar() {
           <div className={classes.sectionDesktop}>
 
             <Tooltip title="發文">  
-              <IconButton aria-label="New Post" color="inherit">
+              <IconButton aria-label="NewPost" color="inherit">
                   {/* <BorderColorIcon /> */}
+                 <Link href="NewPost">
                   <ModeEditIcon/>
+                 </Link>
+
               </IconButton>
             </Tooltip>
 

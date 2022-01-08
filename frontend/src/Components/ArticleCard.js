@@ -19,7 +19,7 @@ import ArchiveIcon from '@mui/icons-material/Archive';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import NotificationAddIcon from '@mui/icons-material/NotificationAdd';
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
-
+import Link from '@mui/material/Link';
 
 const useStyles = makeStyles({
   root: {
@@ -66,18 +66,23 @@ const msgState = (input)=>{
 }
 
 
-export default function AirticleCard({brdname,title,owner,create_time}) {
+export default function AirticleCard({brdname,title,owner,create_time,aid}) {
   const classes = useStyles();
   const classesText = useTextStyles();
   const bull = <span className={classes.bullet}>•</span>;
 
+
+  
   return (
       <Wrapper>
         <Card className={classes.root} variant="outlined">
             <CardContent>
                     {/* <Typography className={classes.title} color="textSecondary" gutterBottom> */}
                     <Row justify="space-between">
-                      <>{brdname} {title} {owner}</>
+                      <Link href={`/boards/${brdname}/${aid}`}>
+                        <>{brdname} {title} {owner}</>
+                      </Link>
+
                       <>{create_time}</>
                       <div>
                       <Tooltip title="收藏">

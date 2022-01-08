@@ -67,6 +67,8 @@ const msgState = (input)=>{
   else return <ArrowRightAltIcon/>
 }
 
+
+
 const data = 
     {
         airtile_id: "123254521",
@@ -151,6 +153,22 @@ export default function Airticle() {
       const year = seconds.getFullYear()  //2016
       return date
   }
+
+  // change to attach each airticle
+  // const [articles, setArticles] = useState('');
+
+  // const {brdname} = useParams()
+  // console.log(brdname)
+  // const {data, error, loading} =  useQuery(GET_BOARD_ARTICLES_QUERY,{
+  //   variables: {
+  //     brdname: brdname,
+  //   }
+  // })
+  
+  // useEffect(() => {
+  //   if(data) setArticles(data.board.articles);
+  // }, [data])
+
   return (
       <Wrapper>
         <Card className={classes.root} variant="outlined">
