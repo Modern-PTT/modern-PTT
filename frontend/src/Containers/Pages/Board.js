@@ -48,6 +48,7 @@ const Board =  () =>{
                   title={item.title}
                   owner={item.owner}
                   create_time={item.create_time}
+                  key={item.aid}
               />
           )): ''}  
           </>
