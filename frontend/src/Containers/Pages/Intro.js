@@ -8,7 +8,7 @@ import styled from 'styled-components';
 import { useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-import { MEDIA_QUERY_MD, MEDIA_QUERY_XL } from '../css/Media_query'
+import { MEDIA_QUERY_MD, MEDIA_QUERY_XL } from '../../css/Media_query'
 
 var hue = {
   'hue': '',

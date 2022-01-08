@@ -147,7 +147,7 @@ const columns = [
   {
     field: 'moderators',
     headerName: 'moderators',
-    flex: .3
+    flex: .5
     // type: 'number',
     // width: 110,
     // editable: true,
@@ -169,7 +169,6 @@ export default function DataTable() {
         rows={GET_ALLBOARDS_QUERY.data.allBoards}
         columns={columns}
         pageSize={10}
-        // checkboxSelection
         disableSelectionOnClick
       />
     </StyledDiv>
