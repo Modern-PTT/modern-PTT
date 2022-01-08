@@ -18,7 +18,7 @@ import Comment from './backend/src/resolvers/Comment';
 import mongo from "./backend/src/mongo.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const port = process.env.PORT || 443;
+const port = process.env.PORT || 80;
 
 const typeDefs = importSchema("./backend/src/schema.graphql");
 const pubsub = new PubSub();
