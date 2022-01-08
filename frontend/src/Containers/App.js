@@ -11,27 +11,24 @@ import ArticleList from "./MainSpace/ArticleList";
 import Row from '../Components/Layout/Row'
 import Column from '../Components/Layout/Column'
 
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Intro from "../Components/Intro";
+import Home from '../Containers/Pages/Home'
+
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 
 function App() {
-  const [atHome, setAtHome] = useState(true)
-  return (
-        <BrowserRouter>        
-              <Navbar/>
-              <div className="contents">
-                <DashBoard/>
-                <Routes> 
-                  <Route path="/hot" element={<BoardList/>}/>
-                  <Route path="/:id" element={<BoardList/>}/>
-                  <Route path="/newPost" element={<BoardList/>}/>
-                  <Route path="/" element={<BoardList/>}/>
-                  <Route path="/" element={<BoardList/>}/>
-                  <Route path="*" element={<BoardList/>}/>
-                </Routes>
-              </div>
-        </BrowserRouter>
 
+  return (
+    <>
+        <BrowserRouter>
+              <Routes>
+                <Route path='/' element={<Navigate to='/intro'/>}/>
+                <Route path='/intro' element={<Intro/>}/>
+                <Route path='/home' element={<Home/>}/>
+              </Routes> 
+        </BrowserRouter>
+    </>
 
   );
 }

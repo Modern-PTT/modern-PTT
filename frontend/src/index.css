@@ -1,3 +1,9 @@
+*{
+  position: relative;
+  box-sizing: border-box;
+  transition: .5s;
+}
+
 body {
   margin: 0;
   height: 300vh;
