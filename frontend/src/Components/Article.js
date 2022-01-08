@@ -13,8 +13,15 @@ import TextField from '@material-ui/core/TextField';
 import Row from './Layout/Row';
 
 // import Message from '../hooks/Message';
+import ThumbUpAltOutlinedIcon from '@mui/icons-material/ThumbUpAltOutlined';
+import ThumbDownOutlinedIcon from '@mui/icons-material/ThumbDownOutlined';
+import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 
 
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import NotificationAddIcon from '@mui/icons-material/NotificationAdd';
 
 
 const useStyles = makeStyles({
@@ -55,9 +62,9 @@ const Wrapper = styled.div`
 
 
 const msgState = (input)=>{
-  if (input == "1")return "👍  "
-  else if (input == "2")return "👎🏼  "
-  else return "→  "
+  if (input == "推")return <ThumbUpAltOutlinedIcon/>
+  else if (input == "噓")return <ThumbDownOutlinedIcon/>
+  else return <ArrowRightAltIcon/>
 }
 
 const data = 
@@ -114,6 +121,16 @@ const  GET_AIRTICLE_QUERY=
                 "country": "TW, Taipei"
               },
               "create_time": 1626000949000
+            },
+            {
+              "type": "噓",
+              "owner": "test2000",
+              "content": "結果是沒問題喔～ 但是好像 frontend 的推/噓有問題 XD",
+              "location": {
+                "ip": "140.112.172.11",
+                "country": "TW, Taipei"
+              },
+              "create_time": 1626000949000
             }
           ]
         }
@@ -130,12 +147,22 @@ export default function Airticle() {
       <Wrapper>
         <Card className={classes.root} variant="outlined">
             <CardContent>
-                <Row justify=''>
-                    <Typography className={classes.title} color="textSecondary" gutterBottom>
-                    <>標題｜{GET_AIRTICLE_QUERY.data.article.title}</>
-                    <Button size="small">Learn More</Button>
-                    </Typography>
-                </Row>
+                    {/* <Typography className={classes.title} color="textSecondary" gutterBottom> */}
+                      <Row justify="space-between" align="center">
+                        <div>標題｜{GET_AIRTICLE_QUERY.data.article.title}</div>
+                        <div>
+                        <Tooltip title="收藏">
+                            <IconButton>
+                              <FavoriteIcon />
+                            </IconButton>
+                          </Tooltip>
+                          <Tooltip title="追蹤">
+                            <IconButton>
+                              <NotificationAddIcon />
+                            </IconButton>
+                          </Tooltip>
+                        </div>
+                      </Row>
 
                 <Typography className={classes.title} color="textSecondary" gutterBottom>
                     作者｜{data.poster_id}
@@ -160,22 +187,23 @@ export default function Airticle() {
             <CardContent>
                 {data.messages.map((item)=>(
                     <Typography className={classes.title} color="textSecondary" gutterBottom>
-                    <Row>
-                        <Typography className={classes.title} color="textSecondary" gutterBottom>
+                    <Row align="center">
                         <>{msgState(item.state) }{item.poster_id} </> <>{item.poster_ip}   {item.time}</>
-                        </Typography>
                     </Row>
                     {item.body}
                     </Typography>
                 
                 ))}
             </CardContent>
-            <form className={classesText.root} noValidate autoComplete="off">
-              <TextField id="outlined-basic" label="Outlined" variant="outlined" />
-            </form>
-            <CardActions>
-                <Button size="small">留言</Button>
-            </CardActions>
+            <Row>
+              <form className={classesText.root} noValidate autoComplete="off">
+                <TextField id="outlined-basic"  variant="outlined" />
+              </form>
+              <CardActions>
+                  <Button size="small">留言</Button>
+              </CardActions>
+            </Row>
+
         </Card>
     </Wrapper>
   );

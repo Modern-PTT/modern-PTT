@@ -75,27 +75,25 @@ export default function AirticleCard({brdname,title,owner,create_time}) {
       <Wrapper>
         <Card className={classes.root} variant="outlined">
             <CardContent>
-
-                    <Typography className={classes.title} color="textSecondary" gutterBottom>
-                    {/* <Row justify="space-between"> */}
+                    {/* <Typography className={classes.title} color="textSecondary" gutterBottom> */}
+                    <Row justify="space-between">
                       <>{brdname} {title} {owner}</>
                       <>{create_time}</>
-
+                      <div>
                       <Tooltip title="收藏">
-                        <IconButton>
-                          <FavoriteIcon />
-                        </IconButton>
-                      </Tooltip>
-
-                      <Tooltip title="追蹤">
-                        <IconButton>
-                          <NotificationAddIcon />
-                        </IconButton>
-                      </Tooltip>
-
-                      <Button size="small" variant="contained" color="primary">追蹤</Button>
-                    {/* </Row> */}
-                    </Typography>
+                          <IconButton>
+                            <FavoriteIcon />
+                          </IconButton>
+                        </Tooltip>
+                        <Tooltip title="追蹤">
+                          <IconButton>
+                            <NotificationAddIcon />
+                          </IconButton>
+                        </Tooltip>
+                        <Button size="small" variant="contained" color="primary">追蹤</Button>
+                      </div>
+                    </Row>
+                    {/* </Typography> */}
 
             </CardContent>
             {/* <CardActions>

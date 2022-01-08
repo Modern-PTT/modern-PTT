@@ -13,6 +13,7 @@ import Paper from '@material-ui/core/Paper';
 import { Divider } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import Row from './Layout/Row';
+import Column from './Layout/Column'
 
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -36,7 +37,7 @@ const Wrapper = styled.div`
 `;
 const useStyles = makeStyles({
     root: {
-      minWidth: 700,
+      minWidth: 600,
     },
     bullet: {
       display: 'flex',
@@ -88,40 +89,53 @@ export default function Airticle() {
     console.log("title: "+title)
     }  
 
+    const sendPost = ()=>{
+        if(!title && !body)console.log("NewPost create!")
+        else console.log("title and body can't be bull")
+    }
+
     return (
         <Wrapper>
             <Card className={classes.root} variant="outlined" width="800">
                 <CardContent>
                 <Typography className={classes.title} color="textSecondary" gutterBottom>
-                    <>看板</>
-                    <FormControl  width="300px">
-                        <InputLabel htmlFor="demo-customized-select-native">選擇主題</InputLabel>
-                        <Select
-                        id="demo-customized-select-native"
-                        // value={age}
-                        // onChange={handleChange}
-                        // input={value}
-                        >
-                        <option hight="50px" value={10}>[問卦]</option>
-                        <option hight="50px" value={20}>[新聞]</option>
-                        <option hight="50px" value={30}>[？？]</option>
-                        </Select>
-                    </FormControl>
+                    <Column>
+                        <>看板</>
+                        <Divider />
+                        <FormControl  width="300px">
+                            <InputLabel htmlFor="demo-customized-select-native">選擇主題</InputLabel>
+                            <Select
+                            id="demo-customized-select-native"
+                            // value={age}
+                            // onChange={handleChange}
+                            // input={value}
+                            >
+                            <option hight="80px" value={10}>[問卦]</option>
+                            <option hight="80px" value={20}>[新聞]</option>
+                            <option hight="80px" value={30}>[？？]</option>
+                            </Select>
+                        </FormControl>
+                    </Column>
+
                     <Divider />
 
                 </Typography>
                     <Typography className={classes.title} color="textSecondary" gutterBottom>
+                        <Column>
+                        {/* <Row justify="space-between" align="center"> */}
                         <>標題</>
-                        <form fullWidth>
+                        <form >
                             <TextField 
-                            // width="700px"
+                            fullWidth
+                            // width="600"
                             value={title}
                             onChange={(e) => handleChangeArticleTitle(e.target.value)}
-                            labelWidth={60}
                             />
                         </form>
+                        </Column>
+
                     </Typography>
-                    <Divider />
+                    {/* <Divider /> */}
 
                 </CardContent>
                 <Divider />
@@ -129,16 +143,20 @@ export default function Airticle() {
                 <form className={classesText.root} noValidate autoComplete="off">
                 <TextField 
                     id="outlined-basic" 
-                    label="Outlined" 
                     variant="outlined" 
                     multiline
+                    fullWidth
+                    // width= '500px'
                     value={body}
                     onChange={(e) => handleChangeArticleBody(e.target.value)}
                     rows={20}
                     />
                 </form>
                 <CardActions>
-                    <Button size="small">發文</Button>
+                    <Button size="small"
+                    onClick={()=>sendPost()}
+                    >
+                        發文</Button>
                 </CardActions>
             </Card>
         </Wrapper>
