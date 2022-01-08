@@ -4,9 +4,10 @@ import styled from 'styled-components';
 import Article from '../../Components/Article';
 import ArticleCard from '../../Components/ArticleCard'
 
+// import  graphql  from 'graphql';
 import { useParams, useHistory } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
-import { GET_BOARD_ARTICLES_QUERY} from "../graphql";
+import { GET_BOARD_ARTICLES_QUERY } from "../../graphql";
 // import {}
 
 //query某看板後拿回的簡要文章列表
@@ -34,7 +35,7 @@ const Board = () =>{
     return(
       <Wrapper>
            {/* <Button variant="contained">Default</Button> */}
-          <>{GET_NEWEST_ARTICLES_QUERY.data.newestArticles.map((item)=>(
+          <>{data.newestArticles.map((item)=>(
               <ArticleCard
                   brdname={item.brdname}
                   title={item.title}
