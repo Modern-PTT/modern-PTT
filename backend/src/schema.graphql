@@ -92,34 +92,33 @@ type MailSender {
   system: String
 }
 
-type Token {
-  token: String                 # can be null if authentication failed
-}
-
 # See resolvers/Query.js
 type Query {
-#   category(catname: String!): [Board!]                 # can be null if in root category
   board(brdname: String!): Board
+  boards(keywords: [String!]): [Board!]             # query all or search board
   article(aid: String!): Article
-  allBoards: [Board!]
+  articles(input: articlesInput!): [Article!]
+  user(username: String!): User
+  
   hotBoards: [Board!]
   newestArticles(limit: Int): [Article!]
-  # allArticles: [Article!]
-#   hotArticles: [Article!]
-
-#   searchBoard(input: SearchBoardInput!): [Board!]
-#   searchArticle(input: SearchArticleInput!): [Article!]
+  hotArticles(input: HotArticlesInput): [Article!]
 }
 
-# Input for searching boards
-input SearchBoardInput {
-  keyword: [String!]!
+type Token {
+  token: String!
 }
 
-# Input for searching articles
-input SearchArticleInput {
-  keyword: [String!]!
-  brdname: [String!]                            # support for searching in multiple boards
+input HotArticlesInput {
+  limit: Int
+  timerange: Int          # hour
+}
+
+input articlesInput {
+  brdname: [String!]      # support for searching in multiple boards
+  owner: String           # exactly match
+  title: [String!]
+  timerange: Int          # hour
 }
 
 # See resolvers/Mutation.js

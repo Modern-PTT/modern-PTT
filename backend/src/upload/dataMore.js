@@ -46,6 +46,7 @@ const brdname_list = [
   "sex",
   "Stock",
   "WhoAmI",
+  "test",
 ];
 
 const getInitBoardList = async () => {
