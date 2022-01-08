@@ -1,6 +1,7 @@
 import * as React from 'react';
 import  {DataGrid}  from '@material-ui/data-grid';
 import styled from 'styled-components';
+import Link from '@mui/material/Link';
 
 //set styled div
 const StyledDiv = styled.div`
@@ -124,7 +125,10 @@ const columns = [
   {
     field: 'brdname',
     headerName: 'BoardName',
-    flex: 1
+    flex: 1,
+    renderCell: (params) => (
+      <Link href={`/boards/${params.value}`}>{params.value}</Link>
+    )
     // width: 200,
     // editable: true,
   },
