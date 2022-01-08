@@ -10,13 +10,21 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import { Divider } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
-
-
+import Row from './Layout/Row';
+import Column from './Layout/Column';
+import DeleteIcon from '@mui/icons-material/Delete';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
+import ArchiveIcon from '@mui/icons-material/Archive';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import NotificationAddIcon from '@mui/icons-material/NotificationAdd';
+import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 
 
 const useStyles = makeStyles({
   root: {
-    minWidth: 275,
+    minWidth: 700,
+    // align-items: "space-between",
   },
   bullet: {
     display: 'inline-block',
@@ -45,15 +53,12 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
-  width: 700px;
+  height: 100px;
+  width: 800px;
   margin: auto;
 `;
 
-const Row = styled.div`
-  display: flex;
-  flex-direction: row;
-`;
+
 const msgState = (input)=>{
   if (input == "1")return "👍"
   else if (input == "2")return "👎🏼"
@@ -67,23 +72,36 @@ export default function AirticleCard({brdname,title,owner,create_time}) {
   const bull = <span className={classes.bullet}>•</span>;
 
   return (
-    //   <Wrapper>
+      <Wrapper>
         <Card className={classes.root} variant="outlined">
             <CardContent>
-                <Row>
+
                     <Typography className={classes.title} color="textSecondary" gutterBottom>
-                    <>{brdname}</>
-                    <>{title}</>
-                    <>{owner}</>
-                    <>{create_time}</>
-                    {/* <Button size="small">Learn More</Button> */}
+                    {/* <Row justify="space-between"> */}
+                      <>{brdname} {title} {owner}</>
+                      <>{create_time}</>
+
+                      <Tooltip title="收藏">
+                        <IconButton>
+                          <FavoriteIcon />
+                        </IconButton>
+                      </Tooltip>
+
+                      <Tooltip title="追蹤">
+                        <IconButton>
+                          <NotificationAddIcon />
+                        </IconButton>
+                      </Tooltip>
+
+                      <Button size="small" variant="contained" color="primary">追蹤</Button>
+                    {/* </Row> */}
                     </Typography>
-                </Row>
+
             </CardContent>
             {/* <CardActions>
                 <Button size="small">留言</Button>
             </CardActions> */}
         </Card>
-    // </Wrapper>
+      </Wrapper>
   );
 }

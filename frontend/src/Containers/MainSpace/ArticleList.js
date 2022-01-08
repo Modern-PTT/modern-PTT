@@ -1,4 +1,5 @@
 import Button from '@material-ui/core/Button';
+import styled from 'styled-components';
 // import MessageBox from './old/MessageBox';
 import Article from '../../Components/Article';
 import ArticleCard from '../../Components/ArticleCard'
@@ -347,21 +348,31 @@ const GET_NEWEST_ARTICLES_QUERY = {
     }
 }
 
-
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 500px;
+  width: 800px;
+  margin: auto;
+`;
 
 const ArticleList = () =>{
 
     return(
-        // <Button variant="contained">Default</Button>
-        <>{GET_NEWEST_ARTICLES_QUERY.data.newestArticles.map((item)=>(
-            <ArticleCard
-                brdname={item.brdname}
-                title={item.title}
-                owner={item.owner}
-                create_time={item.create_time}
-            />
-        ))}  
-        </>
+      <Wrapper>
+           {/* <Button variant="contained">Default</Button> */}
+          <>{GET_NEWEST_ARTICLES_QUERY.data.newestArticles.map((item)=>(
+              <ArticleCard
+                  brdname={item.brdname}
+                  title={item.title}
+                  owner={item.owner}
+                  create_time={item.create_time}
+              />
+          ))}  
+          </>
+        </Wrapper>
     )
 }
 

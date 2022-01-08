@@ -10,8 +10,10 @@ import RightBoardList from "../Components/BoardList"
 import ArticleList from "./MainSpace/ArticleList";
 import Row from '../Components/Layout/Row'
 import Column from '../Components/Layout/Column'
+import NewPost from '../Components/NewPost'
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import AirticleCard from "../Components/ArticleCard";
 
 
 function App() {
@@ -29,6 +31,9 @@ function App() {
                   <Route path="/" element={<BoardList/>}/>
                   <Route path="*" element={<BoardList/>}/>
                 </Routes>
+                <ArticleBox/>
+                <ArticleList/>
+                <NewPost/>
               </div>
         </BrowserRouter>
 

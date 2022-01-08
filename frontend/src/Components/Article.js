@@ -53,14 +53,11 @@ const Wrapper = styled.div`
   margin: auto;
 `;
 
-// const Row = styled.div`
-//   display: flex;
-//   flex-direction: row;
-// `;
+
 const msgState = (input)=>{
-  if (input == "1")return "👍"
-  else if (input == "2")return "👎🏼"
-  else return "-"
+  if (input == "1")return "👍  "
+  else if (input == "2")return "👎🏼  "
+  else return "→  "
 }
 
 const data = 
@@ -96,7 +93,32 @@ const data =
         }
         ]
     }
-
+const  GET_AIRTICLE_QUERY=
+    {
+      "data": {
+        "article": {
+          "title": "[問題] openbbsmiddleware-0.17.4",
+          "owner": "test2000",
+          "content": "會不會有問題呢？～ XD.\n",
+          "location": {
+            "ip": "172.18.0.1",
+            "country": "private"
+          },
+          "comments": [
+            {
+              "type": "推",
+              "owner": "test2000",
+              "content": "結果是沒問題喔～ 但是好像 frontend 的推/噓有問題 XD",
+              "location": {
+                "ip": "140.112.172.11",
+                "country": "TW, Taipei"
+              },
+              "create_time": 1626000949000
+            }
+          ]
+        }
+      }
+    }
 
 
 export default function Airticle() {
@@ -110,7 +132,7 @@ export default function Airticle() {
             <CardContent>
                 <Row justify=''>
                     <Typography className={classes.title} color="textSecondary" gutterBottom>
-                    <>標題｜{data.title}</>
+                    <>標題｜{GET_AIRTICLE_QUERY.data.article.title}</>
                     <Button size="small">Learn More</Button>
                     </Typography>
                 </Row>
@@ -140,10 +162,10 @@ export default function Airticle() {
                     <Typography className={classes.title} color="textSecondary" gutterBottom>
                     <Row>
                         <Typography className={classes.title} color="textSecondary" gutterBottom>
-                        <>{item.poster_id}|{item.poster_ip}   {item.time} | </>
+                        <>{msgState(item.state) }{item.poster_id} </> <>{item.poster_ip}   {item.time}</>
                         </Typography>
                     </Row>
-                    {msgState(item.state) }{item.body}
+                    {item.body}
                     </Typography>
                 
                 ))}
