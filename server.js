@@ -1,8 +1,13 @@
-
+import express from "express";
 import { ApolloServer, PubSub } from "apollo-server-express";
 import { importSchema } from "graphql-import";
+import bodyParser from "body-parser";
+import cors from "cors";
 import http from "http";
 import "dotenv-defaults/config.js";
+import path from "path";
+import { dirname } from "path";
+import { fileURLToPath } from "url";
 
 import * as db from "./backend/src/models";
 import Query from "./backend/src/resolvers/Query.js";
@@ -10,21 +15,30 @@ import timeScalar from './backend/src/resolvers/Time';
 import Board from './backend/src/resolvers/Board';
 import Article from './backend/src/resolvers/Article';
 import Comment from './backend/src/resolvers/Comment';
-// import Mutation from "./backend/resolvers/Mutation.js";
-// import Subscription from "./backend/resolvers/Subscription.js";
-import mongo from "./backend/mongo.js";
+import mongo from "./backend/src/mongo.js";
 
-const port = process.env.PORT || 80;
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const port = process.env.PORT || 443;
 
 const typeDefs = importSchema("./backend/src/schema.graphql");
 const pubsub = new PubSub();
+const app = express();
+
+app.use(cors());
+app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, "build")));
+app.get("/*", function (req, res) {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
+});
 
 const server = new ApolloServer({
   typeDefs,
   resolvers: {
     Query,
-    Mutation,
-    Subscription,
+    Time: timeScalar,
+    Board,
+    Article,
+    Comment,
   },
   context: {
     db,
