@@ -4,6 +4,10 @@ import styled from 'styled-components';
 import Article from '../../Components/Article';
 import ArticleCard from '../../Components/ArticleCard'
 
+import { useParams, useHistory } from 'react-router-dom';
+import { useQuery } from '@apollo/client';
+
+
 //query某看板後拿回的簡要文章列表
 
 const GET_BOARD_QUERY = 
@@ -358,17 +362,20 @@ const Wrapper = styled.div`
   margin: auto;
 `;
 
-const ArticleList = () =>{
+const Board = () =>{
+  const {brdname} = useParams()
+  const {data: newestArticles, error, isLoading} = useQuery()
+
 
     return(
       <Wrapper>
            {/* <Button variant="contained">Default</Button> */}
           <>{GET_NEWEST_ARTICLES_QUERY.data.newestArticles.map((item)=>(
               <ArticleCard
-                  brdname={item.brdname}
-                  title={item.title}
-                  owner={item.owner}
-                  create_time={item.create_time}
+                  brdname={newestArticles.brdname}
+                  title={newestArticles.title}
+                  owner={newestArticles.owner}
+                  create_time={newestArticles.create_time}
               />
           ))}  
           </>
@@ -376,4 +383,4 @@ const ArticleList = () =>{
     )
 }
 
-export default ArticleList;
+export default Board;
