@@ -11,6 +11,7 @@ import ArticleList from "./Pages/Board";
 import Row from '../Components/Layout/Row'
 import Column from '../Components/Layout/Column'
 import NewPost from '../Components/NewPost'
+import Board from "./Pages/Board";
 
 import Intro from "../Containers/Pages/Intro";
 import Home from '../Containers/Pages/Home'
