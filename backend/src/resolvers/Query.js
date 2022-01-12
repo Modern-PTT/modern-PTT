@@ -72,7 +72,10 @@ const Query = {
 
   async user(parent, { input: { username, password } }, { db }, info) {
     let userData = await db.UserModel.findOne({username});
-    if(userData && await isValidUser(password, userData.password)) {
+    if(!userData) {
+      return null;
+    }
+    else if(await isValidUser(password, userData.password)) {
       return userData;
     }
     else {
@@ -87,7 +90,11 @@ const Query = {
   },
 
   async salt(parent, { username }, { db }, info) {
-    let userData = await db.UserModel.findOne({username});
+    const userData = await db.UserModel.findOne({username});
+    if(!userData) {
+      return null;
+    }
+
     return userData.salt;
   },
 
