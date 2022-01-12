@@ -1,32 +1,45 @@
 import axios from "axios";
+import { hashPassword } from "../utilities/userUtil";
 
 const instance = axios.create({
   baseURL: 'https://api.devptt.site:3457/api'
 });
 
 // import users
-const getInitUserList = () => {
+const getInitUserList = async () => {
   let user_list = [];
+
+  let { hashed_password, salt } = await hashPassword("123123");
   user_list.push({
     username: "SYSOP",
     nickname: "站長？",
-    password: "123123",
+    password: hashed_password,
+    salt,
   });
+  
+  ({ hashed_password, salt } = await hashPassword("123123"));
   user_list.push({
     username: "test",
     nickname: "測試機器人嗶嗶",
-    password: "123123",
+    password: hashed_password,
+    salt,
   });
+
   for(let i = 2; i <= 12; i++) {
+    ({ hashed_password, salt } = await hashPassword("123123"));
     user_list.push({
       username: `SYSOP${i}`,
-      password: "123123",
+      password: hashed_password,
+      salt,
     });
   }
+
   for(let i = 1; i <= 50; i++) {
+    ({ hashed_password, salt } = await hashPassword("123123"));
     user_list.push({
       username: `test${i}`,
-      password: "123123",
+      password: hashed_password,
+      salt,
     });
   }
 

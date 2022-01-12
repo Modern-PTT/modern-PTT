@@ -5,7 +5,7 @@ import { getInitUserList, getInitBoardList, getInitArticleList } from './dataMor
 
 const userInit = async () => {
   await UserModel.deleteMany({});
-  const defaultUsers = getInitUserList();
+  const defaultUsers = await getInitUserList();
   for(let user of defaultUsers) {
     await createUser(user);
   }

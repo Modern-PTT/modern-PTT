@@ -9,6 +9,7 @@ const UserSchema = new mongoose.Schema(
       required: true
     },
     password: String,
+    salt: String,
     nickname: String,
     login_days: Number,
     last_login: Date,

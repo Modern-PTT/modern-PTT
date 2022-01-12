@@ -123,31 +123,40 @@ input articlesInput {
 
 # See resolvers/Mutation.js
 # type Mutation {
-#   signup(username: String!, password: String!): User
-#   login(username: String!, password: String!): Token
-#   logout(username: String!): User
+  # signup(input: SignupInput!): User
+  # login(username: String!, password: String!): Token
+  # logout(username: String!): User
 
-#   # Create an article
-#   createArticle(input: CreateArticleInput!): String     # return null if failed
-#   # Update an article
-#   updateArticle(input: UpdateArticleInput!): String     # return null if failed
-#   # Delete an article
-#   deleteArticle(input: DeleteArticleInput!): String     # return null if failed
+  # # Create an article
+  # createArticle(input: CreateArticleInput!): String     # return null if failed
+  # # Update an article
+  # updateArticle(input: UpdateArticleInput!): String     # return null if failed
+  # # Delete an article
+  # deleteArticle(input: DeleteArticleInput!): String     # return null if failed
 
-#   # create a comment
-#   createComment(input: CreateCommentInput!): ID         # return cid. return null if failed
-#   # modify a comment
-#   modifyComment(input: ModifyCommentInput!): ID         # return cid. return null if failed. only for moderator and article owner
-#   # delete a comment
-#   deleteComment(input: DeleteCommentInput!): ID         # return cid. return null if failed. only for moderator and article owner
+  # # create a comment
+  # createComment(input: CreateCommentInput!): ID         # return cid. return null if failed
+  # # modify a comment
+  # modifyComment(input: ModifyCommentInput!): ID         # return cid. return null if failed. only for moderator and article owner
+  # # delete a comment
+  # deleteComment(input: DeleteCommentInput!): ID         # return cid. return null if failed. only for moderator and article owner
 
-#   # add a favorite board
-#   createFavBoard(input: CreateFavBoardInput!): ID       # return bid. return null if failed
-#   # move a favorite board
-#   moveFavBoard(input: MoveFavBoardInput!): ID           # return bid. return null if failed
-#   # delete a favorite board
-#   deleteFavBoard(input: DeleteFavBoardInput!): bid      # return bid. return null if failed
+  # # add a favorite board
+  # createFavBoard(input: CreateFavBoardInput!): ID       # return bid. return null if failed
+  # # move a favorite board
+  # moveFavBoard(input: MoveFavBoardInput!): ID           # return bid. return null if failed
+  # # delete a favorite board
+  # deleteFavBoard(input: DeleteFavBoardInput!): bid      # return bid. return null if failed
 # }
+
+input SignupInput {
+  username: String!
+  password: String!         # encrypted
+  salt: String!
+
+  # other info...
+  realname: String!
+}
 
 input CreateArticleInput {
   brdname: String!

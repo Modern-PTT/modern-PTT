@@ -3,6 +3,12 @@ import bcrypt from "bcrypt";
 
 const saltRounds = 10;
 
+const hashPassword = async (password) => {
+  const salt = bcrypt.genSaltSync(saltRounds);
+  const hashed_password = bcrypt.hashSync(password, salt);
+  return { hashed_password, salt }
+}
+
 const checkUser = (username, errFunc) => {
   if(!username) {
     throw new Error("Missing username for: " + errFunc);
@@ -26,6 +32,7 @@ const createUser = async (user) => {
 }
 
 export {
+  hashPassword,
   checkUser,
   createUser,
 };

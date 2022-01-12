@@ -1,6 +1,7 @@
 import { ArticleModel, BoardModel, CommentModel, UserModel } from '../models';
 import { createArticle } from '../utilities/articleUtil';
 import { createUser } from '../utilities/userUtil';
+import { hashPassword } from '../utilities/userUtil';
 
 const defaultUsers = [
   {
@@ -85,6 +86,9 @@ const defaultArticles = [
 const userInit = async () => {
   await UserModel.deleteMany({});
   for(let user of defaultUsers) {
+    let { hashed_password, salt } = await hashPassword(user.password)
+    user.password = hashed_password;
+    user.salt = salt;
     await createUser(user);
   }
   console.log("Database: users initialized!");
