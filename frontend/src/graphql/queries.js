@@ -1,16 +1,16 @@
 import { gql } from "@apollo/client";
 
 // query - 全站最新文章List
-export const GET_NEWEST_AIRTICLES_QUERY = gql`
-  query newestArticles($limit: 4) 
-    newestArticles(limit: $limit){
-        brdname
-        title
-        owner
-        create_time
-    }
-  }
-`;
+// export const GET_NEWEST_AIRTICLES_QUERY = gql`
+//   query newestArticles($limit: ) 
+//     newestArticles(limit: $limit){
+//         brdname
+//         title
+//         owner
+//         create_time
+//     }
+//   }
+// `;
 
 // query - 單篇文章內容
 export const GET_AIRTICLE_QUERY = gql`
