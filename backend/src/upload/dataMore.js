@@ -13,6 +13,7 @@ const getInitUserList = async () => {
   user_list.push({
     username: "SYSOP",
     nickname: "站長？",
+    realname: "站長是誰",
     password: hashed_password,
     salt,
   });
@@ -21,6 +22,7 @@ const getInitUserList = async () => {
   user_list.push({
     username: "test",
     nickname: "測試機器人嗶嗶",
+    realname: "測試機",
     password: hashed_password,
     salt,
   });
@@ -29,6 +31,7 @@ const getInitUserList = async () => {
     ({ hashed_password, salt } = await hashPassword("123123"));
     user_list.push({
       username: `SYSOP${i}`,
+      realname: "SYSOP 真名",
       password: hashed_password,
       salt,
     });
@@ -38,6 +41,7 @@ const getInitUserList = async () => {
     ({ hashed_password, salt } = await hashPassword("123123"));
     user_list.push({
       username: `test${i}`,
+      realname: "test 真名",
       password: hashed_password,
       salt,
     });

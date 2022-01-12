@@ -1,4 +1,6 @@
 import { getHotBrdnameList } from "../utilities/creater";
+import { isValidUser } from "../utilities/userUtil";
+import { hashPassword } from "../utilities/userUtil";
 
 const Query = {
   async board(parent, { brdname }, { db }, info) {
@@ -68,9 +70,34 @@ const Query = {
     }
   },
 
-  async user(parent, { username }, { db}, info) {
-    return await db.UserModel.findOne({username});
+  async user(parent, { input: { username, password } }, { db }, info) {
+    let userData = await db.UserModel.findOne({username});
+    if(userData && await isValidUser(password, userData.password)) {
+      return userData;
+    }
+    else {
+      userData.realname = null;
+      userData.first_login = null;
+      userData.fav_boards = null;
+      userData.track_articles = null;
+      userData.fav_articles = null;
+      userData.mails = null;
+      return userData;
+    }
   },
+
+  async salt(parent, { username }, { db }, info) {
+    let userData = await db.UserModel.findOne({username});
+    return userData.salt;
+  },
+
+  // async genHash(parent, { plaintext }, { db }, info) {
+  //   let { hashed_password, salt } = await hashPassword(plaintext);
+  //   console.log(plaintext);
+  //   console.log(salt);
+  //   console.log(hashed_password);
+  //   return hashed_password;
+  // },
 
   async hotBoards(parent, args, { db }, info) {
     const hot_brdname_list = getHotBrdnameList();
