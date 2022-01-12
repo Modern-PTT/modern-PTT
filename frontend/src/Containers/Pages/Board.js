@@ -42,7 +42,6 @@ const Board =  () =>{
 
 
     return(
-<<<<<<< HEAD
       <>
         <Navbar />
         <div className="contents">
@@ -63,22 +62,6 @@ const Board =  () =>{
           </Wrapper>
     </>);
 
-=======
-      <Wrapper>
-           {/* <Button variant="contained">Default</Button> */}
-          <>{articles ? articles.map((item)=>(
-              <ArticleCard
-                  brdname={item.brdname}
-                  title={item.title}
-                  owner={item.owner}
-                  create_time={item.create_time}
-                  key={item.aid}
-              />
-          )): ''}  
-          </>
-        </Wrapper>
-    )
->>>>>>> e5b437d1f5e82687b720f5599416b739949175ff
 }
 
 export default Board;
