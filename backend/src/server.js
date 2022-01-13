@@ -28,11 +28,10 @@ const server = new GraphQLServer({
     //User,
     //Post,
   },
-  context: req => ({
-    req: req.request,
+  context: {
     db,
     pubsub,
-  }),
+  },
 });
 
 export default server;
