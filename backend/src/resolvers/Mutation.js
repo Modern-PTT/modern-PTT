@@ -2,7 +2,8 @@ import { validUser, checkUser, createUser } from '../utilities/userUtil';
 import {
   createArticle as createArticleUtil,
   updateArticle as updateArticleUtil,
-  deleteArticle as deleteArticleUtil
+  deleteArticle as deleteArticleUtil,
+  checkArticle
 } from '../utilities/articleUtil';
 import { createComment } from '../utilities/commentUtil';
 import { checkBoard } from '../utilities/boardUtil';
@@ -180,11 +181,48 @@ const Mutation = {
       return true;
     }
 
-    for(let brdname of brdnames) {
-      let board;
+    // TODO: case insensitive
+    const unique_brdnames = brdnames.filter((item, pos, self) => (
+      self.indexOf(item) === pos
+    ));
+
+    for(let brdname of unique_brdnames) {
       try {
-        board = await checkBoard(brdname, "updateFavBoards", db);
+        const board = await checkBoard(brdname, "updateFavBoards", db);
         user.fav_boards.push(board);
+      } catch (e) {
+        console.log(`${e}`);
+      }
+    }
+
+    await user.save();
+    return true;
+  },
+
+  async updateFavArticles(parent, { input } , { db }, info) {
+    const { aids, token } = input;
+    const { username, password } = token;
+
+    const user = await validUser(username, password, "updateFavArticles", db);
+    if(!user) {
+      console.log("not valid user");
+      return false;
+    }
+
+    user.fav_articles = [];
+    if(!(Array.isArray(aids) && aids.length !== 0)) {
+      await user.save();
+      return true;
+    }
+
+    const unique_aids = aids.filter((item, pos, self) => (
+      self.indexOf(item) === pos
+    ));
+
+    for(let aid of unique_aids) {
+      try {
+        const article = await checkArticle(aid, "updateFavArticles", db);
+        user.fav_articles.push(article);
       } catch (e) {
         console.log(`${e}`);
       }

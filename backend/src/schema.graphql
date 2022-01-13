@@ -148,7 +148,7 @@ type Mutation {
   updateFavBoards(input: UpdateFavBoardsInput!): Boolean!
 
   # # update a favorite article list
-  # updateFavArticles(input: UpdateFavArticlesInput!): Boolean!
+  updateFavArticles(input: UpdateFavArticlesInput!): Boolean!
 
 
 }
@@ -213,7 +213,7 @@ input UpdateFavBoardsInput {
   brdnames: [String!]
 }
 
-input UpdateFavAritclesInput {
+input UpdateFavArticlesInput {
   token: Token!
   aids: [String!]
 }
