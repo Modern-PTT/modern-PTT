@@ -6,8 +6,7 @@ const User = {
   },
   
   fav_boards(parent, args, { db }, info) {
-    if(!parent.fav_boards
-      || (Array.isArray(parent.fav_boards) && parent.fav_boards.length === 0)) {
+    if(!parent.fav_boards) {
         return null;
     }
 
@@ -19,8 +18,7 @@ const User = {
   },
 
   track_articles(parent, args, { db }, info) {
-    if(!parent.track_articles
-      || (Array.isArray(parent.track_articles) && parent.track_articles.length === 0)) {
+    if(!parent.track_articles) {
         return null;
     }
     
@@ -32,8 +30,7 @@ const User = {
   },
 
   fav_articles(parent, args, { db }, info) {
-    if(!parent.fav_articles
-      || (Array.isArray(parent.fav_articles) && parent.fav_articles.length === 0)) {
+    if(!parent.fav_articles) {
         return null
     }
 
