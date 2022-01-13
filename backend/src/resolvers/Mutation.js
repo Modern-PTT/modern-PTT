@@ -1,5 +1,6 @@
 import { validUser, checkUser, createUser } from '../utilities/userUtil';
 import { createArticle as createArticleUtil } from '../utilities/articleUtil';
+import { createComment } from '../utilities/commentUtil';
 
 const day_msec = 1000*60*60*24;
 const timeshift = 1000*60*60*8;
@@ -12,7 +13,7 @@ const isPassedOneDay = (last_time, curr_time) => {
 }
 
 const Mutation = {
-  async signup(parent, { input } , { db, req }, info) {
+  async signup(parent, { input } , { db }, info) {
     // console.log(req);
     const username = input.username;
     const password = input.password;
@@ -35,7 +36,7 @@ const Mutation = {
     return true;
   },
 
-  async login(parent, { username, password } , { db, req }, info) {
+  async login(parent, { username, password } , { db }, info) {
     const user = await validUser(username, password, "login", db);
     if(!user) {
       return false;
@@ -56,7 +57,7 @@ const Mutation = {
     return true;
   },
 
-  async logout(parent, { username, password } , { db, req }, info) {
+  async logout(parent, { username, password } , { db }, info) {
     const user = await validUser(username, password, "login", db);
     if(!user) {
       return false;
@@ -65,7 +66,7 @@ const Mutation = {
     return true;
   },
 
-  async createArticle(parent, { input } , { db, req }, info) {
+  async createArticle(parent, { input } , { db }, info) {
     const { brdname, title, content, token } = input;
     const { username, password } = token;
 
@@ -85,6 +86,35 @@ const Mutation = {
     try {
       await createArticleUtil(article, "createArticle", user, db);
     } catch (e) {
+      console.log(`${e}`);
+      return false;
+    }
+    return true;
+  },
+
+  async createComment(parent, { input } , { db }, info) {
+    const { aid, type, content, token } = input;
+    const { username, password } = token;
+
+    const user = await validUser(username, password, "createArticle", db);
+    if(!user) {
+      console.log("not valid user");
+      return false;
+    }
+
+    if(type <= 0 || type > 3) {
+      console.log("invalid comment type.");
+      return false;
+    }
+    const comment = {
+      owner: user.username,
+      type,
+      content,
+    };
+
+    try {
+      await createComment(aid, comment, user.last_ip, db)
+    } catch(e) {
       console.log(`${e}`);
       return false;
     }
