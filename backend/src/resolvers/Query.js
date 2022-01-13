@@ -98,12 +98,15 @@ const Query = {
   },
 
   async salt(parent, { username }, { db }, info) {
-    const userData = await db.UserModel.findOne({username});
+    const userData = await db.UserModel.findOne({
+      username: { "$regex": `^${username}$`, "$options": "i" }
+    });
     if(!userData) {
       return null;
     }
 
     // const password = "123123";
+    // console.log(userData.username)
     // console.log(userData.salt);
     // console.log(hashSync(password, userData.salt));
 

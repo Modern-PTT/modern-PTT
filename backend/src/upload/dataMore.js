@@ -125,10 +125,9 @@ const parseComments = async (brdname, aid) => {
   const { data: { list } } = await instance.get(`/board/${brdname}/article/${aid}/comments?limit=200&desc=false`);
   for(let comment of list) {
     if(comment.type <= 3) {
-      const type = (comment.type == 1)? "推" : ((comment.type == 2)? "噓" : "→");
       plainComments.push({
         owner: comment.owner,
-        type,
+        type: comment.type,
         content: comment.content[0][0].text,
         deleted: comment.deleted,
         ip: comment.ip,

@@ -52,12 +52,12 @@ const defaultArticles = [
     plainComments: [
       {
         owner: "test456",
-        type: "推",
+        type: 1,
         content: "Hello?",
       },
       {
         owner: "test789",
-        type: "→",
+        type: 3,
         content: "Hi~~~",
       },
     ],
@@ -70,7 +70,7 @@ const defaultArticles = [
     plainComments: [
       {
         owner: "test789",
-        type: "噓",
+        type: 2,
         content: "紅的喜氣",
       },
     ],

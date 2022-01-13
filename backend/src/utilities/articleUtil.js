@@ -20,13 +20,13 @@ const checkArticle = async (aid, errFunc, db=undefined) => {
 const pushNewComment = async (article, comment) => {
   article.comments = [...article.comments, comment];
   switch(comment.type) {
-    case "推":
+    case 1:
       ++article.push;
       break;
-    case "噓":
+    case 2:
       ++article.boo;
       break;
-    case "→":
+    case 3:
       ++article.neutral;
       break;
     default:
