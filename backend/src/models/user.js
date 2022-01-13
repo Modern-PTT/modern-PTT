@@ -34,10 +34,10 @@ const UserSchema = new mongoose.Schema(
       type: mongoose.Types.ObjectId,
       ref: "Article"
     }],
-    mails: [{
-      type: mongoose.Types.ObjectId,
-      ref: "Mail"
-    }]
+    // mails: [{
+    //   type: mongoose.Types.ObjectId,
+    //   ref: "Mail"
+    // }]
   }
 );
 

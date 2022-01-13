@@ -1,10 +1,13 @@
 import { getHotBrdnameList } from "../utilities/creater";
-import bcrypt from "bcrypt";
+import { checkArticle } from "../utilities/articleUtil";
+import bcrypt, { hashSync } from "bcrypt";
 import { hashPassword } from "../utilities/userUtil";
 
 const Query = {
   async board(parent, { brdname }, { db }, info) {
-    return await db.BoardModel.findOne({brdname});
+    return await db.BoardModel.findOne({
+      brdname: { "$regex": `^${brdname}$`, "$options": "i" }
+    });
   },
 
   async boards(parent, { keywords }, { db }, info) {
@@ -23,7 +26,11 @@ const Query = {
   },
 
   async article(parent, { aid }, { db }, info) {
-    return await db.ArticleModel.findOne({aid});
+    try {
+      return await checkArticle(aid, "query article", db);
+    } catch (e) {
+      return null;
+    }
   },
 
   async articles(parent, { input: { brdname, owner, title, timerange } }, { db }, info) {
@@ -86,7 +93,6 @@ const Query = {
       userData.fav_boards = null;
       userData.track_articles = null;
       userData.fav_articles = null;
-      userData.mails = null;
       return userData;
     }
   },
@@ -96,6 +102,10 @@ const Query = {
     if(!userData) {
       return null;
     }
+
+    // const password = "123123";
+    // console.log(userData.salt);
+    // console.log(hashSync(password, userData.salt));
 
     return userData.salt;
   },

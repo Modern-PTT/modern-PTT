@@ -1,4 +1,5 @@
 import { validUser, checkUser, createUser } from '../utilities/userUtil';
+import { createArticle as createArticleUtil } from '../utilities/articleUtil';
 
 const day_msec = 1000*60*60*24;
 const timeshift = 1000*60*60*8;
@@ -46,6 +47,10 @@ const Mutation = {
     }
     user.last_login = current_login;
 
+    // show random ip. TODO: catch real ip.
+    const randNum = Math.floor(Math.random() * 253 + 1);
+    user.last_ip = `140.112.30.${randNum}`
+
     await user.save();
 
     return true;
@@ -60,6 +65,31 @@ const Mutation = {
     return true;
   },
 
+  async createArticle(parent, { input } , { db, req }, info) {
+    const { brdname, title, content, token } = input;
+    const { username, password } = token;
+
+    const user = await validUser(username, password, "createArticle", db);
+    if(!user) {
+      console.log("not valid user");
+      return false;
+    }
+
+    let article = {
+      brdname,
+      title,
+      content,
+      owner: user.username,
+    }
+
+    try {
+      await createArticleUtil(article, "createArticle", user, db);
+    } catch (e) {
+      console.log(`${e}`);
+      return false;
+    }
+    return true;
+  },
 };
 
 export { Mutation as default };

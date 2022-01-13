@@ -25,7 +25,11 @@ const articleInit = async () => {
   await ArticleModel.deleteMany({});
   const defaultArticles = await getInitArticleList();
   for(let article of defaultArticles) {
-    await createArticle(article);
+    try {
+      await createArticle(article, "article init");
+    } catch (e) {
+      console.log(`articleInit error with ${article}: ${e}`);
+    }
   }
   console.log("Database: articles and comments initialized!");
 }

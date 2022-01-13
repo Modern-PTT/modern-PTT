@@ -1,10 +1,16 @@
 import { BoardModel } from "../models";
 
-const checkBoard = (brdname, errFunc) => {
+const checkBoard = async (brdname, errFunc, db=undefined) => {
   if(!brdname) {
     throw new Error("Missing board name for: " + errFunc);
   }
-  return BoardModel.findOne({brdname});
+  
+  if(db) {
+    return await db.BoardModel.findOne({brdname});
+  }
+  else {
+    return await BoardModel.findOne({brdname});
+  }
 }
 
 const pushNewArticle = async (board, article) => {

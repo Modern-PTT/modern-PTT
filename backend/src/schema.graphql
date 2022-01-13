@@ -70,7 +70,7 @@ type User {
   fav_boards: [Board!]          # 我的最愛看板
   track_articles: [Article!]    # 追蹤文章清單
   fav_articles: [Article!]      # 收藏文章清單
-  mails: [Mail!]                # 站內信箱
+  # mails: [Mail!]                # 站內信箱
 }
 
 type Location {
@@ -131,7 +131,7 @@ type Mutation {
   logout(username: String!, password: String!): Boolean
 
   # # Create an article
-  # createArticle(input: CreateArticleInput!): Boolean    # return null if failed
+  createArticle(input: CreateArticleInput!): Boolean    # return null if failed
   # # Update an article
   # updateArticle(input: UpdateArticleInput!): Boolean    # return null if failed
   # # Delete an article

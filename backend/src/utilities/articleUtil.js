@@ -4,11 +4,17 @@ import { checkBoard, pushNewArticle } from "./boardUtil";
 import { checkUser } from "./userUtil";
 import { createComment } from "./commentUtil";
 
-const checkArticle = async (aid, errFunc) => {
+const checkArticle = async (aid, errFunc, db=undefined) => {
   if(!aid) {
     throw new Error("Missing aid for: " + errFunc);
   }
-  return ArticleModel.findOne({aid});
+
+  if(db) {
+    return db.ArticleModel.findOne({aid});
+  }
+  else {
+    return ArticleModel.findOne({aid});
+  }
 }
 
 const pushNewComment = async (article, comment) => {
@@ -30,15 +36,20 @@ const pushNewComment = async (article, comment) => {
   await article.save();
 }
 
-const createArticle = async (article) => {
-  const board = await checkBoard(article.brdname, "createArticle");
+const createArticle = async (article, errFunc, user=undefined, db=undefined) => {
+  const board = await checkBoard(article.brdname, errFunc, db);
   if(!board) {
-    throw new Error(`board named ${article.brdname} not found for createArticle`);
+    throw new Error(`board named ${article.brdname} not found for ${errFunc}`);
   }  
 
-  const user = await checkUser(article.owner, "createArticle");
+  if(!user) {
+    user = await checkUser(article.owner, errFunc, db);
+  }
+
+  let defaultIP = "140.112.172.11";
   if(user) {
     ++user.post;  
+    defaultIP = user.last_ip;
     await user.save();  
   }
 
@@ -55,7 +66,7 @@ const createArticle = async (article) => {
   article.neutral = 0;
   article.boo = 0;
 
-  article.ip = (article.ip)? article.ip : "140.112.172.11",
+  article.ip = (article.ip)? article.ip : defaultIP,
   article.modified_time = article.create_time;
 
   let plainComments = null;
@@ -64,14 +75,20 @@ const createArticle = async (article) => {
     delete article.plainComments;
   }
 
-  const newArticle = new ArticleModel(article);
+  let newArticle;
+  if(db) {
+    newArticle = new db.ArticleModel(article);
+  }  
+  else {
+    newArticle = new ArticleModel(article);
+  }
   await newArticle.save();
   await pushNewArticle(board, newArticle);
 
   // create comments
   if(plainComments) {
     for(let comment of plainComments) {
-      await createComment(article.aid, comment);
+      await createComment(article.aid, comment, db);
     }
   }
 }

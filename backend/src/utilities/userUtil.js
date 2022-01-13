@@ -9,7 +9,7 @@ const hashPassword = async (password) => {
   return { hashed_password, salt }
 }
 
-const validUser = async (username, password, errFunc, db = undefined) => {
+const validUser = async (username, password, errFunc, db=undefined) => {
   const user = await checkUser(username, errFunc, db);
   if(!user) {
     return null;
@@ -22,11 +22,11 @@ const validUser = async (username, password, errFunc, db = undefined) => {
   }
 }
 
-const checkUser = async (username, errFunc, db = undefined) => {
+const checkUser = async (username, errFunc, db=undefined) => {
   if(!username) {
     throw new Error("Missing username for: " + errFunc);
   }
-  if(!db) {
+  if(db) {
     return await db.UserModel.findOne({
       username: { "$regex": `^${username}$`, "$options": "i" },
     });
@@ -38,7 +38,7 @@ const checkUser = async (username, errFunc, db = undefined) => {
   }
 }
 
-const createUser = async (user, db = undefined) => {
+const createUser = async (user, db=undefined) => {
   user.first_login = new Date();
 
   user.login_days = 1;
@@ -49,7 +49,7 @@ const createUser = async (user, db = undefined) => {
   user.password = bcrypt.hashSync(user.password, saltRounds);
 
   let newUser;
-  if(!db) {
+  if(db) {
     newUser = new db.UserModel(user);
   }
   else {
