@@ -4,9 +4,6 @@ import { v4 as uuidv4 } from "uuid";
 
 const createComment = async(aid, comment, ip=undefined, db=undefined) => {
   const article = await checkArticle(aid, "createComment", db);
-  if(!article) {
-    throw new Error(`article ${aid} not found for createComment`);
-  }
 
   comment.cid = uuidv4();
   comment.deleted = ("deleted" in comment)? comment.deleted : false;

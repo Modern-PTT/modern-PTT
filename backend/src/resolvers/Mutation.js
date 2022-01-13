@@ -1,5 +1,8 @@
 import { validUser, checkUser, createUser } from '../utilities/userUtil';
-import { createArticle as createArticleUtil } from '../utilities/articleUtil';
+import {
+  createArticle as createArticleUtil,
+  deleteArticle as deleteArticleUtil
+} from '../utilities/articleUtil';
 import { createComment } from '../utilities/commentUtil';
 
 const day_msec = 1000*60*60*24;
@@ -92,11 +95,30 @@ const Mutation = {
     return true;
   },
 
+  async deleteArticle(parent, { input } , { db }, info) {
+    const { aid, token } = input;
+    const { username, password } = token;
+
+    const user = await validUser(username, password, "deleteArticle", db);
+    if(!user) {
+      console.log("not valid user");
+      return false;
+    }
+
+    try {
+      await deleteArticleUtil(aid, user, "deleteArticle", db);
+    } catch (e) {
+      console.log(`${e}`);
+      return false;
+    }
+    return true;
+  },
+
   async createComment(parent, { input } , { db }, info) {
     const { aid, type, content, token } = input;
     const { username, password } = token;
 
-    const user = await validUser(username, password, "createArticle", db);
+    const user = await validUser(username, password, "createComment", db);
     if(!user) {
       console.log("not valid user");
       return false;

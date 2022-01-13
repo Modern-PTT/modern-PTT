@@ -135,7 +135,7 @@ type Mutation {
   # # Update an article
   # updateArticle(input: UpdateArticleInput!): Boolean    # return null if failed
   # # Delete an article
-  # deleteArticle(input: DeleteArticleInput!): Boolean    # return null if failed
+  deleteArticle(input: DeleteArticleInput!): Boolean    # return null if failed
 
   # # create a comment
   createComment(input: CreateCommentInput!): Boolean    # return cid. return null if failed

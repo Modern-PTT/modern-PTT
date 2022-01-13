@@ -67,6 +67,10 @@ const Query = {
       })
     }
 
+    filter.push({
+      deleted: false
+    })
+
     if(filter.length === 0) {
       return await db.ArticleModel.find();
     }
@@ -135,7 +139,7 @@ const Query = {
     if(limit !== null && limit > 0 && limit <= queryNum) {
       queryNum = limit;
     }
-    return await db.ArticleModel.find({})
+    return await db.ArticleModel.find({deleted: false})
                                 .sort({create_time: -1})
                                 .limit(queryNum);;
   },
@@ -167,6 +171,7 @@ const Query = {
           pushRank: {
             $gt: 0
           },
+          deleted: false,
         }
       },
       { 

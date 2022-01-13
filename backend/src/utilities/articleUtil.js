@@ -9,12 +9,23 @@ const checkArticle = async (aid, errFunc, db=undefined) => {
     throw new Error("Missing aid for: " + errFunc);
   }
 
+  let article;
   if(db) {
-    return db.ArticleModel.findOne({aid});
+    article = await db.ArticleModel.findOne({aid});
   }
   else {
-    return ArticleModel.findOne({aid});
+    article = await ArticleModel.findOne({aid});
   }
+
+  if(!article) {
+    throw new Error(`aid ${aid} not found for ${errFunc}`);
+  }
+
+  if(article.deleted) {
+    throw new Error(`aid ${aid} has been deleted.`);
+  }
+
+  return article;
 }
 
 const pushNewComment = async (article, comment) => {
@@ -93,8 +104,26 @@ const createArticle = async (article, errFunc, user=undefined, db=undefined) => 
   }
 }
 
+const deleteArticle = async (aid, user, errFunc, db) => {
+  const article = await checkArticle(aid, errFunc, db);
+
+  if(user.username !== article.owner) {
+    throw new Error(`permission denied for delete article.`);
+  }
+
+  article.deleted = true;
+  user.post -= 1;
+
+  console.log(article.deleted);
+  console.log(user.post);
+
+  article.save();
+  user.save();
+}
+
 export {
   checkArticle,
   pushNewComment,
   createArticle,
+  deleteArticle,
 };
