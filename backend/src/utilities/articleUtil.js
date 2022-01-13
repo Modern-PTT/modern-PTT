@@ -114,9 +114,6 @@ const updateArticle = async (aid, user, title, content, comment_reply, errFunc, 
   article.title = title;
   article.content = content;
 
-  console.log(article.title);
-  console.log(article.content);
-
   try {
     await updateCommentReply(aid, comment_reply, db);
   } catch (e) {

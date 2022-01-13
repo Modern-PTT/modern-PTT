@@ -184,7 +184,7 @@ input UpdateArticleInput {
 
 input CommentReply {
   cid: ID!
-  reply: String!
+  reply: String
 }
 
 input DeleteArticleInput {
