@@ -2,9 +2,10 @@ import { CommentModel } from "../models";
 import { checkArticle, pushNewComment } from "./articleUtil";
 import { v4 as uuidv4 } from "uuid";
 
-const createComment = async(aid, comment, ip=undefined, db=undefined) => {
+const createComment = async (aid, comment, ip=undefined, db=undefined) => {
   const article = await checkArticle(aid, "createComment", db);
 
+  comment.aid = aid;
   comment.cid = uuidv4();
   comment.deleted = ("deleted" in comment)? comment.deleted : false;
 
@@ -25,6 +26,24 @@ const createComment = async(aid, comment, ip=undefined, db=undefined) => {
   await pushNewComment(article, newComment);
 }
 
+const updateCommentReply = async (aid, comment_reply, db) => {
+  if(!(Array.isArray(comment_reply) && comment_reply.length !== 0)) {
+    return;
+  }
+
+  // return Promise.all(
+  //   parent.comments.map(
+  //     (c_id) => db.CommentModel.findById(c_id)
+  //   )
+  // );
+
+  // comment_reply.forEach(e => {
+    
+  // });
+  return;
+}
+
 export {
   createComment,
+  updateCommentReply,
 };

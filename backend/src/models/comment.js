@@ -7,6 +7,7 @@ const CommentSchema = new mongoose.Schema(
       unique: true,
       required: true
     },
+    aid: String,
     deleted: Boolean,
 
     type: Number,

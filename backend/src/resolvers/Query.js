@@ -112,7 +112,7 @@ const Query = {
     // const password = "123123";
     // console.log(userData.username)
     // console.log(userData.salt);
-    // console.log(hashSync(password, userData.salt));
+    // console.log(bcrypt.hashSync(password, userData.salt));
 
     return userData.salt;
   },

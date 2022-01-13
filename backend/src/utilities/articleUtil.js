@@ -2,7 +2,7 @@ import { ArticleModel } from "../models";
 import { createRandom, makeAIDu } from "./creater";
 import { checkBoard, pushNewArticle } from "./boardUtil";
 import { checkUser } from "./userUtil";
-import { createComment } from "./commentUtil";
+import { createComment, updateCommentReply } from "./commentUtil";
 
 const checkArticle = async (aid, errFunc, db=undefined) => {
   if(!aid) {
@@ -104,6 +104,30 @@ const createArticle = async (article, errFunc, user=undefined, db=undefined) => 
   }
 }
 
+const updateArticle = async (aid, user, title, content, comment_reply, errFunc, db) => {
+  const article = await checkArticle(aid, errFunc, db);
+
+  if(user.username !== article.owner) {
+    throw new Error(`permission denied for update article.`);
+  }
+
+  article.title = title;
+  article.content = content;
+
+  console.log(article.title);
+  console.log(article.content);
+
+  try {
+    await updateCommentReply(aid, comment_reply, db);
+  } catch (e) {
+    console.log(`${e}`);
+  }
+
+  article.modified_time = new Date();
+  await article.save();
+
+}
+
 const deleteArticle = async (aid, user, errFunc, db) => {
   const article = await checkArticle(aid, errFunc, db);
 
@@ -113,17 +137,19 @@ const deleteArticle = async (aid, user, errFunc, db) => {
 
   article.deleted = true;
   user.post -= 1;
+  article.modified_time = new Date();
 
   console.log(article.deleted);
   console.log(user.post);
 
-  article.save();
-  user.save();
+  await article.save();
+  await user.save();
 }
 
 export {
   checkArticle,
   pushNewComment,
   createArticle,
+  updateArticle,
   deleteArticle,
 };

@@ -133,7 +133,7 @@ type Mutation {
   # # Create an article
   createArticle(input: CreateArticleInput!): Boolean    # return null if failed
   # # Update an article
-  # updateArticle(input: UpdateArticleInput!): Boolean    # return null if failed
+  updateArticle(input: UpdateArticleInput!): Boolean    # return null if failed
   # # Delete an article
   deleteArticle(input: DeleteArticleInput!): Boolean    # return null if failed
 
@@ -178,7 +178,7 @@ input UpdateArticleInput {
   token: Token!
   aid: String!
   title: String!
-  content: String
+  content: String!
   comment_reply: [CommentReply!]  # null if not change
 }
 

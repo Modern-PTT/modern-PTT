@@ -1,6 +1,7 @@
 import { validUser, checkUser, createUser } from '../utilities/userUtil';
 import {
   createArticle as createArticleUtil,
+  updateArticle as updateArticleUtil,
   deleteArticle as deleteArticleUtil
 } from '../utilities/articleUtil';
 import { createComment } from '../utilities/commentUtil';
@@ -88,6 +89,32 @@ const Mutation = {
 
     try {
       await createArticleUtil(article, "createArticle", user, db);
+    } catch (e) {
+      console.log(`${e}`);
+      return false;
+    }
+    return true;
+  },
+
+  // input UpdateArticleInput {
+  //   token: Token!
+  //   aid: String!
+  //   title: String!
+  //   content: String
+  //   comment_reply: [CommentReply!]  # null if not change
+  // }
+  async updateArticle(parent, { input } , { db }, info) {
+    const { aid, title, content, comment_reply, token } = input;
+    const { username, password } = token;
+
+    const user = await validUser(username, password, "updateArticle", db);
+    if(!user) {
+      console.log("not valid user");
+      return false;
+    }
+
+    try {
+      await updateArticleUtil(aid, user, title, content, comment_reply, "updateArticle", db);
     } catch (e) {
       console.log(`${e}`);
       return false;
