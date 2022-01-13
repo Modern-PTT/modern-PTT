@@ -21,10 +21,10 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import InputBase from '@material-ui/core/InputBase';
-// import Message from '../hooks/Message';
-import Alert from '@mui/material/Alert';
 
-
+import { useParams, useHistory } from 'react-router-dom';
+import { useMutation } from '@apollo/client';
+import { CREATE_ARTICLE_MUTATION } from "../graphql";
 
 const Wrapper = styled.div`
   display: flex;
@@ -73,10 +73,19 @@ export default function NewPostCard() {
     const classes = useStyles();
     const classesText = useTextStyles();
     const bull = <span className={classes.bullet}>•</span>;
-
+    const {brdname} = useParams()
     //about send NewPost
     const [body,setBody] = useState('')
     const [title,setTitle] = useState('')
+
+    // const user_token = {
+    var username = "newuser"
+    var password = "$2b$10$ip6zuKhR4sm4qkv25HoURObkBHBHAeXzeKHl1UyAV3OTzIKkRVvDa"
+      // }
+
+    const [sendPost, { data, loading, error }] = useMutation(CREATE_ARTICLE_MUTATION);
+
+
     // const [articleInput,setArticleInput] = useState('')
 
     const handleChangeArticleBody=(input)=>{
@@ -89,14 +98,32 @@ export default function NewPostCard() {
     console.log("title: "+title)
     }  
 
-    const sendPost = ()=>{
-        if(!title || !body){
-          return(
-            <Alert severity="error">This is an error alert — check it out!</Alert>
-          )
+    const handleSubmit = ()=>{
+        if(!title || !body) alert("title and body can't be bull")
+        else {
+          sendPost({
+              variables:{
+                  username: username,
+                  password: password,
+                  brdname: brdname,
+                  title: title,
+                  content: body,
+                },
+              });
+          if(data.createArticle){
+            setBody('')
+            setTitle('')
+
+            alert("New Post okay")
+          }
+
         }
-        else console.log("title and body can't be bull")
+        
     }
+
+
+
+
 
     return (
         <Wrapper>
@@ -158,7 +185,7 @@ export default function NewPostCard() {
                 </form>
                 <CardActions>
                     <Button size="small"
-                    onClick={()=>sendPost()}
+                    onClick={()=>handleSubmit()}
                     >
                         發文</Button>
                 </CardActions>

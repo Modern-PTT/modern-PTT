@@ -72,7 +72,7 @@ function App() {
                     setMyLoveArticles={setMyLoveArticles}
                   />
                   }/>
-                <Route path='/NewPost' element={<NewPost/>}/>
+                <Route path='/:brdname/NewPost' element={<NewPost/>}/>
                 <Route path='*' element={<Home/>}/>
               </Routes> 
         </BrowserRouter>

@@ -30,8 +30,8 @@ export const LOG_OUT_MUTATION = gql`
 
 // about ARTICLE: CREATE/UPDATE/DELETE
 export const CREATE_ARTICLE_MUTATION = gql`
-  mutation createArticle($CreateArticleInput: CreateArticleInput!){
-    createArticle(CreateArticleInput: $CreateArticleInput){
+  mutation createArticle($password:String!, $username:String!, $brdname:String!, $title:String!, $content:String!){
+    createArticle(password:$password, username:$username, brdname: $brdname, title:$title, content:$content){
         createArticle
     }
   }
