@@ -5,12 +5,23 @@ const checkBoard = async (brdname, errFunc, db=undefined) => {
     throw new Error("Missing board name for: " + errFunc);
   }
   
+  let board;
   if(db) {
-    return await db.BoardModel.findOne({brdname});
+    board = await db.BoardModel.findOne({
+      brdname: { "$regex": `^${brdname}$`, "$options": "i" }
+    });
   }
   else {
-    return await BoardModel.findOne({brdname});
+    board = await BoardModel.findOne({
+      brdname: { "$regex": `^${brdname}$`, "$options": "i" }
+    });
   }
+
+  if(!board) {
+    throw new Error(`board named ${article.brdname} not found for ${errFunc}`);
+  }
+  
+  return board;
 }
 
 const pushNewArticle = async (board, article) => {

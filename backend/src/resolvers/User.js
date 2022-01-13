@@ -5,36 +5,36 @@ const User = {
     return getLocation(parent.last_ip);
   },
   
-  fav_boards(parent, args, { db }, info) {
+  async fav_boards(parent, args, { db }, info) {
     if(!parent.fav_boards) {
         return null;
     }
 
-    return Promise.all(
+    return await Promise.all(
       parent.fav_boards.map(
         (b_id) => db.BoardModel.findById(b_id)
       )
     );
   },
 
-  track_articles(parent, args, { db }, info) {
+  async track_articles(parent, args, { db }, info) {
     if(!parent.track_articles) {
         return null;
     }
     
-    return Promise.all(
+    return await Promise.all(
       parent.track_articles.map(
         (a_id) => db.ArticleModel.findById(a_id)
       )
     );
   },
 
-  fav_articles(parent, args, { db }, info) {
+  async fav_articles(parent, args, { db }, info) {
     if(!parent.fav_articles) {
         return null
     }
 
-    return Promise.all(
+    return await Promise.all(
       parent.fav_articles.map(
         (a_id) => db.ArticleModel.findById(a_id)
       )

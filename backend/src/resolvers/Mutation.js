@@ -5,6 +5,7 @@ import {
   deleteArticle as deleteArticleUtil
 } from '../utilities/articleUtil';
 import { createComment } from '../utilities/commentUtil';
+import { checkBoard } from '../utilities/boardUtil';
 
 const day_msec = 1000*60*60*24;
 const timeshift = 1000*60*60*8;
@@ -96,13 +97,6 @@ const Mutation = {
     return true;
   },
 
-  // input UpdateArticleInput {
-  //   token: Token!
-  //   aid: String!
-  //   title: String!
-  //   content: String
-  //   comment_reply: [CommentReply!]  # null if not change
-  // }
   async updateArticle(parent, { input } , { db }, info) {
     const { aid, title, content, comment_reply, token } = input;
     const { username, password } = token;
@@ -167,6 +161,36 @@ const Mutation = {
       console.log(`${e}`);
       return false;
     }
+    return true;
+  },
+
+  async updateFavBoards(parent, { input } , { db }, info) {
+    const { brdnames, token } = input;
+    const { username, password } = token;
+
+    const user = await validUser(username, password, "updateFavBoards", db);
+    if(!user) {
+      console.log("not valid user");
+      return false;
+    }
+
+    user.fav_boards = [];
+    if(!(Array.isArray(brdnames) && brdnames.length !== 0)) {
+      await user.save();
+      return true;
+    }
+
+    for(let brdname of brdnames) {
+      let board;
+      try {
+        board = await checkBoard(brdname, "updateFavBoards", db);
+        user.fav_boards.push(board);
+      } catch (e) {
+        console.log(`${e}`);
+      }
+    }
+
+    await user.save();
     return true;
   },
 };

@@ -14,31 +14,6 @@ const checkComment = async (cid, db) => {
   return comment;
 }
 
-
-// const checkArticle = async (aid, errFunc, db=undefined) => {
-//   if(!aid) {
-//     throw new Error("Missing aid for: " + errFunc);
-//   }
-
-//   let article;
-//   if(db) {
-//     article = await db.ArticleModel.findOne({aid});
-//   }
-//   else {
-//     article = await ArticleModel.findOne({aid});
-//   }
-
-//   if(!article) {
-//     throw new Error(`aid ${aid} not found for ${errFunc}`);
-//   }
-
-//   if(article.deleted) {
-//     throw new Error(`aid ${aid} has been deleted.`);
-//   }
-
-//   return article;
-// }
-
 const createComment = async (aid, comment, ip=undefined, db=undefined) => {
   const article = await checkArticle(aid, "createComment", db);
 

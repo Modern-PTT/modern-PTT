@@ -48,10 +48,7 @@ const pushNewComment = async (article, comment) => {
 }
 
 const createArticle = async (article, errFunc, user=undefined, db=undefined) => {
-  const board = await checkBoard(article.brdname, errFunc, db);
-  if(!board) {
-    throw new Error(`board named ${article.brdname} not found for ${errFunc}`);
-  }  
+  const board = await checkBoard(article.brdname, errFunc, db); 
 
   if(!user) {
     user = await checkUser(article.owner, errFunc, db);

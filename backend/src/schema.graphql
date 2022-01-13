@@ -114,7 +114,7 @@ input HotArticlesInput {
 
 input articlesInput {
   brdname: [String!]      # support for searching in multiple boards
-  owner: String           # exactly match
+  owner: String
   title: [String!]
   timerange: Int          # hour
 }
@@ -126,29 +126,29 @@ input userInput {
 
 # See resolvers/Mutation.js
 type Mutation {
-  signup(input: SignupInput!): Boolean
-  login(username: String!, password: String!): Boolean
-  logout(username: String!, password: String!): Boolean
+  signup(input: SignupInput!): Boolean!
+  login(username: String!, password: String!): Boolean!
+  logout(username: String!, password: String!): Boolean!
 
   # # Create an article
-  createArticle(input: CreateArticleInput!): Boolean    # return null if failed
+  createArticle(input: CreateArticleInput!): Boolean!
   # # Update an article
-  updateArticle(input: UpdateArticleInput!): Boolean    # return null if failed
+  updateArticle(input: UpdateArticleInput!): Boolean!
   # # Delete an article
-  deleteArticle(input: DeleteArticleInput!): Boolean    # return null if failed
+  deleteArticle(input: DeleteArticleInput!): Boolean!
 
   # # create a comment
-  createComment(input: CreateCommentInput!): Boolean    # return cid. return null if failed
+  createComment(input: CreateCommentInput!): Boolean!
   # # modify a comment
-  # modifyComment(input: ModifyCommentInput!): Boolean    # return cid. return null if failed. only for moderator and article owner
+  # modifyComment(input: ModifyCommentInput!): Boolean!    # only for moderator and article owner
   # # delete a comment
-  # deleteComment(input: DeleteCommentInput!): Boolean    # return cid. return null if failed. only for moderator and article owner
+  # deleteComment(input: DeleteCommentInput!): Boolean!    # only for moderator and article owner
 
   # # update favorite board list
-  # updateFavBoards(input: UpdateFavBoardsInput!): Boolean           # return bid. return null if failed
+  updateFavBoards(input: UpdateFavBoardsInput!): Boolean!
 
   # # update a favorite article list
-  # updateFavArticles(input: UpdateFavArticlesInput!): Boolean       # return bid. return null if failed
+  # updateFavArticles(input: UpdateFavArticlesInput!): Boolean!
 
 
 }
