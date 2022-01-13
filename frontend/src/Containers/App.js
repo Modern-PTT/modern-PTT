@@ -19,15 +19,22 @@ import Category from '../Containers/Pages/Category'
 import AllBoards from './Pages/AllBoards'
 import HotBoards from './Pages/HotBoards'
 import SearchBoards from './Pages/SearchBoards'
+import LoginRegister from './Pages/LoginRegister'
 
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
+// const LOCALSTORAGE_KEY = "save-me";
 
 function App() {
 
+  // const savedUserName = localStorage.getItem(LOCALSTORAGE_KEY);
   // TODO USERNAME PASSWORD SALT
-  const [me, setMe] = useState()
-  const [meSalt, setMeSalt] = useState()
+  // const [username, setUsername] = useState(savedUserName || '')
+  const [username, setUsername] = useState('')
+  const [mySalt, setMySalt] = useState()
+  const [myHashPassword, setMyHashPassword] = useState('')
+  const [isLogIn, setIsLogIn] = useState(false)
+
   const [myLoveBoards, setMyLoveBoards] = useState([])
   const [myLoveArticles, setMyLoveArticles] = useState([])
 
@@ -37,6 +44,19 @@ function App() {
               <Routes>
                 <Route path='/' element={<Navigate to='/intro'/>}/>
                 <Route path='/intro' element={<Intro/>}/>
+                <Route path='/LoginRegister' element={
+                  <LoginRegister
+                    username={username}
+                    setUsername={setUsername}
+                    mySalt={mySalt}
+                    setMySalt={setMySalt}
+                    myHashPassword={myHashPassword}
+                    setMyHashPassword={setMyHashPassword}
+                    isLogIn={isLogIn}
+                    setIsLogIn={setIsLogIn}
+
+                  />
+                  }/>
                 <Route path='/home' element={
                   <Home 
                     myLoveBoards={myLoveBoards}

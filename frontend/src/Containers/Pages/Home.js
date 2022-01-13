@@ -8,6 +8,8 @@ import Button from '@mui/material/Button';
 import styled from 'styled-components';
 import BoardNameCard from '../../Components/BoardNameCard'
 
+
+
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -20,14 +22,13 @@ const Wrapper = styled.div`
 const Home = ({myLoveBoards, setMyLoveBoards, myLoveArticles, setMyLoveArticles}) => {
 
     const [articles, setArticles] = useState('');
-
-
     const {data, error, loading} =  useQuery(GET_HOTARTICLES)
     
     useEffect(() => {
       if(data) setArticles(data.hotArticles);
       if(data) console.log(data)
     }, [data])
+
 
 
     return (<>

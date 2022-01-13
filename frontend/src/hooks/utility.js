@@ -11,14 +11,14 @@ const secondToDate = (seconds)=>{
 
 // //check the user token
 
-// const bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt');
   
 // const saltRounds = 10;
 // const myPassword = 'password1';
 // const testPassword = 'password2';
 // const myHash ='$2a$10$fok18OT0R/cWoR0a.VsjjuuYZV.XrfdYd5CpDWrYkhi1F0i8ABp6e'; // myPassword加密後結果(驗證用)
 
-// 加密
+// 加密git 
 // const hash = bcrypt.hashSync(myPassword, saltRounds);
 // console.log(hash);
 

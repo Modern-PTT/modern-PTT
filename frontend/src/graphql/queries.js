@@ -3,7 +3,7 @@ import { gql } from "@apollo/client";
 
 // 1. query - 特定看板 list
 export const GET_BOARD_QUERY  = gql`
-query board($brdname: String!){
+query board($brdname: String){
     board(brdname: $brdname) {
         articles {
             brdname
@@ -103,7 +103,7 @@ export const GET_USER = gql`
 `
 // 6. query - salt
 export const GET_SALT = gql`
-    query salt ($username: username){
+    query salt ($username: String!){
         salt(username: $username){
             salt
         }
