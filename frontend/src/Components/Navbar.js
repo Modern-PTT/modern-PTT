@@ -8,21 +8,36 @@ import InputBase from '@material-ui/core/InputBase';
 import Badge from '@material-ui/core/Badge';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Tooltip from '@mui/material/Tooltip';
 import BorderColorIcon from '@mui/icons-material/BorderColor';
-import ModeEditIcon from '@mui/icons-material/ModeEdit';
 
 import Link from '@mui/material/Link';
 
 
+import Button from '@mui/material/Button';
+// const [showAlert, setShowAlert] = useState(null)
+import { useState, useEffect} from 'react';
+import { useQuery } from '@apollo/client';
+import Card from '@mui/material/Card';
+import Modal from '@mui/material/Modal';
+import styled from 'styled-components';
+import Row from './Layout/Row';
+import Column from './Layout/Column';
+
+//selection
+import InputLabel from '@mui/material/InputLabel';
+import FormHelperText from '@mui/material/FormHelperText';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import TextField from '@mui/material/TextField';
 const useStyles = makeStyles((theme) => ({
   appBar:{
     boxShadow: 'none',
@@ -91,6 +106,43 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function PrimarySearchAppBar() {
+  // insert ===========================
+  const [boardInput, setBoardInput] = useState([""])
+  const [titleInput, setTitleInput] = useState([""])
+  const [ownerInput, setOwnerInput] = useState([""])
+  const [time, setTime] = useState(3);
+  const time_interval = [
+    {time:6,name:"6小時內"},
+    {time:12,name:"12小時內"},
+    {time:72,name:"3天內"},
+    {time:168,name:"一週內"}
+  ]
+
+  const handleTimeChange = (event) => {
+    setTime(event.target.value);
+  };
+
+  const handleBasicSearch = () => {
+    var splits_boards = boardInput.split(" ");
+    console.log(splits_boards)
+    // return 
+  }
+  // Advance Search
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const handleSubmit = () =>{
+    setOpen(false);
+    // QUERY
+  }
+
+
+
+
+
+  // TODO:  Mutation in Search
+  //  =================================
+
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -202,17 +254,98 @@ export default function PrimarySearchAppBar() {
             ModernPTT
           </Typography>
           <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
-            </div>
+
             <InputBase
               placeholder="搜尋看板..."
               classes={{
                 root: classes.inputRoot,
                 input: classes.inputInput,
               }}
+              value={boardInput}
+              onChange={(e) => setBoardInput(e.target.value)}
               inputProps={{ 'aria-label': 'search' }}
             />
+            {/* <div className={classes.searchIcon}>
+              <SearchIcon />
+            </div> */}
+
+            <Button onClick={handleOpen} >進階搜尋</Button>
+            <Modal 
+              width="500"
+              open={open}
+              onClose={handleClose}
+              display="flex"
+              align-items="center"
+              justify-content="center"
+              // aria-labelledby="modal-modal-title"
+              // aria-describedby="modal-modal-description"
+            >
+                <Card  sx={{position: 'absolute', width: 500 }}>
+                    <p>進階搜尋</p>
+                    <div padding="20px">
+                    <Column>
+                      <Row>看板
+                        <TextField  
+                          fullWidth
+                          placeholder="用空白間隔開關鍵字，如 B k"
+                          id="board_search" 
+                          value={boardInput} 
+                          onChange={(e)=>setBoardInput(e.target.value)} 
+                          variant="outlined" 
+                        />
+                      </Row>
+                      <Row>
+                        作者
+                        <TextField  
+                          fullWidth
+                          // placeholder="用空白間隔開關鍵字，如 B k"
+                          id="board_search" 
+                          value={ownerInput} 
+                          onChange={(e)=>setOwnerInput(e.target.value)} 
+                          variant="outlined" 
+                        />
+                      </Row>
+                      <Row>
+                        標題
+                        <TextField  
+                          fullWidth
+                          placeholder="用空白間隔開關鍵字，如 B k"
+                          id="title_search" 
+                          value={titleInput} 
+                          onChange={(e)=>setTitleInput(e.target.value)} 
+                          variant="outlined" 
+                        />
+                      </Row>
+                      <Row>時間</Row>
+                        <FormControl sx={{ m: 1, minWidth: 120 }}>
+                        {/* <FormHelperText>Without label</FormHelperText>  */}
+                          <Select
+                            value={time}
+                            onChange={handleTimeChange}
+                            displayEmpty
+                          >
+                            {time_interval.map((item)=>(
+                              <MenuItem value={item.time}>{item.name}</MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
+                    </Column>
+                    </div>
+                  <div>
+                    <Button onClick={handleClose} >取消</Button>
+                    <Button onClick={handleSubmit} >送出</Button>
+                  </div>
+                </Card>
+
+
+            </Modal>
+
+
+            <IconButton>
+              {/* <Link href="/search/boards"> */}
+                <SearchIcon onClick={()=>handleBasicSearch()}/>
+              {/* </Link> */}
+            </IconButton>
           </div>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>

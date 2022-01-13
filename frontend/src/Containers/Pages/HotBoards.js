@@ -2,16 +2,12 @@ import Button from '@material-ui/core/Button';
 import styled from 'styled-components';
 import { useParams, useHistory } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
-import { GET_ALLBOARDS_QUERY } from "../../graphql";
+import { GET_HOTBOARDS } from "../../graphql";
 import { useState, useEffect} from 'react';
-
 import  {DataGrid}  from '@material-ui/data-grid';
 import Link from '@mui/material/Link';
-
 import Navbar from "../../Components/Navbar"
 import DashBoard from "../../Components/DashBoard"
-// import HotList from '../../Components/HotList'
-//query某看板後拿回的簡要文章列表
 
 
 //set styled div
@@ -32,25 +28,16 @@ const Wrapper = styled.div`
 `;
 
 
-// {
-//   "id":11,
-//   "brdname": "WhoAmI",
-//   "type": "board",
-//   "class": "嘰哩",
-//   "title": "呵呵，猜猜我是誰！",
-//   "moderators": []
-// }
+const HotBoards =  () =>{
+  const [hotBoards, setHotBoards] = useState('');
 
-const Hot =  () =>{
-  const [boards, setBoards] = useState('');
-
-
-  const {data, error, loading} =  useQuery(GET_ALLBOARDS_QUERY)
+  const {data, error, loading} =  useQuery(GET_HOTBOARDS)
+   
   
   useEffect(() => {
-    if(data) setBoards(data.boards);
+    if(data) setHotBoards(data.hotBoards);
   }, [data])
-  console.log(boards)
+  console.log(hotBoards)
 
   const columns = [
     {
@@ -86,9 +73,9 @@ const Hot =  () =>{
         <Wrapper>
                 {/* <HotList/> */}
                 <StyledDiv>
-                  {boards?
+                  {hotBoards?
                     <DataGrid
-                    rows={boards}
+                    rows={hotBoards}
                     columns={columns}
                     pageSize={10}
                     getRowId={(row) => row.brdname}
@@ -103,5 +90,5 @@ const Hot =  () =>{
 
 }
 
-export default Hot;
+export default HotBoards;
 

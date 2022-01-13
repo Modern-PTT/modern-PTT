@@ -25,7 +25,7 @@ const Wrapper = styled.div`
   margin: auto;
 `;
 
-const Board =  () =>{
+const Board =  ({myLoveArticles, setMyLoveArticles}) =>{
   const [articles, setArticles] = useState('');
 
   const {brdname} = useParams()
@@ -56,6 +56,9 @@ const Board =  () =>{
                     owner={item.owner}
                     create_time={item.create_time}
                     aid={item.aid}
+                    deleted={item.deleted}
+                    myLoveArticles={myLoveArticles}
+                    setMyLoveArticles={setMyLoveArticles}
                 />
             )): ''}  
             </>

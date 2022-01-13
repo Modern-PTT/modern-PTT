@@ -20,6 +20,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import NotificationAddIcon from '@mui/icons-material/NotificationAdd';
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import Link from '@mui/material/Link';
+import {useState, useEffect} from 'react'
 
 const useStyles = makeStyles({
   root: {
@@ -66,14 +67,31 @@ const msgState = (input)=>{
 }
 
 
-export default function AirticleCard({brdname,title,owner,create_time,aid}) {
+export default function ArticleCard({brdname,title,owner,create_time,aid,deleted,myLoveArticles,setMyLoveArticles}) {
   const classes = useStyles();
   const classesText = useTextStyles();
   const bull = <span className={classes.bullet}>•</span>;
 
+  const AddLoveArticles = (input) =>{
+    console.log(input)
+    setMyLoveArticles(myLoveArticles.concat(input));
+  }
+
+  useEffect(() => {
+    console.log(myLoveArticles)
+  }, [myLoveArticles])
 
   
   return (
+    (deleted)?
+    <Wrapper>
+      <Card className={classes.root} variant="outlined">
+          <CardContent>
+           本文章已刪除
+          </CardContent>
+      </Card>
+    </Wrapper>
+    :
       <Wrapper>
         <Card className={classes.root} variant="outlined">
             <CardContent>
@@ -86,16 +104,16 @@ export default function AirticleCard({brdname,title,owner,create_time,aid}) {
                       <>{create_time}</>
                       <div>
                       <Tooltip title="收藏">
-                          <IconButton>
+                          <IconButton onClick={()=>AddLoveArticles(aid)}>
                             <FavoriteIcon />
                           </IconButton>
                         </Tooltip>
-                        <Tooltip title="追蹤">
+                        {/* <Tooltip title="追蹤">
                           <IconButton>
                             <NotificationAddIcon />
                           </IconButton>
                         </Tooltip>
-                        <Button size="small" variant="contained" color="primary">追蹤</Button>
+                        <Button size="small" variant="contained" color="primary">追蹤</Button> */}
                       </div>
                     </Row>
                     {/* </Typography> */}
@@ -106,5 +124,6 @@ export default function AirticleCard({brdname,title,owner,create_time,aid}) {
             </CardActions> */}
         </Card>
       </Wrapper>
+    
   );
 }

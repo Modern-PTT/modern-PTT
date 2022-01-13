@@ -1,18 +1,34 @@
 import { gql } from "@apollo/client";
 
-// query - 全站最新文章List
-// export const GET_NEWEST_AIRTICLES_QUERY = gql`
-//   query newestArticles($limit: limit) 
-//     newestArticles(limit: $limit){
-//         brdname
-//         title
-//         owner
-//         create_time
-//     }
-//   }
-// `;
 
-// query - 單篇文章內容
+// 1. query - 特定看板 list
+export const GET_BOARD_QUERY  = gql`
+query board($brdname: brdname){
+    board(brdname: $brdname) {
+      brdname
+      type
+      class
+      title
+      moderators
+    }
+  }
+`;
+
+// 2. query all or search board HotBoards
+export const GET_BOARDS_QUERY = gql`
+query boards($keywords: [String!]){
+    boards(keywords: $keywords){
+      brdname
+      type
+      class
+      title
+      moderators
+  }
+}
+`;
+
+
+// 3. query - 單篇文章內容
 export const GET_ARTICLE_QUERY = gql`
     query article ($aid: String!) {
         article(aid: $aid){
@@ -36,40 +52,95 @@ export const GET_ARTICLE_QUERY = gql`
         }
 }
 `;
-// query - 單一看板文章list
-export const GET_BOARD_ARTICLES_QUERY = gql`
-query board($brdname: String!){
-    board(brdname: $brdname){
-        brdname
-        articles {
-            aid
-            owner
+
+// 4. query - 
+export const GET_ARTICLES_QUERY = gql`
+    query articles ($aid: String!) {
+        articles(aid: $aid){
             title
-            create_time
+            owner
+            content
+            location {
+                ip
+                country
+                }
+            comments {
+                type
+                owner
+                content
+                location {
+                    ip
+                    country
+                    }
+                create_time
+            }
         }
+}
+`;
+
+// 5. query - user
+export const GET_USER = gql`
+    query user ($username: String!, $password: String){
+        user(username: $username, password: $password){
+            username
+            realname
+            nickname
+            login_days
+            last_login
+            post
+            money
+        
+            first_login
+            fav_boards {
+                brdname
+            }
+        }
+    }
+`
+// 6. query - salt
+export const GET_SALT = gql`
+    query salt ($username: username){
+        salt(username: $username){
+            salt
+        }
+    }
+`
+
+
+
+// 7. query - 熱門看板list ok HotBoards
+export const GET_HOTBOARDS = gql`
+query hotBoards{
+    hotBoards{
+        brdname
+        class
+        title
+        moderators
     }
 }
 `;
-// query {
-//     board (brdname: "Baseball") {
-//       articles {
-//         aid
-//         title
-//         owner
-//       }
-//     }
-//   }
 
-// query - 所有看板 list
-export const GET_ALLBOARDS_QUERY = gql`
-query {
-    boards {
-      brdname
-      type
-      class
-      title
-      moderators
+
+// 8. query - 熱門文章
+export const GET_NEWEST_ARTICLES = gql`
+query newestArticles($limit: Int!){
+    newestArticles(limit: $limit){
+        brdname
+        title
+        owner
+        create_time
     }
-  }
+}
 `;
 
+// 9. query - 熱門文章list ok
+export const GET_HOTARTICLES = gql`
+query hotArticles{
+    hotArticles{
+        title
+        create_time
+        push
+        boo
+    }
+}
+`;

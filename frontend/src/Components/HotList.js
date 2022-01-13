@@ -158,21 +158,15 @@ const columns = [
   }
 ];
 
-const rows = [
-  { id: 1, BoardName: 'Snow', BoardEName: 'Jon', detail: 35 },
-  { id: 2, BoardName: 'Snow', BoardEName: 'Jon', detail: 35 },
-  { id: 3, BoardName: 'Snow', BoardEName: 'Jon', detail: 35 },
-  { id: 4, BoardName: 'Snow', BoardEName: 'Jon', detail: 35 }
 
-];
-
-export default function HotList() {
+export default function HotList({inputrows}) {
   return (
     <StyledDiv>
       <DataGrid
-        rows={GET_ALLBOARDS_QUERY.data.allBoards}
+        rows={inputrows}
         columns={columns}
         pageSize={10}
+
         disableSelectionOnClick
       />
     </StyledDiv>

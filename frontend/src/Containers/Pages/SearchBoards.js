@@ -1,13 +1,10 @@
-import Button from '@material-ui/core/Button';
 import styled from 'styled-components';
-// import MessageBox from './old/MessageBox';
-import Article from '../../Components/Article';
 import ArticleCard from '../../Components/ArticleCard'
 
 // import  graphql  from 'graphql';
 import { useParams, useHistory } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
-import { GET_ARTICLE_QUERY } from "../../graphql";
+import { GET_BOARD_ARTICLES_QUERY } from "../../graphql";
 import { useState, useEffect} from 'react';
 
 import Navbar from "../../Components/Navbar"
@@ -28,21 +25,17 @@ const Wrapper = styled.div`
 const Board =  ({myLoveArticles, setMyLoveArticles}) =>{
   const [articles, setArticles] = useState('');
 
-  const {aid, brdname} = useParams()
-  console.log(aid)
+  const {brdname} = useParams()
   console.log(brdname)
-  const {data, error, loading} =  useQuery(GET_ARTICLE_QUERY,{
+  const {data, error, loading} =  useQuery(GET_BOARD_ARTICLES_QUERY,{
     variables: {
-      aid: aid,
+      brdname: brdname,
     }
   })
   
-//   useEffect(() => {
-//     if(data) {
-//         setArticles(data.articles);
-//         console.log("42"+data.title)
-//     }
-//   }, [data])
+  useEffect(() => {
+    if(data) setArticles(data.board.articles);
+  }, [data])
 
 
     return(
@@ -52,14 +45,21 @@ const Board =  ({myLoveArticles, setMyLoveArticles}) =>{
             <DashBoard />
         </div>
         <Wrapper>
-            {/* {console.log(data.article)} */}
-            {(data)?
-            <Article
-                article={data.article}
-                myLoveArticles={myLoveArticles}
-                setMyLoveArticles={setMyLoveArticles}
-            />:<></>}
-        </Wrapper>
+            {/* <Button variant="contained">Default</Button> */}
+            <>{articles ? articles.map((item)=>(
+                <ArticleCard
+                    brdname={item.brdname}
+                    title={item.title}
+                    owner={item.owner}
+                    create_time={item.create_time}
+                    aid={item.aid}
+                    deleted={item.deleted}
+                    myLoveArticles={myLoveArticles}
+                    setMyLoveArticles={setMyLoveArticles}
+                />
+            )): ''}  
+            </>
+          </Wrapper>
     </>);
 
 }

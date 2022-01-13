@@ -7,7 +7,7 @@ import ArticleCard from '../../Components/ArticleCard'
 // import  graphql  from 'graphql';
 import { useParams, useHistory } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
-import { GET_ARTICLE_QUERY } from "../../graphql";
+import { GET_BOARD_ARTICLES_QUERY } from "../../graphql";
 import { useState, useEffect} from 'react';
 
 import Navbar from "../../Components/Navbar"
@@ -25,24 +25,21 @@ const Wrapper = styled.div`
   margin: auto;
 `;
 
-const Board =  ({myLoveArticles, setMyLoveArticles}) =>{
+const Board =  ({myLoveAirticles, setMyLoveAirticles}) =>{
   const [articles, setArticles] = useState('');
 
-  const {aid, brdname} = useParams()
-  console.log(aid)
-  console.log(brdname)
-  const {data, error, loading} =  useQuery(GET_ARTICLE_QUERY,{
+//   const {brdname} = useParams()
+//   console.log(brdname)
+  const {data, error, loading} =  useQuery(GET_BOARD_ARTICLES_QUERY,{
     variables: {
-      aid: aid,
+      aid: myLoveAirticles,
     }
   })
   
-//   useEffect(() => {
-//     if(data) {
-//         setArticles(data.articles);
-//         console.log("42"+data.title)
-//     }
-//   }, [data])
+  useEffect(() => {
+    if(data) setArticles(data.board.articles);
+    console.log(myLoveAirticles)
+  }, [myLoveAirticles])
 
 
     return(
@@ -52,14 +49,20 @@ const Board =  ({myLoveArticles, setMyLoveArticles}) =>{
             <DashBoard />
         </div>
         <Wrapper>
-            {/* {console.log(data.article)} */}
-            {(data)?
-            <Article
-                article={data.article}
-                myLoveArticles={myLoveArticles}
-                setMyLoveArticles={setMyLoveArticles}
-            />:<></>}
-        </Wrapper>
+            {/* <Button variant="contained">Default</Button> */}
+            <>{articles ? articles.map((item)=>(
+                <ArticleCard
+                    brdname={item.brdname}
+                    title={item.title}
+                    owner={item.owner}
+                    create_time={item.create_time}
+                    aid={item.aid}
+                    myLoveAirticles={myLoveAirticles}
+                    setMyLoveAirticles={setMyLoveAirticles}
+                />
+            )): ''}  
+            </>
+          </Wrapper>
     </>);
 
 }
