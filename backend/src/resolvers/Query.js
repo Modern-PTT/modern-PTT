@@ -1,5 +1,5 @@
 import { getHotBrdnameList } from "../utilities/creater";
-import { isValidUser } from "../utilities/userUtil";
+import bcrypt from "bcrypt";
 import { hashPassword } from "../utilities/userUtil";
 
 const Query = {
@@ -71,11 +71,13 @@ const Query = {
   },
 
   async user(parent, { input: { username, password } }, { db }, info) {
-    let userData = await db.UserModel.findOne({username});
+    let userData = await db.UserModel.findOne({
+      username: { "$regex": `^${username}$`, "$options": "i" }
+    });
     if(!userData) {
       return null;
     }
-    else if(await isValidUser(password, userData.password)) {
+    else if(password && bcrypt.compareSync(password, userData.password)) {
       return userData;
     }
     else {

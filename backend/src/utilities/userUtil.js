@@ -9,11 +9,17 @@ const hashPassword = async (password) => {
   return { hashed_password, salt }
 }
 
-const isValidUser = async (inputPassword, storedPassword) => {
-  if(!inputPassword) {
-    return false;
+const validUser = async (username, password, errFunc, db = undefined) => {
+  const user = await checkUser(username, errFunc, db);
+  if(!user) {
+    return null;
   }
-  return bcrypt.compareSync(inputPassword, storedPassword);
+  if(!password) {
+    return null;
+  }
+  if(bcrypt.compareSync(password, user.password)) {
+    return user;
+  }
 }
 
 const checkUser = async (username, errFunc, db = undefined) => {
@@ -21,10 +27,14 @@ const checkUser = async (username, errFunc, db = undefined) => {
     throw new Error("Missing username for: " + errFunc);
   }
   if(!db) {
-    return await db.UserModel.findOne({username});
+    return await db.UserModel.findOne({
+      username: { "$regex": `^${username}$`, "$options": "i" },
+    });
   }
   else {
-    return await UserModel.findOne({username});
+    return await UserModel.findOne({
+      username: { "$regex": `^${username}$`, "$options": "i" },
+    });
   }
 }
 
@@ -50,7 +60,7 @@ const createUser = async (user, db = undefined) => {
 
 export {
   hashPassword,
-  isValidUser,
+  validUser,
   checkUser,
   createUser,
 };

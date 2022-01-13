@@ -1,4 +1,4 @@
-import { isValidUser, checkUser, createUser } from '../utilities/userUtil';
+import { validUser, checkUser, createUser } from '../utilities/userUtil';
 
 const day_msec = 1000*60*60*24;
 const timeshift = 1000*60*60*8;
@@ -35,13 +35,8 @@ const Mutation = {
   },
 
   async login(parent, { username, password } , { db, req }, info) {
-    const user = await checkUser(username, "login", db);
+    const user = await validUser(username, password, "login", db);
     if(!user) {
-      return false;
-    }
-
-    const isValid = await isValidUser(password, user.password);
-    if(!isValid) {
       return false;
     }
 
@@ -54,7 +49,17 @@ const Mutation = {
     await user.save();
 
     return true;
-  }
+  },
+
+  async logout(parent, { username, password } , { db, req }, info) {
+    const user = await validUser(username, password, "login", db);
+    if(!user) {
+      return false;
+    }
+
+    return true;
+  },
+
 };
 
 export { Mutation as default };
