@@ -64,6 +64,26 @@ const brdname_list = [
   "Stock",
   "WhoAmI",
   "test",
+  "home-sale",
+  "car",
+  "movie",
+  "Boy-Girl",
+  "Beauty",
+];
+
+const brdname_list2 = [
+  "Baseball",
+  "C_Chat",
+  "Gossiping",
+  "HatePolitics",
+  "Lifeismoney",
+  "LoL",
+  "MobileComm",
+  "NBA",
+  "sex",
+  "Stock",
+  "WhoAmI",
+  "test",
 ];
 
 const getInitBoardList = async () => {
@@ -123,7 +143,7 @@ const articlePerBoard = 50;
 
 const getInitArticleList = async () => {
   let article_list = [];
-  for(let brdname of brdname_list) {
+  for(let brdname of brdname_list2) {
     const { data: { list } } = await instance.get(`/board/${brdname}/articles?limit=${articlePerBoard}&desc=true`);
 
     for(let article of list) {
