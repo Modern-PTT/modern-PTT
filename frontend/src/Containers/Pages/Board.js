@@ -7,7 +7,7 @@ import ArticleCard from '../../Components/ArticleCard'
 // import  graphql  from 'graphql';
 import { useParams, useHistory } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
-import { GET_BOARD_ARTICLES_QUERY } from "../../graphql";
+import { GET_BOARD_QUERY } from "../../graphql";
 import { useState, useEffect} from 'react';
 
 import Navbar from "../../Components/Navbar"
@@ -30,7 +30,7 @@ const Board =  ({myLoveArticles, setMyLoveArticles}) =>{
 
   const {brdname} = useParams()
   console.log(brdname)
-  const {data, error, loading} =  useQuery(GET_BOARD_ARTICLES_QUERY,{
+  const {data, error, loading} =  useQuery(GET_BOARD_QUERY,{
     variables: {
       brdname: brdname,
     }

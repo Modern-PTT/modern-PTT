@@ -3,16 +3,20 @@ import { gql } from "@apollo/client";
 
 // 1. query - 特定看板 list
 export const GET_BOARD_QUERY  = gql`
-query board($brdname: brdname){
+query board($brdname: String!){
     board(brdname: $brdname) {
-      brdname
-      type
-      class
-      title
-      moderators
+        articles {
+            brdname
+            aid
+            owner
+            title
+            create_time
+            deleted
+          }
     }
   }
 `;
+
 
 // 2. query all or search board HotBoards
 export const GET_BOARDS_QUERY = gql`
