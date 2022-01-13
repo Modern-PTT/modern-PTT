@@ -12,7 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.24.0",
-    "bcrypt": "^5.0.1",
+    "bcryptjs": "^2.4.3",
     "dotenv-defaults": "^3.0.0",
     "geoip-lite": "^1.4.2",
     "graphql-yoga": "^1.17.4",

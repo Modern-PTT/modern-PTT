@@ -1,6 +1,6 @@
 import { getHotBrdnameList } from "../utilities/creater";
 import { checkArticle } from "../utilities/articleUtil";
-import bcrypt, { hashSync } from "bcrypt";
+import bcrypt from "bcryptjs";
 import { hashPassword } from "../utilities/userUtil";
 
 const Query = {
