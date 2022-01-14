@@ -28,7 +28,7 @@ const Wrapper = styled.div`
 `;
 
 
-const HotBoards =  () =>{
+const HotBoards =  ({isLogIn}) =>{
   const [hotBoards, setHotBoards] = useState('');
 
   const {data, error, loading} =  useQuery(GET_HOTBOARDS)
@@ -66,7 +66,7 @@ const HotBoards =  () =>{
   ];
     return(
       <>
-        <Navbar />
+        <Navbar isLogIn={isLogIn} />
         <div className="contents">
             <DashBoard />
         </div>

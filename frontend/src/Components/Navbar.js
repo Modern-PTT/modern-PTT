@@ -360,6 +360,7 @@ export default function PrimarySearchAppBar({
 
   return (
     <div className={classes.grow}>
+
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
           <Typography className={classes.title} variant="h6" noWrap>
@@ -459,44 +460,38 @@ export default function PrimarySearchAppBar({
           </div>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
+          {(isLogIn)?
+              <>
+                <Tooltip title="發文">  
+                  <IconButton aria-label="NewPost" color="inherit">
+                      {/* <BorderColorIcon /> */}
+                    <Link href="NewPost">
+                      <ModeEditIcon/>
+                    </Link>
+                  </IconButton>
+                </Tooltip>
 
-            <Tooltip title="發文">  
-              <IconButton aria-label="NewPost" color="inherit">
-                  {/* <BorderColorIcon /> */}
-                 <Link href="NewPost">
-                  <ModeEditIcon/>
-                 </Link>
-
-              </IconButton>
-            </Tooltip>
-
-            <Tooltip title="站內信">
-              <IconButton aria-label="show 4 new mails" color="inherit">
-                <Badge badgeContent={4} color="secondary">
-                  <MailIcon />
-                </Badge>
-              </IconButton>
-            </Tooltip>
-
-            {/* <Tooltip title="通知">
-              <IconButton aria-label="show 17 new notifications" color="inherit">
-                <Badge badgeContent={17} color="secondary">
-                  <NotificationsIcon />
-                </Badge>
-              </IconButton>
-            </Tooltip> */}
-
-            <IconButton
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton>
-          </div>
+                <Tooltip title="站內信">
+                  <IconButton aria-label="show 4 new mails" color="inherit">
+                    <Badge badgeContent={4} color="secondary">
+                      <MailIcon />
+                    </Badge>
+                  </IconButton>
+                </Tooltip>
+              </>
+              :<></>}
+          <IconButton
+            edge="end"
+            aria-label="account of current user"
+            aria-controls={menuId}
+            aria-haspopup="true"
+            onClick={handleProfileMenuOpen}
+            color="inherit"
+          >
+            <AccountCircle />
+          </IconButton>
+        </div>
+          
           <div className={classes.sectionMobile}>
             <IconButton
               aria-label="show more"

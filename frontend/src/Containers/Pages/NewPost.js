@@ -20,16 +20,19 @@ const Wrapper = styled.div`
   margin: auto;
 `;
 
-const NewPost =  () =>{
+const NewPost =  ({isLogIn,username ,myHashPassword}) =>{
  
 
     return(
       <>
-        <Navbar />
+        <Navbar isLogIn={isLogIn} />
         <div className="contents">
           <Row>
             <DashBoard />
-            <NewPostCard/>
+            <NewPostCard
+              username={username}
+              myHashPassword={myHashPassword}
+            />
           </Row>
         </div>
     </>);

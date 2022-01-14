@@ -69,7 +69,7 @@ const msgState = (input)=>{
 
 
 
-export default function NewPostCard() {
+export default function NewPostCard({username,myHashPassword}) {
     const classes = useStyles();
     const classesText = useTextStyles();
     const bull = <span className={classes.bullet}>•</span>;
@@ -79,8 +79,8 @@ export default function NewPostCard() {
     const [title,setTitle] = useState('')
 
     // const user_token = {
-    var username = "newuser"
-    var password = "$2b$10$ip6zuKhR4sm4qkv25HoURObkBHBHAeXzeKHl1UyAV3OTzIKkRVvDa"
+    // var username = "newuser"
+    // var password = "$2b$10$ip6zuKhR4sm4qkv25HoURObkBHBHAeXzeKHl1UyAV3OTzIKkRVvDa"
       // }
 
     const [sendPost, { data, loading, error }] = useMutation(CREATE_ARTICLE_MUTATION);
@@ -103,18 +103,23 @@ export default function NewPostCard() {
         else {
           sendPost({
               variables:{
-                  username: username,
-                  password: password,
+                input:{
+                  token: {
+                    username:username,
+                    password:myHashPassword,
+                  },
                   brdname: brdname,
-                  title: title,
+                  title:  title,
                   content: body,
+                  }
                 },
               });
-          if(data.createArticle){
+          console.log(data)
+          if(data){
             setBody('')
             setTitle('')
 
-            alert("New Post okay")
+            alert("New Post is published.")
           }
 
         }

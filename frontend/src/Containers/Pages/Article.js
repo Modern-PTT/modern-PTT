@@ -25,7 +25,7 @@ const Wrapper = styled.div`
   margin: auto;
 `;
 
-const Board =  ({myLoveArticles, setMyLoveArticles}) =>{
+const Board =  ({myLoveArticles, setMyLoveArticles,isLogIn}) =>{
   const [articles, setArticles] = useState('');
 
   const {aid, brdname} = useParams()
@@ -47,7 +47,7 @@ const Board =  ({myLoveArticles, setMyLoveArticles}) =>{
 
     return(
       <>
-        <Navbar />
+        <Navbar isLogIn={isLogIn} />
         <div className="contents">
             <DashBoard />
         </div>

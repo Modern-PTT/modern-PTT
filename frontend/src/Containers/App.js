@@ -74,9 +74,9 @@ function App() {
                   />
                   }/>
                   {/* Home_熱門文章 */}
-                <Route path='/allboards' element={<AllBoards/>}/>
+                <Route path='/allboards' element={<AllBoards isLogIn={isLogIn}/>}/>
                   {/* Home_所有看板 */}
-                <Route path='/hotboards' element={<HotBoards/>}/>
+                <Route path='/hotboards' element={<HotBoards isLogIn={isLogIn}/>}/>
                   {/* Home_熱門看板 */}
 
                 <Route path='/myLoveArticles' element={
@@ -90,18 +90,26 @@ function App() {
                 {/* <Route path='/search/articles' element={<Board/>}/> */}
                 <Route path='/boards/:brdname' element={
                   <Board
+                    isLogIn={isLogIn}
                     myLoveArticles={myLoveArticles}
                     setMyLoveArticles={setMyLoveArticles}
                   />
                   }/>
                 <Route path='/boards/:brdname/:aid' element={
                   <Article
+                    isLogIn={isLogIn}
                     myLoveArticles={myLoveArticles}
                     setMyLoveArticles={setMyLoveArticles}
                   />
                   }/>
-                <Route path='/:brdname/NewPost' element={<NewPost/>}/>
-                <Route path='*' element={<Home/>}/>
+                <Route path='/:brdname/NewPost' element={
+                  <NewPost 
+                  isLogIn={isLogIn}
+                  username={username}
+                  myHashPassword={myHashPassword}
+                  />}
+                  />
+                <Route path='*' element={<Home isLogIn={isLogIn}/>}/>
               </Routes> 
         </BrowserRouter>
     </>

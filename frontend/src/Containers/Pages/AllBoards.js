@@ -30,7 +30,7 @@ const Wrapper = styled.div`
 `;
 
 
-const AllBoards =  () =>{
+const AllBoards =  ({isLogIn}) =>{
   const [allBoards, setAllBoards] = useState('');
 
   const {data, error, loading} =  useQuery(GET_BOARDS_QUERY)
@@ -67,7 +67,7 @@ const AllBoards =  () =>{
   ];
     return(
       <>
-        <Navbar />
+        <Navbar isLogIn={isLogIn} />
         <div className="contents">
             <DashBoard />
         </div>
