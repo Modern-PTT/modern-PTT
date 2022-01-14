@@ -5,25 +5,19 @@ import { gql } from "@apollo/client";
 
 export const SIGN_UP_MUTATION = gql`
   mutation signup( $username: String!, $password: String!, $salt: String!){
-    signup(username:$username, password:$password, salt:$salt){
-        signup
-    }
+    signup(username:$username, password:$password, salt:$salt)
   }
 `
 
 export const LOG_IN_MUTATION = gql`
   mutation login($username: String!, $password: String!){
-    login(username: $username, password: $password ){
-        login
-    }
+    login(username: $username, password: $password )
   }
 `
 
 export const LOG_OUT_MUTATION = gql`
   mutation logout($username: String!, $password: String!){
-    logout(username: $username, password: $password ){
-        logout
-    }
+    logout(username: $username, password: $password )
   }
 `
 
@@ -31,9 +25,7 @@ export const LOG_OUT_MUTATION = gql`
 // about ARTICLE: CREATE/UPDATE/DELETE
 export const CREATE_ARTICLE_MUTATION = gql`
   mutation createArticle($password:String!, $username:String!, $brdname:String!, $title:String!, $content:String!){
-    createArticle(password:$password, username:$username, brdname: $brdname, title:$title, content:$content){
-        createArticle
-    }
+    createArticle(password:$password, username:$username, brdname: $brdname, title:$title, content:$content)
   }
 `
 // export const UPDATE_ARTICLE_MUTATION = gql`

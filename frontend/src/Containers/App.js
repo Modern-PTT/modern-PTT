@@ -20,6 +20,7 @@ import AllBoards from './Pages/AllBoards'
 import HotBoards from './Pages/HotBoards'
 import SearchBoards from './Pages/SearchBoards'
 import LoginRegister from './Pages/LoginRegister'
+import SingUp from './Pages/SingUp'
 
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
@@ -54,9 +55,21 @@ function App() {
                     setMyHashPassword={setMyHashPassword}
                     isLogIn={isLogIn}
                     setIsLogIn={setIsLogIn}
-
                   />
                   }/>
+                <Route path='/signup' element={
+                  <SingUp
+                    username={username}
+                    setUsername={setUsername}
+                    mySalt={mySalt}
+                    setMySalt={setMySalt}
+                    myHashPassword={myHashPassword}
+                    setMyHashPassword={setMyHashPassword}
+                    isLogIn={isLogIn}
+                    setIsLogIn={setIsLogIn}
+                  />
+                  }/>
+
                 <Route path='/home' element={
                   <Home 
                     myLoveBoards={myLoveBoards}

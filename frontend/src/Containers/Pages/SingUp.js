@@ -1,4 +1,4 @@
-import { GET_SALT, GET_USER, LOG_IN_MUTATION } from  "../../graphql";
+import { GET_SALT, GET_USER, LOG_IN_MUTATION, SIGN_UP_MUTATION } from  "../../graphql";
 import { useQuery, useMutation } from '@apollo/client';
 import { useState, useEffect} from 'react';
 import Button from '@mui/material/Button';
@@ -32,7 +32,7 @@ const Wrapper = styled.div`
   width: 800px;
   margin: auto;
 `;
-const LoginRegister = (
+const SingUp = (
     {   username,
         setUsername,
         mySalt,
@@ -45,6 +45,8 @@ const LoginRegister = (
     // const [isLogIn, setIsHaveAccount] = useState(true);
     const [isHaveAccount, setIsHaveAccount] = useState(true);
     const [usernameInput,setUsernameInput] = useState('')
+    const [realnameInput,setRealnameInput] = useState('')
+    const [newsalt, setNewsalt] = useState('')
     const [password, setPassword] = useState('')
 
     const { data: returnSalt,
@@ -53,8 +55,9 @@ const LoginRegister = (
             refetch: getSalt} = useQuery( GET_SALT, {
                 variables:{ username: usernameInput }
             });
-    // const {data2, error2, loading2} =  useQuery(GET_USER,{variables:{username: usernameInput, password: myHashPassword}})
+    
     const [checkLogin] = useMutation(LOG_IN_MUTATION)
+    const [checkSingUp] = useMutation(SIGN_UP_MUTATION)
 
     // useEffect(() => {
     //     if (isLogIn) {
@@ -73,26 +76,34 @@ const LoginRegister = (
         return bcrypt.hashSync(password, salt);
     }
 
-    const checkUserExist = () => {
+    const checkUserIsNotExist = () => {
         getSalt();
-        if(returnSalt) {
-            setMySalt(returnSalt.salt);
-            // console.log("salt:", returnSalt.salt);
-            return returnSalt.salt;
+        if(!returnSalt) {
+            setNewsalt(generateSalt());
+            return true
         }
-        return null;
+        return false;
     }
 
-    const login = async () => {
-        const getBackSalt = checkUserExist();
-        if(!getBackSalt) {
-            alert("username or password invalid");
+    const sendSignUp = async () => {
+        const usernameExist = checkUserIsNotExist();
+        if(!usernameExist) {
+            alert("username is existed!");
             return;
         }
 
         if(password) {
-            const hashPassword = await generateHash(password, getBackSalt);
+            const hashPassword = await generateHash(password, newsalt);
             setMyHashPassword(hashPassword);
+            const signInResult = await checkSingUp({
+                variables:{
+                    username: usernameInput,
+                    password: hashPassword,
+                    salt: newsalt,
+                    realname: realnameInput,
+                }
+            })
+
             const loginResult = await checkLogin({
                 variables:{
                     username: usernameInput,
@@ -138,7 +149,7 @@ const LoginRegister = (
     return (
         (!isLogIn)
         ?<Column>
-            <p> 登入 </p>
+            <p> 註冊新帳號 </p>
             <TextField
                 label="username"
                 id="username"
@@ -168,10 +179,17 @@ const LoginRegister = (
                 }
                 label="Password"
             />
+            <TextField
+                label="realname"
+                id="realname"
+                value={realnameInput}
+                onChange={(e)=>{setRealnameInput(e.target.value);console.log("name: "+usernameInput)}}
+                sx={{ m: 1, width: '25ch' }}
+            />
+
             </FormControl>
             <Row>
-                <Button variant="outlined">註冊</Button>
-                <Button variant="contained" onClick={()=>login()}>登入</Button>
+                <Button variant="contained" onClick={()=>sendSignUp()}>送出</Button>
             </Row>
 
 
@@ -182,4 +200,4 @@ const LoginRegister = (
     );
 }
 
-export default LoginRegister;
+export default SingUp;

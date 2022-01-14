@@ -104,9 +104,7 @@ export const GET_USER = gql`
 // 6. query - salt
 export const GET_SALT = gql`
     query salt ($username: String!){
-        salt(username: $username){
-            salt
-        }
+        salt(username: $username)
     }
 `
 
