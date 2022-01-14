@@ -26,15 +26,18 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 // const LOCALSTORAGE_KEY = "save-me";
 
-function App() {
+const LOCALSTORAGE_USERNAME = "saveMyUsername";
+const LOCALSTORAGE_HASHEDPW = "saveMyHashedPassword";
 
+function App() {
+  const savedUsername = localStorage.getItem(LOCALSTORAGE_USERNAME);
+  const savedHashedPassword = localStorage.getItem(LOCALSTORAGE_HASHEDPW);
   // const savedUserName = localStorage.getItem(LOCALSTORAGE_KEY);
   // TODO USERNAME PASSWORD SALT
-  // const [username, setUsername] = useState(savedUserName || '')
-  const [username, setUsername] = useState('')
-  const [mySalt, setMySalt] = useState()
-  const [myHashPassword, setMyHashPassword] = useState('')
-  const [isLogIn, setIsLogIn] = useState(false)
+  const [username, setUsername] = useState(savedUsername || '')
+  // const [username, setUsername] = useState('')
+  const [myHashPassword, setMyHashPassword] = useState(savedHashedPassword || '')
+  const [isLogIn, setIsLogIn] = useState((savedUsername && savedHashedPassword)? true : false)
 
   const [myLoveBoards, setMyLoveBoards] = useState([])
   const [myLoveArticles, setMyLoveArticles] = useState([])
@@ -49,8 +52,6 @@ function App() {
                   <LoginRegister
                     username={username}
                     setUsername={setUsername}
-                    mySalt={mySalt}
-                    setMySalt={setMySalt}
                     myHashPassword={myHashPassword}
                     setMyHashPassword={setMyHashPassword}
                     isLogIn={isLogIn}
