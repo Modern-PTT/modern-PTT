@@ -7,18 +7,16 @@ import bcrypt from "bcryptjs"
 import Row from "../../Components/Layout/Row";
 import Column from '../../Components/Layout/Column'
 
-import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
-import Input from '@mui/material/Input';
-import FilledInput from '@mui/material/FilledInput';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import InputAdornment from '@mui/material/InputAdornment';
-import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+
+import Link from '@mui/material/Link';
 
 const LOCALSTORAGE_USERNAME = "saveMyUsername";
 const LOCALSTORAGE_HASHEDPW = "saveMyHashedPassword";
@@ -33,7 +31,7 @@ const Wrapper = styled.div`
   width: 800px;
   margin: auto;
 `;
-const LoginRegister = (
+const Login = (
     {   username,
         setUsername,
         myHashPassword,
@@ -144,16 +142,10 @@ const LoginRegister = (
     }
 
     const [values, setValues] = useState({
-        amount: '',
-        password: '',
-        weight: '',
-        weightRange: '',
         showPassword: false,
       });
     
-    const handleChange = (prop) => (event) => {
-    setValues({ ...values, [prop]: event.target.value });
-    };
+
 
     const handleClickShowPassword = () => {
     setValues({
@@ -202,17 +194,17 @@ const LoginRegister = (
             />
             </FormControl>
             <Row>
-                <Button variant="outlined">註冊</Button>
+                <Link href="signup">
+                    <Button variant="outlined">註冊</Button>
+                </Link>
                 <Button variant="contained" onClick={()=>login()}>登入</Button>
             </Row>
+            </Column>
 
-        </Column>
-        
-        
         :<>You have been login as {username}
             <Button variant="contained" onClick={()=>logout()}>test for logout</Button>
         </>
     );
 }
 
-export default LoginRegister;
+export default Login;

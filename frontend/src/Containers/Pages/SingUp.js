@@ -20,7 +20,8 @@ import TextField from '@mui/material/TextField';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
-const LOCALSTORAGE_KEY = "save-me";
+import Link from '@mui/material/Link';
+
 
 
 const Wrapper = styled.div`
@@ -35,8 +36,6 @@ const Wrapper = styled.div`
 const SingUp = (
     {   username,
         setUsername,
-        mySalt,
-        setMySalt,
         myHashPassword,
         setMyHashPassword,
         isLogIn,
@@ -76,18 +75,22 @@ const SingUp = (
         return bcrypt.hashSync(password, salt);
     }
 
-    const checkUserIsNotExist = () => {
+    const checkUserIsExist = () => {
         getSalt();
-        if(!returnSalt) {
-            setNewsalt(generateSalt());
-            return true
+        if(returnSalt) {
+            return true;
+        } else {
+            console.log(returnSalt);
+            const salt = generateSalt();
+            setNewsalt(salt);
+            console.log(newsalt);
+            return false
         }
-        return false;
     }
 
     const sendSignUp = async () => {
-        const usernameExist = checkUserIsNotExist();
-        if(!usernameExist) {
+        const userExist = checkUserIsExist();
+        if(userExist) {
             alert("username is existed!");
             return;
         }
@@ -103,20 +106,28 @@ const SingUp = (
                     realname: realnameInput,
                 }
             })
+            if(signInResult){
+                const loginResult = await checkLogin({
+                    variables:{
+                        username: usernameInput,
+                        password: hashPassword,
+                    }
+                    // refetchQueries: [GET_TASKS_QUERY],
+                });
 
-            const loginResult = await checkLogin({
-                variables:{
-                    username: usernameInput,
-                    password: hashPassword,
+                if(loginResult.data.login) {
+                    console.log("login!!");
+                    setIsLogIn(true);
                 }
-                // refetchQueries: [GET_TASKS_QUERY],
-            });
-            if(loginResult.data.login) {
-                console.log("login!!");
+                else {
+                    alert("username or password invalid");
+                };
+
+            }else {
+                alert("system error!");
+                return;
             }
-            else {
-                alert("username or password invalid");
-            }
+
         } else {
             alert("password can't not be empty");
         }
@@ -130,9 +141,6 @@ const SingUp = (
         showPassword: false,
       });
     
-    const handleChange = (prop) => (event) => {
-    setValues({ ...values, [prop]: event.target.value });
-    };
 
     const handleClickShowPassword = () => {
     setValues({
@@ -183,20 +191,19 @@ const SingUp = (
                 label="realname"
                 id="realname"
                 value={realnameInput}
-                onChange={(e)=>{setRealnameInput(e.target.value);console.log("name: "+usernameInput)}}
+                onChange={(e)=>{setRealnameInput(e.target.value);console.log("name: "+realnameInput)}}
                 sx={{ m: 1, width: '25ch' }}
             />
 
             </FormControl>
             <Row>
+                <Link href="login">
+                    <Button variant="outlined">回登入</Button>
+                </Link>
                 <Button variant="contained" onClick={()=>sendSignUp()}>送出</Button>
             </Row>
-
-
         </Column>
-        
-        
-        :<></>
+        :<h1>Welcome to NEW PTT</h1>
     );
 }
 
