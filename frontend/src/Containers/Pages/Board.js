@@ -6,8 +6,8 @@ import ArticleCard from '../../Components/ArticleCard'
 
 // import  graphql  from 'graphql';
 import { useParams, useHistory } from 'react-router-dom';
-import { useQuery } from '@apollo/client';
-import { GET_BOARD_QUERY } from "../../graphql";
+import { useQuery, useMutation } from '@apollo/client';
+import { GET_BOARD_QUERY, UPDATE_FAV_ARTICLES_MUTATION } from "../../graphql";
 import { useState, useEffect} from 'react';
 
 import Navbar from "../../Components/Navbar"
@@ -25,8 +25,11 @@ const Wrapper = styled.div`
   margin: auto;
 `;
 
-const Board =  ({myLoveArticles, setMyLoveArticles, isLogIn}) =>{
+const Board =  ({myLoveArticles, setMyLoveArticles, isLogIn, username, myHashPassword}) =>{
   const [articles, setArticles] = useState('');
+
+  const [updateFavArticles] = useMutation(UPDATE_FAV_ARTICLES_MUTATION)
+
 
   const {brdname} = useParams()
   console.log(brdname)
@@ -40,6 +43,21 @@ const Board =  ({myLoveArticles, setMyLoveArticles, isLogIn}) =>{
     if(data) setArticles(data.board.articles);
   }, [data])
 
+  useEffect(() => {
+    var update = updateFavArticles({
+      variables:{
+        input:{
+          token:{
+            username: username,
+            password: myHashPassword
+          },
+          aids:  myLoveArticles
+        }
+      }
+    })
+    // if(update)alert("update myLoveArticles success!")
+
+  }, [myLoveArticles])
 
     return(
       <>
@@ -59,6 +77,8 @@ const Board =  ({myLoveArticles, setMyLoveArticles, isLogIn}) =>{
                     deleted={item.deleted}
                     myLoveArticles={myLoveArticles}
                     setMyLoveArticles={setMyLoveArticles}
+                    username={username}
+                    myHashPassword={myHashPassword}
                 />
             )): ''}  
             </>

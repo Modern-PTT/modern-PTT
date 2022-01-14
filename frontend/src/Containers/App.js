@@ -30,7 +30,7 @@ function App() {
 
   const [myLoveBoards, setMyLoveBoards] = useState([])
   const [myLoveArticles, setMyLoveArticles] = useState([])
-
+  console.log(myHashPassword)
   return (
     <>
         <BrowserRouter>
@@ -74,7 +74,15 @@ function App() {
                   />
                   }/>
                   {/* Home_熱門文章 */}
-                <Route path='/allboards' element={<AllBoards isLogIn={isLogIn}/>}/>
+                <Route path='/allboards' element={
+                  <AllBoards 
+                    isLogIn={isLogIn}
+                    myLoveArticles={myLoveArticles}
+                    setMyLoveArticles={setMyLoveArticles}
+                    username={username}
+                    myHashPassword={myHashPassword}
+                    />}
+                  />
                   {/* Home_所有看板 */}
                 <Route path='/hotboards' element={<HotBoards isLogIn={isLogIn}/>}/>
                   {/* Home_熱門看板 */}
@@ -83,6 +91,8 @@ function App() {
                   <myLoveArticles
                     myLoveArticles={myLoveArticles}
                     setMyLoveArticles={setMyLoveArticles}
+                    username={username}
+                    myHashPassword={myHashPassword}
                   />
                   }/>
                 {/* <Route path='/category' element={<Category/>}/> */}
@@ -93,6 +103,8 @@ function App() {
                     isLogIn={isLogIn}
                     myLoveArticles={myLoveArticles}
                     setMyLoveArticles={setMyLoveArticles}
+                    username={username}
+                    myHashPassword={myHashPassword}
                   />
                   }/>
                 <Route path='/boards/:brdname/:aid' element={

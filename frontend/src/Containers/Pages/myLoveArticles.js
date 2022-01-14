@@ -25,7 +25,7 @@ const Wrapper = styled.div`
   margin: auto;
 `;
 
-const Board =  ({myLoveArticles, setMyLoveArticles,isLogIn}) =>{
+const Board =  ({myLoveArticles, setMyLoveArticles, isLogIn, username, myHashPassword}) =>{
   const [articles, setArticles] = useState('');
 
 //   const {brdname} = useParams()

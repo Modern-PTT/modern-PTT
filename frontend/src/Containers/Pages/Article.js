@@ -25,7 +25,7 @@ const Wrapper = styled.div`
   margin: auto;
 `;
 
-const Board =  ({myLoveArticles, setMyLoveArticles,isLogIn}) =>{
+const Board =  ({myLoveArticles, setMyLoveArticles,isLogIn,username,myHashPassword}) =>{
   const [articles, setArticles] = useState('');
 
   const {aid, brdname} = useParams()
@@ -58,6 +58,8 @@ const Board =  ({myLoveArticles, setMyLoveArticles,isLogIn}) =>{
                 article={data.article}
                 myLoveArticles={myLoveArticles}
                 setMyLoveArticles={setMyLoveArticles}
+                username={username}
+                myHashPassword={myHashPassword}
             />:<></>}
         </Wrapper>
     </>);

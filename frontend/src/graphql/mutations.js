@@ -30,16 +30,12 @@ export const CREATE_ARTICLE_MUTATION = gql`
 `
 export const UPDATE_ARTICLE_MUTATION = gql`
   mutation updateArticle($input: UpdateArticleInput!){
-    updateArticle(input: $input){
-        updateArticle
-    }
+    updateArticle(input: $input)
   }
 `
 export const DELETE_ARTICLE_MUTATION = gql`
   mutation deleteArticle($input: DeleteArticleInput!){
-    deleteArticle(input: $input){
-        deleteArticle
-    }
+    deleteArticle(input: $input)
   }
 `
 //   {
@@ -50,38 +46,28 @@ export const DELETE_ARTICLE_MUTATION = gql`
 
 // about COMMENT: CREATE/UPDATE/DELETE
 export const CREATE_COMMENT_MUTATION = gql`
-  mutation createComment($CreateCommentInput: CreateCommentInput!){
-    createComment(CreateCommentInput: $CreateCommentInput){
-        createComment
-    }
+  mutation createComment($input: CreateCommentInput!){
+    createComment(input: $input)
   }
 `
 export const MODIFY_COMMENT_MUTATION = gql`
-  mutation modifyComment($ModifyCommentInput: ModifyCommentInput!){
-    modifyComment(ModifyCommentInput: $ModifyCommentInput){
-        modifyComment
-    }
+  mutation modifyComment($input: ModifyCommentInput!){
+    modifyComment(input: $input)
   }
 `
 export const DELETE_COMMENT_MUTATION = gql`
-  mutation deleteComment($DeleteArticleInput: DeleteArticleInput!){
-    deleteComment(DeleteArticleInput: $DeleteArticleInput){
-        deleteComment
-    }
+  mutation deleteComment($input: DeleteArticleInput!){
+    deleteComment(input: $input)
   }
 `
 export const UPDATE_FAV_BOARDS_MUTATION = gql`
-  mutation updateFavBoards($UpdateFavBoardsInput: UpdateFavBoardsInput!){
-    updateFavBoards(UpdateFavBoardsInput: $UpdateFavBoardsInput){
-        updateFavBoards
-    }
+  mutation updateFavBoards($input: UpdateFavBoardsInput!){
+    updateFavBoards(input: $input)
   }
 `
 
 export const UPDATE_FAV_ARTICLES_MUTATION = gql`
-  mutation updateFavArticles($UpdateFavArticlesInput: UpdateFavArticlesInput!){
-    updateFavArticles(UpdateFavArticlesInput: $UpdateFavArticlesInput){
-        updateFavArticles
-    }
+  mutation updateFavArticles($input: UpdateFavArticlesInput!){
+    updateFavArticles(input: $input)
   }
 `
