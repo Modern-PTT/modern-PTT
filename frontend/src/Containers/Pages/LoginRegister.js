@@ -1,4 +1,4 @@
-import { GET_SALT, GET_USER, LOG_IN_MUTATION } from  "../../graphql";
+import { GET_SALT, GET_USER, LOG_IN_MUTATION, LOG_OUT_MUTATION  } from  "../../graphql";
 import { useQuery, useMutation } from '@apollo/client';
 import { useState, useEffect} from 'react';
 import Button from '@mui/material/Button';
@@ -20,7 +20,8 @@ import TextField from '@mui/material/TextField';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
-const LOCALSTORAGE_KEY = "save-me";
+const LOCALSTORAGE_USERNAME = "saveMyUsername";
+const LOCALSTORAGE_HASHEDPW = "saveMyHashedPassword";
 
 
 const Wrapper = styled.div`
@@ -35,26 +36,24 @@ const Wrapper = styled.div`
 const LoginRegister = (
     {   username,
         setUsername,
-        mySalt,
-        setMySalt,
         myHashPassword,
         setMyHashPassword,
         isLogIn,
         setIsLogIn,
     }) => {
-    // const [isLogIn, setIsHaveAccount] = useState(true);
-    const [isHaveAccount, setIsHaveAccount] = useState(true);
+    const [accountExist, setAccountExist] = useState(true);
     const [usernameInput,setUsernameInput] = useState('')
     const [password, setPassword] = useState('')
 
     const { data: returnSalt,
-            error: getSaltError,
-            loading: getSaltLoading,
+            // error: getSaltError,
+            // loading: getSaltLoading,
             refetch: getSalt} = useQuery( GET_SALT, {
                 variables:{ username: usernameInput }
             });
     // const {data2, error2, loading2} =  useQuery(GET_USER,{variables:{username: usernameInput, password: myHashPassword}})
     const [checkLogin] = useMutation(LOG_IN_MUTATION)
+    const [checkLogout] = useMutation(LOG_OUT_MUTATION);
 
     // useEffect(() => {
     //     if (isLogIn) {
@@ -76,7 +75,6 @@ const LoginRegister = (
     const checkUserExist = () => {
         getSalt();
         if(returnSalt) {
-            setMySalt(returnSalt.salt);
             // console.log("salt:", returnSalt.salt);
             return returnSalt.salt;
         }
@@ -87,28 +85,62 @@ const LoginRegister = (
         const getBackSalt = checkUserExist();
         if(!getBackSalt) {
             alert("username or password invalid");
+            setUsernameInput("");
+            setPassword("");
             return;
         }
 
         if(password) {
             const hashPassword = await generateHash(password, getBackSalt);
-            setMyHashPassword(hashPassword);
             const loginResult = await checkLogin({
                 variables:{
                     username: usernameInput,
                     password: hashPassword,
                 }
-                // refetchQueries: [GET_TASKS_QUERY],
             });
-            if(loginResult.data.login) {
+            if(loginResult.data?.login) {
+                setUsername(loginResult.data.login);
+                setMyHashPassword(hashPassword)
+                localStorage.setItem(LOCALSTORAGE_USERNAME, loginResult.data.login);
+                localStorage.setItem(LOCALSTORAGE_HASHEDPW, hashPassword);
+                setIsLogIn(true);
                 console.log("login!!");
             }
             else {
                 alert("username or password invalid");
             }
+            setUsernameInput("");
+            setPassword("");
         } else {
             alert("password can't not be empty");
         }
+    }
+
+    const logout = async () => {
+        if(!username || !myHashPassword) {
+            console.log("username and hashed password cannot be null");
+            return;
+        }
+
+        const logoutResult = await checkLogout({
+            variables:{
+                username: username,
+                password: myHashPassword,
+            }
+        });
+
+        if(logoutResult.data?.logout) {
+            console.log("logout~~");
+            setIsLogIn(false);
+            setMyHashPassword("");
+            setUsername("");
+
+            localStorage.removeItem(LOCALSTORAGE_USERNAME);
+            localStorage.removeItem(LOCALSTORAGE_HASHEDPW);
+        } else {
+            console.log("logout error...");
+        }
+
     }
 
     const [values, setValues] = useState({
@@ -174,11 +206,12 @@ const LoginRegister = (
                 <Button variant="contained" onClick={()=>login()}>登入</Button>
             </Row>
 
-
         </Column>
         
         
-        :<></>
+        :<>You have been login as {username}
+            <Button variant="contained" onClick={()=>logout()}>test for logout</Button>
+        </>
     );
 }
 
