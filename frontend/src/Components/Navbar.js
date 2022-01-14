@@ -38,6 +38,14 @@ import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
+
+// LogIn / SignUp
+import AlertDialog from "./Alert";
+import Login from "./Login";
+import SingUp from "./SingUp";
+import { LOG_OUT_MUTATION  } from  "../graphql";
+import { useMutation } from '@apollo/client';
+
 const useStyles = makeStyles((theme) => ({
   appBar:{
     boxShadow: 'none',
@@ -105,7 +113,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function PrimarySearchAppBar() {
+
+const LOCALSTORAGE_USERNAME = "saveMyUsername";
+const LOCALSTORAGE_HASHEDPW = "saveMyHashedPassword";
+
+
+export default function PrimarySearchAppBar({
+  username,
+  setUsername,
+  myHashPassword,
+  setMyHashPassword,
+  isLogIn,
+  setIsLogIn,
+}) {
   // insert ===========================
   const [boardInput, setBoardInput] = useState([""])
   const [titleInput, setTitleInput] = useState([""])
@@ -135,8 +155,63 @@ export default function PrimarySearchAppBar() {
     setOpen(false);
     // QUERY
   }
+  const LoginButton = () =>(            
+    <AlertDialog
+        btntext="Login"
+        maintitle="Login"
+        mainfiled=
+            {<Login
+                username={username}
+                setUsername={setUsername}
+                myHashPassword={myHashPassword}
+                setMyHashPassword={setMyHashPassword}
+                isLogIn={isLogIn}
+                setIsLogIn={setIsLogIn}
+            />}
+    />)
 
+    const SignUpButton = () =>(            
+        <AlertDialog
+            btntext="SingUp"
+            maintitle="SingUp"
+            mainfiled=
+                {<SingUp
+                    setUsername={setUsername}
+                    setMyHashPassword={setMyHashPassword}
+                    isLogIn={isLogIn}
+                    setIsLogIn={setIsLogIn}
+                />}
+        />)
 
+  // logout
+  const [checkLogout] = useMutation(LOG_OUT_MUTATION);
+
+  const logout = async () => {
+    
+    if(!username || !myHashPassword) {
+        console.log("username and hashed password cannot be null");
+        return;
+    }
+
+    const logoutResult = await checkLogout({
+        variables:{
+            username: username,
+            password: myHashPassword,
+        }
+    });
+
+    if(logoutResult.data?.logout) {
+        console.log("logout~~");
+        setIsLogIn(false);
+        setMyHashPassword("");
+        setUsername("");
+
+        localStorage.removeItem(LOCALSTORAGE_USERNAME);
+        localStorage.removeItem(LOCALSTORAGE_HASHEDPW);
+    } else {
+        console.log("logout error...");
+    }
+}
 
 
 
@@ -168,23 +243,60 @@ export default function PrimarySearchAppBar() {
   };
 
   const menuId = 'primary-search-account-menu';
-  const renderMenu = (
+
+  const guestMenu = (
     <Menu
       anchorEl={anchorEl}
-      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
       id={menuId}
       keepMounted
       transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>Setting</MenuItem>
-      <MenuItem onClick={handleMenuClose} color="red">Log Out</MenuItem>
+        <Link href ="signup">
+          <MenuItem onClick={handleMenuClose} >Sign Up</MenuItem>
+        </Link>
+        <Link href ="login">
+          <MenuItem onClick={handleMenuClose} >Log In</MenuItem>
+        </Link>
     </Menu>
   );
 
+  const userMenu =  (
+      <Menu
+      anchorEl={anchorEl}
+      anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+      id={menuId}
+      keepMounted
+      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+      open={isMenuOpen}
+      onClose={()=>handleMenuClose}
+    >
+
+        <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+        <MenuItem onClick={handleMenuClose}>Setting</MenuItem>
+        <MenuItem onClick={()=>{logout();handleMenuClose()}} color="red">Log Out</MenuItem>
+    </Menu>
+    )
+  
+    
+
+  // const userMenu = (
+  //   <Menu
+  //     anchorEl={anchorEl}
+  //     anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+  //     id={menuId}
+  //     keepMounted
+  //     transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+  //     open={isMenuOpen}
+  //     onClose={()=>handleMenuClose}
+  //   >
+  //       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+  //       <MenuItem onClick={handleMenuClose}>Setting</MenuItem>
+  //       <MenuItem onClick={handleMenuClose} color="red">Log Out</MenuItem>
+  //   </Menu>
+  // );
   const mobileMenuId = 'primary-search-account-menu-mobile';
   const renderMobileMenu = (
     <Menu
@@ -336,8 +448,6 @@ export default function PrimarySearchAppBar() {
                     <Button onClick={handleSubmit} >送出</Button>
                   </div>
                 </Card>
-
-
             </Modal>
 
 
@@ -368,13 +478,14 @@ export default function PrimarySearchAppBar() {
               </IconButton>
             </Tooltip>
 
-            <Tooltip title="通知">
+            {/* <Tooltip title="通知">
               <IconButton aria-label="show 17 new notifications" color="inherit">
                 <Badge badgeContent={17} color="secondary">
                   <NotificationsIcon />
                 </Badge>
               </IconButton>
-            </Tooltip>
+            </Tooltip> */}
+
             <IconButton
               edge="end"
               aria-label="account of current user"
@@ -399,8 +510,9 @@ export default function PrimarySearchAppBar() {
           </div>
         </Toolbar>
       </AppBar>
-      {/* {renderMobileMenu} */}
+      {renderMobileMenu}
       {/* {renderMenu} */}
+      {(isLogIn)?userMenu:guestMenu}
     </div>
   );
 }

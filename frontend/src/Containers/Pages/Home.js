@@ -19,7 +19,19 @@ const Wrapper = styled.div`
   width: 800px;
   margin: auto;
 `;
-const Home = ({myLoveBoards, setMyLoveBoards, myLoveArticles, setMyLoveArticles}) => {
+const Home = ({
+    myLoveBoards, 
+    setMyLoveBoards, 
+    myLoveArticles, 
+    setMyLoveArticles,
+    //for login btn
+    username,
+    setUsername,
+    myHashPassword,
+    setMyHashPassword,
+    isLogIn,
+    setIsLogIn,
+}) => {
 
     const [articles, setArticles] = useState('');
     const {data, error, loading} =  useQuery(GET_HOTARTICLES)
@@ -30,9 +42,17 @@ const Home = ({myLoveBoards, setMyLoveBoards, myLoveArticles, setMyLoveArticles}
     }, [data])
 
 
-
     return (<>
-        <Navbar />
+
+
+        <Navbar 
+            username={username}
+            setUsername={setUsername}
+            myHashPassword={myHashPassword}
+            setMyHashPassword={setMyHashPassword}
+            isLogIn={isLogIn}
+            setIsLogIn={setIsLogIn}
+        />
         <div className="contents">
             <DashBoard
                 myLoveBoards={myLoveBoards}

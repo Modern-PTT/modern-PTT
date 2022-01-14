@@ -8,8 +8,8 @@ import Home from '../Containers/Pages/Home'
 import AllBoards from './Pages/AllBoards'
 import HotBoards from './Pages/HotBoards'
 import SearchBoards from './Pages/SearchBoards'
-import Login from './Pages/Login'
-import SingUp from './Pages/SingUp'
+import Login from '../Components/Login'
+import SingUp from '../Components/SingUp'
 
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
@@ -60,6 +60,13 @@ function App() {
 
                 <Route path='/home' element={
                   <Home 
+                    username={username}
+                    setUsername={setUsername}
+                    myHashPassword={myHashPassword}
+                    setMyHashPassword={setMyHashPassword}
+                    isLogIn={isLogIn}
+                    setIsLogIn={setIsLogIn}
+
                     myLoveBoards={myLoveBoards}
                     setMyLoveBoards={setMyLoveBoards}
                     myLoveArticles={myLoveArticles}

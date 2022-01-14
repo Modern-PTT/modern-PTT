@@ -1,11 +1,11 @@
-import { GET_SALT, GET_USER, LOG_IN_MUTATION, LOG_OUT_MUTATION  } from  "../../graphql";
+import { GET_SALT, GET_USER, LOG_IN_MUTATION, LOG_OUT_MUTATION  } from  "../graphql";
 import { useQuery, useMutation } from '@apollo/client';
 import { useState, useEffect} from 'react';
 import Button from '@mui/material/Button';
 import styled from 'styled-components';
 import bcrypt from "bcryptjs"
-import Row from "../../Components/Layout/Row";
-import Column from '../../Components/Layout/Column'
+import Row from "./Layout/Row";
+import Column from './Layout/Column'
 
 import IconButton from '@mui/material/IconButton';
 import OutlinedInput from '@mui/material/OutlinedInput';
@@ -39,7 +39,6 @@ const Login = (
         isLogIn,
         setIsLogIn,
     }) => {
-    const [accountExist, setAccountExist] = useState(true);
     const [usernameInput,setUsernameInput] = useState('')
     const [password, setPassword] = useState('')
 
@@ -49,23 +48,13 @@ const Login = (
             refetch: getSalt} = useQuery( GET_SALT, {
                 variables:{ username: usernameInput }
             });
-    // const {data2, error2, loading2} =  useQuery(GET_USER,{variables:{username: usernameInput, password: myHashPassword}})
+    
     const [checkLogin] = useMutation(LOG_IN_MUTATION)
     const [checkLogout] = useMutation(LOG_OUT_MUTATION);
 
-    // useEffect(() => {
-    //     if (isLogIn) {
-    //       localStorage.setItem(LOCALSTORAGE_KEY, username);
-    //     }
-    //     // displayStatus(status)
-    //   }, [isLogIn, username]);
 
-    // useEffect(() => {
-    //   if(data) setArticles(data.hotArticles);
-    //   if(data) console.log(data)
-    // }, [data])
 
-    const generateSalt=() =>{return bcrypt.genSaltSync(10);} 
+    // const generateSalt=() =>{return bcrypt.genSaltSync(10);} 
     const generateHash = async (password, salt) => {
         return bcrypt.hashSync(password, salt);
     }
@@ -138,7 +127,6 @@ const Login = (
         } else {
             console.log("logout error...");
         }
-
     }
 
     const [values, setValues] = useState({

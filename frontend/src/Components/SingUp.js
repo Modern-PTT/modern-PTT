@@ -1,11 +1,11 @@
-import { GET_SALT, GET_USER, LOG_IN_MUTATION, SIGN_UP_MUTATION } from  "../../graphql";
+import { GET_SALT, GET_USER, LOG_IN_MUTATION, SIGN_UP_MUTATION } from  "../graphql";
 import { useQuery, useMutation } from '@apollo/client';
 import { useState, useEffect} from 'react';
 import Button from '@mui/material/Button';
 import styled from 'styled-components';
 import bcrypt from "bcryptjs"
-import Row from "../../Components/Layout/Row";
-import Column from '../../Components/Layout/Column'
+import Row from "./Layout/Row";
+import Column from './Layout/Column'
 
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
