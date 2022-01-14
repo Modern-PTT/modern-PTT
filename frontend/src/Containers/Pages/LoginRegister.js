@@ -47,8 +47,12 @@ const LoginRegister = (
     const [usernameInput,setUsernameInput] = useState('')
     const [password, setPassword] = useState('')
 
-
-    const {data, error1, loading1} =  useQuery(GET_SALT,{variables:{username: usernameInput}})
+    const { data: returnSalt,
+            error: getSaltError,
+            loading: getSaltLoading,
+            refetch: getSalt} = useQuery( GET_SALT, {
+                variables:{ username: usernameInput }
+            });
     // const {data2, error2, loading2} =  useQuery(GET_USER,{variables:{username: usernameInput, password: myHashPassword}})
     const [checkLogin] = useMutation(LOG_IN_MUTATION)
 
@@ -65,31 +69,48 @@ const LoginRegister = (
     // }, [data])
 
     const generateSalt=() =>{return bcrypt.genSaltSync(10);} 
-    const generateHash=(password, salt) =>{return bcrypt.hashSync(password, salt);} 
-
-    const checkUserExist = ()=>{
-
-        if(!data){
-            setMySalt(data.salt.salt)
-            console.log(mySalt)
-        }
-        // if( salt != "null") {
-        //     setMySalt(salt);
-        //     if(!password){ 
-        //         var hashPassword = generateHash({password, mySalt})
-        //         setMyHashPassword(hashPassword)
-        //         checkLogin({
-        //             variables:{
-        //                 username,
-        //                 hashPassword,
-        //             },
-        //             // refetchQueries: [GET_TASKS_QUERY],
-        //         })
-        //     }else {alert("password can't not be empty")}
-
-        // }
-        // else {alert("username error")}
+    const generateHash = async (password, salt) => {
+        return bcrypt.hashSync(password, salt);
     }
+
+    const checkUserExist = () => {
+        getSalt();
+        if(returnSalt) {
+            setMySalt(returnSalt.salt);
+            // console.log("salt:", returnSalt.salt);
+            return returnSalt.salt;
+        }
+        return null;
+    }
+
+    const login = async () => {
+        const getBackSalt = checkUserExist();
+        if(!getBackSalt) {
+            alert("username or password invalid");
+            return;
+        }
+
+        if(password) {
+            const hashPassword = await generateHash(password, getBackSalt);
+            setMyHashPassword(hashPassword);
+            const loginResult = await checkLogin({
+                variables:{
+                    username: usernameInput,
+                    password: hashPassword,
+                }
+                // refetchQueries: [GET_TASKS_QUERY],
+            });
+            if(loginResult.data.login) {
+                console.log("login!!");
+            }
+            else {
+                alert("username or password invalid");
+            }
+        } else {
+            alert("password can't not be empty");
+        }
+    }
+
     const [values, setValues] = useState({
         amount: '',
         password: '',
@@ -150,7 +171,7 @@ const LoginRegister = (
             </FormControl>
             <Row>
                 <Button variant="outlined">註冊</Button>
-                <Button variant="contained" onClick={()=>checkUserExist()}>登入</Button>
+                <Button variant="contained" onClick={()=>login()}>登入</Button>
             </Row>
 
 
