@@ -26,7 +26,13 @@ const Mutation = {
     const salt = input.salt;
     const realname = input.realname;
 
-    const userTaken = await checkUser(username, "signup", db);
+    let userTaken;
+    try {
+      userTaken = await checkUser(username, "signup", db);
+    } catch (e) {
+      console.log(`${e}`)
+      return false;
+    }
     if(userTaken) {
       return false;
     }
@@ -43,9 +49,15 @@ const Mutation = {
   },
 
   async login(parent, { username, password } , { db }, info) {
-    const user = await validUser(username, password, "login", db);
+    let user;
+    try {
+      user = await validUser(username, password, "login", db);
+    } catch (e) {
+      console.log(`${e}`);
+      return null;
+    }
     if(!user) {
-      return false;
+      return null;
     }
 
     const current_login = new Date();
@@ -60,11 +72,17 @@ const Mutation = {
 
     await user.save();
 
-    return true;
+    return user.username;
   },
 
   async logout(parent, { username, password } , { db }, info) {
-    const user = await validUser(username, password, "login", db);
+    let user;
+    try {
+      user = await validUser(username, password, "login", db);
+    } catch (e) {
+      console.log(`${e}`);
+      return false;
+    }
     if(!user) {
       return false;
     }

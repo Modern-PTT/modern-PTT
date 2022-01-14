@@ -127,7 +127,7 @@ input userInput {
 # See resolvers/Mutation.js
 type Mutation {
   signup(input: SignupInput!): Boolean!
-  login(username: String!, password: String!): Boolean!
+  login(username: String!, password: String!): String
   logout(username: String!, password: String!): Boolean!
 
   # # Create an article
