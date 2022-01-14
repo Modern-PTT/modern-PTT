@@ -194,6 +194,9 @@ const Login = (
             />
             </FormControl>
             <Row>
+                <Link href="home">
+                    <Button variant="outlined">訪客</Button>
+                </Link>
                 <Link href="signup">
                     <Button variant="outlined">註冊</Button>
                 </Link>

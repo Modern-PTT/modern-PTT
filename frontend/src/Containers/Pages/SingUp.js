@@ -34,28 +34,17 @@ const Wrapper = styled.div`
   margin: auto;
 `;
 const SingUp = (
-    {   username,
-        setUsername,
-        myHashPassword,
+    {   setUsername,
         setMyHashPassword,
         isLogIn,
         setIsLogIn,
     }) => {
-    // const [isLogIn, setIsHaveAccount] = useState(true);
-    const [isHaveAccount, setIsHaveAccount] = useState(true);
+    
     const [usernameInput,setUsernameInput] = useState('')
     const [realnameInput,setRealnameInput] = useState('')
-    const [newsalt, setNewsalt] = useState('')
     const [password, setPassword] = useState('')
 
-    const { data: returnSalt,
-            error: getSaltError,
-            loading: getSaltLoading,
-            refetch: getSalt} = useQuery( GET_SALT, {
-                variables:{ username: usernameInput }
-            });
-    
-    const [checkLogin] = useMutation(LOG_IN_MUTATION)
+ 
     const [checkSingUp] = useMutation(SIGN_UP_MUTATION)
 
     // useEffect(() => {
@@ -75,63 +64,52 @@ const SingUp = (
         return bcrypt.hashSync(password, salt);
     }
 
-    const checkUserIsExist = () => {
-        getSalt();
-        if(returnSalt) {
-            return true;
-        } else {
-            console.log(returnSalt);
-            const salt = generateSalt();
-            setNewsalt(salt);
-            console.log(newsalt);
-            return false
-        }
-    }
 
     const sendSignUp = async () => {
-        const userExist = checkUserIsExist();
-        if(userExist) {
-            alert("username is existed!");
+        var randomSalt = generateSalt();
+
+        console.log("Salt: "+randomSalt)
+
+        // each prop. should be filled
+        if (!usernameInput) {
+            alert("username can not be empty!");
             return;
         }
-
-        if(password) {
-            const hashPassword = await generateHash(password, newsalt);
+        if (!realnameInput) {
+            alert("username can not be empty!");
+            return;
+        }
+        if (!password) {
+            alert("username can not be empty!");
+            return;
+        } else{ 
+            const hashPassword = await generateHash(password, randomSalt);
             setMyHashPassword(hashPassword);
-            const signInResult = await checkSingUp({
+            console.log("hashPassword"+hashPassword)
+            const signUpResult = await checkSingUp({
                 variables:{
-                    username: usernameInput,
-                    password: hashPassword,
-                    salt: newsalt,
-                    realname: realnameInput,
-                }
-            })
-            if(signInResult){
-                const loginResult = await checkLogin({
-                    variables:{
+                    input:{
                         username: usernameInput,
                         password: hashPassword,
+                        salt: randomSalt,
+                        realname: realnameInput,
                     }
-                    // refetchQueries: [GET_TASKS_QUERY],
-                });
-
-                if(loginResult.data.login) {
-                    console.log("login!!");
-                    setIsLogIn(true);
                 }
-                else {
-                    alert("username or password invalid");
-                };
+            });
 
-            }else {
-                alert("system error!");
+            if(signUpResult.data.signup) {
+                console.log("signup success and login!!");
+                setIsLogIn(true);
+                setUsername(usernameInput);
+                setMyHashPassword(hashPassword);
+            }else{
+                alert("username is existed!");
                 return;
             }
-
-        } else {
-            alert("password can't not be empty");
         }
     }
+
+
 
     const [values, setValues] = useState({
         amount: '',
@@ -203,7 +181,13 @@ const SingUp = (
                 <Button variant="contained" onClick={()=>sendSignUp()}>送出</Button>
             </Row>
         </Column>
-        :<h1>Welcome to NEW PTT</h1>
+        :<>
+            <h1>Welcome to NEW PTT</h1>
+            <Link href="home">
+                <Button variant="outlined">進入新世界</Button>
+            </Link>
+        </>
+
     );
 }
 
