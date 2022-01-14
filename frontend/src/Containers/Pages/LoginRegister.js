@@ -70,7 +70,7 @@ const LoginRegister = (
     const checkUserExist = ()=>{
 
         if(!data){
-            setMySalt(data.salt.salt)
+            setMySalt(data.salt)
             console.log(mySalt)
         }
         // if( salt != "null") {
