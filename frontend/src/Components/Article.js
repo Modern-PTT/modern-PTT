@@ -19,7 +19,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-
+import DeleteIcon from '@mui/icons-material/Delete';
 
 // import Message from '../hooks/Message';
 import ThumbUpAltOutlinedIcon from '@mui/icons-material/ThumbUpAltOutlined';
@@ -32,11 +32,15 @@ import Tooltip from '@mui/material/Tooltip';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { useMutation } from '@apollo/client';
 import { 
+  GET_ARTICLE_QUERY,
   CREATE_COMMENT_MUTATION, 
+  DELETE_ARTICLE_MUTATION,
   UPDATE_ARTICLE_MUTATION,
   MODIFY_COMMENT_MUTATION } from "../graphql";
 
 import {pttContext}  from "../Containers/App"
+
+import { useNavigate } from 'react-router-dom';
 
 const useStyles = makeStyles({
   root: {
@@ -85,15 +89,20 @@ const msgState = (input)=>{
 
 
 
-export default function Article({article}) {
+export default function Article( {item} ) {
+
+  const [postAid, setPost] = useState(item.aid)
+  const [brdname, setBrdname] = useState(item.brdname)
   const {
     username,
     myHashPassword,
-    isLogin } = useContext(pttContext)
+    isLogIn } = useContext(pttContext)
 
   const classes = useStyles();
   const classesText = useTextStyles();
   const bull = <span className={classes.bullet}>•</span>;
+
+  const navigate = useNavigate();
 
   const showTime = (time)=>{
       return moment(time).format('YYYY/MM/DD hh:mm:ss')
@@ -102,29 +111,26 @@ export default function Article({article}) {
   // Edit Comment Part
   const [commentType, setCommentType] = useState(3)
   const [inputcomment, setInputComment] = useState('')
-  const [inputaid, setInputaid]=useState(article.aid)
   const [createComment] = useMutation(CREATE_COMMENT_MUTATION);
 
   // Edit Article Part
-  const [editTitle, setEditTitle] = useState(article.title)
-  const [editContent, setEditContent] = useState(article.content)
-  const [open, setOpen] = useState(false);
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+  const [editTitle, setEditTitle] = useState(item.title)
+  const [editContent, setEditContent] = useState(item.content)
+  const [edit_reply, setEdit_reply] = useState([])
+// ({cid: ,})
+// setEdit_reply([...edit_reply,])
+  const [editOpen, setEditOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
 
-  const handleClose = () => {
-    setOpen(false);
-  };
+  const handleEditOpen = () => {setEditOpen(true);};
 
-  const handelEdit = () => {
+  const handleDeleteOpen = () => {setDeleteOpen(true);};
 
-  }
 
   const EditCard = ()=>{
     return(
-      <Dialog open={open} onClose={handleClose}>
-          <DialogTitle>{article.username}</DialogTitle>
+      <Dialog open={editOpen} onClose={()=>setEditOpen(false)}>
+          <DialogTitle>{item.username}</DialogTitle>
           <DialogContent>
             <DialogContentText>
               標題
@@ -136,121 +142,204 @@ export default function Article({article}) {
               type="editTitle"
               fullWidth
               value={editTitle}
-              onChange={(e)=>setEditTitle(e.target.value)}
+              onChange={(e)=>{setEditTitle(e.target.value);console.log(editTitle);}}
               variant="standard"
             />
             <DialogContentText>
               內文
             </DialogContentText>
             <TextField
+              multiline
               margin="dense"
-              id="editTitle"
+              id="editContent"
               type="editTitle"
-              fullWidth
+              // fullWidth
               value={editContent}
-              onChange={(e)=>setEditContent(e.target.value)}
+              onChange={(e)=>{setEditContent(e.target.value);console.log(editContent);}}
               variant="standard"
             />
-            {/* {article.comments.map((item)=>(
-              <DialogContentText>
-              {item.owner}{item.owner}
-              </DialogContentText>
-            ))} */}
-          <Divider />
 
-      
           <CardContent>
-              {article.comments.map((item)=>(
-                  <Typography className={classes.title} color="textSecondary" gutterBottom key={item.cid}>
-                  <Row align="center">
-                      <>{msgState(item.type) }{item.owner} </> <>{item.location.ip}   {item.create_time}</>
-                  </Row>
-                  {item.body}
-                  </Typography>
-              
-              ))}
+          {item.comments.map((item)=>(
+              <Typography className={classes.title} color="textSecondary" gutterBottom key={item.cid}>             
+                <Row align="center">
+                    <>{msgState(item.type)}
+                      {item.owner}
+                      {item.content.split("\n").map(e => (
+                        <>
+                          {e}
+                          <br />
+                        </>
+                      ))}
+                    </>
+                    <>
+                      {item.location.ip}
+                      {showTime(item.create_time)}
+                    </>
+                </Row>
+                {item.body}
+              </Typography>
+            ))}
           </CardContent>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose}>取消</Button>
-            <Button onClick={()=>{handleClose();handelEdit();}}>更改</Button>
+            <Button onClick={()=>setEditOpen(false)}>取消</Button>
+            <Button onClick={()=>{setEditOpen(false);updateEdit();}}>更改</Button>
           </DialogActions>
         </Dialog>
     )
   }
-    
+  
+  const DeleteCard = () => {
+    return (
+      <div>
+        <Dialog
+          open={deleteOpen}
+          onClose={()=>setDeleteOpen(false)}
+          aria-labelledby="delete-title"
+          aria-describedby="delete-description"
+        >
+          <DialogTitle id="delete-title">
+            刪除
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+             <h1> 確定刪除文章？</h1>
+             <p> 此步驟無法恢復</p>
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={()=>setDeleteOpen(false)}>取消</Button>
+            <Button onClick={()=>sendDelete()} autoFocus color="red">
+              刪除
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </div>
+    );
+  }
 
-  const submitComment = () =>{
-      var submit = createComment({
+  const [deleteArticle] = useMutation(DELETE_ARTICLE_MUTATION)
+  const sendDelete = async () => {
+
+    var delete1 = await deleteArticle({
+      variables:{
+        input:{
+          token: {
+            username: username,
+            password: myHashPassword,
+          },
+          aid: postAid,
+        }
+      }
+    })
+    if(delete1.data) {
+      console.log(item.brdname)
+      console.log("Post is deleted.") 
+      // navigate(`/${brdname}`)
+      navigate("/home")
+    }
+
+  }
+
+  const [updateArticle] = useMutation(UPDATE_ARTICLE_MUTATION,)
+  const updateEdit = async() =>{
+    var update = await updateArticle({
+      variables: {
+        input: {
+          token: {
+            username: username,
+            password: myHashPassword,
+          },
+          aid: item.aid,
+          title: editTitle,
+          content: editContent,
+          comment_reply: [],
+        }
+      },refetchQueries: [GET_ARTICLE_QUERY]
+    })
+    if(update.data) alert("Article is updated.") 
+    
+  }
+
+  const submitComment = async () =>{
+    if(inputcomment!== ""){
+      var submit = await createComment({
         variables:{
           input:{
             token: {
               username: username,
               password: myHashPassword,
             },
-            aid: "M.1642183234.A.2D6",
+            aid: postAid,
             type: commentType,
             content: inputcomment,
           }
-        }
+        },refetchQueries:[GET_ARTICLE_QUERY]
       })
       if(submit.data) {
-        alert("Comment submit")
-        console.log(submit)
+        setInputComment("");
       }
       else alert("Comment failed")
+    }
   }
   
-  // var username = "amy"
-  // var myHashPassword = "$2a$10$FUeuUN9JDCOmpVW324HKoOPpl7vKQ3tWeT6tCaLzvEoUQCKi9Fd/G"
-  // const isOwner = compare();
   return (
       <Wrapper>
         <Card className={classes.root} variant="outlined">
             <CardContent>
                     {/* <Typography className={classes.title} color="textSecondary" gutterBottom> */}
                       <Row justify="space-between" align="center">
-                        <div>標題｜{article.title}</div>
+                        <div>標題｜{item.title}</div>
                         <div>
-                          {(username==article.owner)?
-                            <Tooltip title="編輯">
+                          {(username==item.owner)?
+                          <>
+                            <Tooltip title="刪除">
                               <IconButton>
-                                <EditIcon onClick={()=>{handleClickOpen();console.log("door open");}}/>
+                                <DeleteIcon onClick={()=>{handleDeleteOpen();console.log("door open");}}/>
                               </IconButton>
                             </Tooltip>
+                            <Tooltip title="編輯">
+                              <IconButton>
+                                <EditIcon onClick={()=>{handleEditOpen();console.log("door open");}}/>
+                              </IconButton>
+                            </Tooltip>
+                          </>
                           :<></>}
+
+                          <DeleteCard/>
                           <EditCard/>
 
-                          {isLogin?
+                          {/* {isLogIn?
                           <Tooltip title="收藏">
                             <IconButton>
                               <FavoriteIcon />
                             </IconButton>
                           </Tooltip>
-                          :<></>}
+                          :<></>} */}
 
 
                         </div>
                       </Row>
 
                 <Typography className={classes.title} color="textSecondary" gutterBottom>
-                    作者｜{article.owner}
+                    作者｜{item.owner}
                 </Typography>
                 <Typography className={classes.title} color="textSecondary" gutterBottom>
-                    時間｜{showTime(article.create_time)}
+                    時間｜{showTime(item.create_time)}
                 </Typography>
                 <p></p>
                 <Divider />
                 <p></p>
                 <Typography className={classes.title} color="textSecondary" gutterBottom >
-                  {article.content.split("\n").map(e => (
+                  {item.content.split("\n").map(e => (
                             <>
                               {e}
                               <br key={e}/>
                             </>
                   ))}
                 </Typography>
-                <Typography className={classes.title} color="textSecondary" gutterBottom l>
+                <Typography className={classes.title} color="textSecondary" gutterBottom >
                   {/* {data.url} */}
                 </Typography>
 
@@ -259,8 +348,8 @@ export default function Article({article}) {
 
     
             <CardContent>
-                {article.comments.map((item)=>(
-                    <Typography className={classes.title} color="textSecondary" gutterBottom> key={item.cid}
+                {item.comments.map((item)=>(
+                    <Typography className={classes.title} color="textSecondary" gutterBottom key={item.cid}> 
                     <Row align="center">
                         <>{msgState(item.type)}
                           {item.owner}
@@ -281,7 +370,7 @@ export default function Article({article}) {
                 
                 ))}
             </CardContent>
-            {isLogin?
+            {(isLogIn)?
               <Row justify="space-around"align="center">
                 <div>
                   <ThumbUpAltOutlinedIcon onClick={()=>{setCommentType(1);console.log(1);}}/>
@@ -299,11 +388,11 @@ export default function Article({article}) {
                     }}
                     />
                 </form>
-                {/* <CardActions > */}
+                <CardActions >
                   <Row justify="flex-end">
                     <Button size="small" onClick={()=>submitComment()}>留言</Button>
                   </Row>
-                {/* </CardActions> */}
+                </CardActions>
               </Row>
             :<></>}
 

@@ -12,6 +12,8 @@ query board($brdname: String!){
             title
             create_time
             deleted
+            push
+            boo
           }
     }
   }
@@ -36,6 +38,7 @@ query boards($keywords: [String!]){
 export const GET_ARTICLE_QUERY = gql`
     query article ($aid: String!) {
         article(aid: $aid){
+            aid
             title
             owner
             create_time
@@ -134,6 +137,8 @@ query newestArticles($limit: Int!){
         title
         owner
         create_time
+        push
+        boo
     }
 }
 `;
@@ -142,8 +147,7 @@ query newestArticles($limit: Int!){
 export const GET_HOTARTICLES = gql`
 query hotArticles{
     hotArticles{
-        aid
-        owner
+        brdname
         title
         create_time
         push

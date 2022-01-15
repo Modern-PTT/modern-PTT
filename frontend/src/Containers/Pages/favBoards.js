@@ -1,9 +1,10 @@
 import styled from 'styled-components';
 import { useQuery, useMutation } from '@apollo/client';
 import { GET_BOARDS_QUERY, UPDATE_FAV_ARTICLES_MUTATION } from "../../graphql";
-import { useState, useEffect} from 'react';
+import { useState, useEffect, useContext} from 'react';
+import { pttContext } from "../App"
 
-import  {DataGrid}  from '@material-ui/data-grid';
+import { DataGrid } from '@material-ui/data-grid';
 import Link from '@mui/material/Link';
 
 import Navbar from "../../Components/Navbar"
@@ -30,7 +31,17 @@ const Wrapper = styled.div`
 `;
 
 
-const AllBoards =  ({myLoveArticles, setMyLoveArticles,isLogIn, username, myHashPassword}) =>{
+const AllBoards =  () =>{
+
+  const {
+    username, 
+    myHashPassword,
+    favBoards,
+    setFavBoards,
+    updateFavBoards,
+    isLogin
+  } = useContext(pttContext)
+
   const [allBoards, setAllBoards] = useState('');
   const [updateFavArticles] = useMutation(UPDATE_FAV_ARTICLES_MUTATION)
   const {data, error, loading} =  useQuery(GET_BOARDS_QUERY)
@@ -43,21 +54,21 @@ const AllBoards =  ({myLoveArticles, setMyLoveArticles,isLogIn, username, myHash
 
   useEffect(() => {
     if(username) {
-      var update = updateFavArticles({
+      var update = updateFavBoards({
         variables:{
           input:{
             token:{
               username: username,
               password: myHashPassword
             },
-            aids:  myLoveArticles
+            aids:  favBoards
           }
         }
       })
     }
     // if(update)alert("update myLoveArticles success!")
 
-  }, [myLoveArticles])
+  }, [favBoards])
 
   const columns = [
     {
@@ -65,7 +76,7 @@ const AllBoards =  ({myLoveArticles, setMyLoveArticles,isLogIn, username, myHash
       headerName: 'BoardName',
       flex: 1,
       renderCell: (params) => (
-        <Link href={`/boards/${params.value}`}>{params.value}</Link>
+        <Link href={`/${params.value}`}>{params.value}</Link>
       )
     },
     {
@@ -86,7 +97,7 @@ const AllBoards =  ({myLoveArticles, setMyLoveArticles,isLogIn, username, myHash
   ];
     return(
       <>
-        <Navbar isLogIn={isLogIn} />
+        <Navbar/>
         <div className="contents">
             <DashBoard />
         </div>

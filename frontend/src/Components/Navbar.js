@@ -13,12 +13,9 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
-
-import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import Tooltip from '@mui/material/Tooltip';
-import BorderColorIcon from '@mui/icons-material/BorderColor';
-
 import Link from '@mui/material/Link';
 
 
@@ -259,10 +256,10 @@ export default function PrimarySearchAppBar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-        <Link href ="signup">
+        <Link href ="/signup">
           <MenuItem onClick={handleMenuClose} >Sign Up</MenuItem>
         </Link>
-        <Link href ="login">
+        <Link href ="/login">
           <MenuItem onClick={handleMenuClose} >Log In</MenuItem>
         </Link>
     </Menu>
@@ -467,14 +464,6 @@ export default function PrimarySearchAppBar() {
           <div className={classes.sectionDesktop}>
           {(isLogIn)?
               <>
-                <Tooltip title="發文">  
-                  <IconButton aria-label="NewPost" color="inherit">
-                      {/* <BorderColorIcon /> */}
-                    <Link href="NewPost">
-                      <ModeEditIcon/>
-                    </Link>
-                  </IconButton>
-                </Tooltip>
 
                 <Tooltip title="站內信">
                   <IconButton aria-label="show 4 new mails" color="inherit">

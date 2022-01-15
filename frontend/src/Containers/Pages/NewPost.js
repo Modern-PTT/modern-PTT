@@ -7,6 +7,8 @@ import NewPostCard from '../../Components/NewPostCard';
 import Navbar from "../../Components/Navbar"
 import DashBoard from "../../Components/DashBoard"
 import Row from "../../Components/Layout/Row"
+import BoardNameCard from "../../Components/BoardNameCard"
+
 //query某看板後拿回的簡要文章列表
 
 
@@ -20,19 +22,15 @@ const Wrapper = styled.div`
   margin: auto;
 `;
 
-const NewPost =  ({isLogIn,username ,myHashPassword}) =>{
- 
+const NewPost =  () =>{
 
     return(
       <>
-        <Navbar isLogIn={isLogIn} />
+        <Navbar/> 
         <div className="contents">
           <Row>
             <DashBoard />
-            <NewPostCard
-              username={username}
-              myHashPassword={myHashPassword}
-            />
+            <NewPostCard/>
           </Row>
         </div>
     </>);
