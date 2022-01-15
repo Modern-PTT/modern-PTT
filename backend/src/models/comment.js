@@ -7,9 +7,10 @@ const CommentSchema = new mongoose.Schema(
       unique: true,
       required: true
     },
+    aid: String,
     deleted: Boolean,
 
-    type: String,
+    type: Number,
     owner: String,
     content: String,
     reply: String,

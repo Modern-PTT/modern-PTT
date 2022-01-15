@@ -11,10 +11,12 @@ import { fileURLToPath } from "url";
 
 import * as db from "./backend/src/models";
 import Query from "./backend/src/resolvers/Query.js";
+import Mutation from './resolvers/Mutation';
 import timeScalar from './backend/src/resolvers/Time';
 import Board from './backend/src/resolvers/Board';
 import Article from './backend/src/resolvers/Article';
 import Comment from './backend/src/resolvers/Comment';
+import User from "./backend/src/resolvers/User";
 import mongo from "./backend/src/mongo.js";
 
 import wakeUpDyno from "./backend/src/utilities/wakeUpDyno";
@@ -37,10 +39,12 @@ const server = new ApolloServer({
   typeDefs,
   resolvers: {
     Query,
+    Mutation,
     Time: timeScalar,
     Board,
     Article,
     Comment,
+    User,
   },
   context: {
     db,

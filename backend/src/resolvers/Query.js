@@ -1,9 +1,13 @@
 import { getHotBrdnameList } from "../utilities/creater";
+import { checkArticle } from "../utilities/articleUtil";
+import bcrypt from "bcryptjs";
+import { hashPassword } from "../utilities/userUtil";
 
 const Query = {
   async board(parent, { brdname }, { db }, info) {
-    console.log(brdname)
-    return await db.BoardModel.findOne({brdname});
+    return await db.BoardModel.findOne({
+      brdname: { "$regex": `^${brdname}$`, "$options": "i" }
+    });
   },
 
   async boards(parent, { keywords }, { db }, info) {
@@ -22,7 +26,11 @@ const Query = {
   },
 
   async article(parent, { aid }, { db }, info) {
-    return await db.ArticleModel.findOne({aid});
+    try {
+      return await checkArticle(aid, "query article", db);
+    } catch (e) {
+      return null;
+    }
   },
 
   async articles(parent, { input: { brdname, owner, title, timerange } }, { db }, info) {
@@ -59,19 +67,63 @@ const Query = {
       })
     }
 
+    filter.push({
+      deleted: false
+    })
+
     if(filter.length === 0) {
       return await db.ArticleModel.find();
     }
     else {
       return await db.ArticleModel.find({
-        "$and": filter
-      });
+        "$and": filter,
+      }).sort({ create_time: -1 });
     }
   },
 
-  async user(parent, { username }, { db}, info) {
-    return await db.UserModel.findOne({username});
+  async user(parent, { input: { username, password } }, { db }, info) {
+    let userData = await db.UserModel.findOne({
+      username: { "$regex": `^${username}$`, "$options": "i" }
+    });
+    if(!userData) {
+      return null;
+    }
+    else if(password && bcrypt.compareSync(password, userData.password)) {
+      return userData;
+    }
+    else {
+      userData.realname = null;
+      userData.first_login = null;
+      userData.fav_boards = null;
+      userData.track_articles = null;
+      userData.fav_articles = null;
+      return userData;
+    }
   },
+
+  async salt(parent, { username }, { db }, info) {
+    const userData = await db.UserModel.findOne({
+      username: { "$regex": `^${username}$`, "$options": "i" }
+    });
+    if(!userData) {
+      return null;
+    }
+
+    // const password = "123123";
+    // console.log(userData.username)
+    // console.log(userData.salt);
+    // console.log(bcrypt.hashSync(password, userData.salt));
+
+    return userData.salt;
+  },
+
+  // async genHash(parent, { plaintext }, { db }, info) {
+  //   let { hashed_password, salt } = await hashPassword(plaintext);
+  //   console.log(plaintext);
+  //   console.log(salt);
+  //   console.log(hashed_password);
+  //   return hashed_password;
+  // },
 
   async hotBoards(parent, args, { db }, info) {
     const hot_brdname_list = getHotBrdnameList();
@@ -87,7 +139,7 @@ const Query = {
     if(limit !== null && limit > 0 && limit <= queryNum) {
       queryNum = limit;
     }
-    return await db.ArticleModel.find({})
+    return await db.ArticleModel.find({deleted: false})
                                 .sort({create_time: -1})
                                 .limit(queryNum);;
   },
@@ -119,6 +171,7 @@ const Query = {
           pushRank: {
             $gt: 0
           },
+          deleted: false,
         }
       },
       { 

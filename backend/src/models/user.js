@@ -9,6 +9,7 @@ const UserSchema = new mongoose.Schema(
       required: true
     },
     password: String,
+    salt: String,
     nickname: String,
     login_days: Number,
     last_login: Date,
@@ -33,10 +34,10 @@ const UserSchema = new mongoose.Schema(
       type: mongoose.Types.ObjectId,
       ref: "Article"
     }],
-    mails: [{
-      type: mongoose.Types.ObjectId,
-      ref: "Mail"
-    }]
+    // mails: [{
+    //   type: mongoose.Types.ObjectId,
+    //   ref: "Mail"
+    // }]
   }
 );
 

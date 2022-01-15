@@ -1,32 +1,49 @@
 import axios from "axios";
+import { hashPassword } from "../utilities/userUtil";
 
 const instance = axios.create({
   baseURL: 'https://api.devptt.site:3457/api'
 });
 
 // import users
-const getInitUserList = () => {
+const getInitUserList = async () => {
   let user_list = [];
+
+  let { hashed_password, salt } = await hashPassword("123123");
   user_list.push({
     username: "SYSOP",
     nickname: "站長？",
-    password: "123123",
+    realname: "站長是誰",
+    password: hashed_password,
+    salt,
   });
+  
+  ({ hashed_password, salt } = await hashPassword("123123"));
   user_list.push({
     username: "test",
     nickname: "測試機器人嗶嗶",
-    password: "123123",
+    realname: "測試機",
+    password: hashed_password,
+    salt,
   });
+
   for(let i = 2; i <= 12; i++) {
+    ({ hashed_password, salt } = await hashPassword("123123"));
     user_list.push({
       username: `SYSOP${i}`,
-      password: "123123",
+      realname: "SYSOP 真名",
+      password: hashed_password,
+      salt,
     });
   }
+
   for(let i = 1; i <= 50; i++) {
+    ({ hashed_password, salt } = await hashPassword("123123"));
     user_list.push({
       username: `test${i}`,
-      password: "123123",
+      realname: "test 真名",
+      password: hashed_password,
+      salt,
     });
   }
 
@@ -35,6 +52,26 @@ const getInitUserList = () => {
 
 // import boards
 const brdname_list = [
+  "Baseball",
+  "C_Chat",
+  "Gossiping",
+  "HatePolitics",
+  "Lifeismoney",
+  "LoL",
+  "MobileComm",
+  "NBA",
+  "sex",
+  "Stock",
+  "WhoAmI",
+  "test",
+  "home-sale",
+  "car",
+  "movie",
+  "Boy-Girl",
+  "Beauty",
+];
+
+const brdname_list2 = [
   "Baseball",
   "C_Chat",
   "Gossiping",
@@ -88,10 +125,9 @@ const parseComments = async (brdname, aid) => {
   const { data: { list } } = await instance.get(`/board/${brdname}/article/${aid}/comments?limit=200&desc=false`);
   for(let comment of list) {
     if(comment.type <= 3) {
-      const type = (comment.type == 1)? "推" : ((comment.type == 2)? "噓" : "→");
       plainComments.push({
         owner: comment.owner,
-        type,
+        type: comment.type,
         content: comment.content[0][0].text,
         deleted: comment.deleted,
         ip: comment.ip,
@@ -106,7 +142,7 @@ const articlePerBoard = 50;
 
 const getInitArticleList = async () => {
   let article_list = [];
-  for(let brdname of brdname_list) {
+  for(let brdname of brdname_list2) {
     const { data: { list } } = await instance.get(`/board/${brdname}/articles?limit=${articlePerBoard}&desc=true`);
 
     for(let article of list) {
@@ -125,9 +161,6 @@ const getInitArticleList = async () => {
         create_time: create_time * 1000,
         owner,
         deleted,
-        push: 0,
-        neutral: 0,
-        boo: 0,
         content: plainContent,
         plainComments,
         ip,

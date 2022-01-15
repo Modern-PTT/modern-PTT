@@ -8,21 +8,49 @@ import InputBase from '@material-ui/core/InputBase';
 import Badge from '@material-ui/core/Badge';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
-
 import DeleteIcon from '@mui/icons-material/Delete';
-import Tooltip from '@mui/material/Tooltip';
-import BorderColorIcon from '@mui/icons-material/BorderColor';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
+import Tooltip from '@mui/material/Tooltip';
+import Link from '@mui/material/Link';
+
+
+import Button from '@mui/material/Button';
+// const [showAlert, setShowAlert] = useState(null)
+import { useState, useEffect, useContext} from 'react';
+import { useQuery } from '@apollo/client';
+import Card from '@mui/material/Card';
+import Modal from '@mui/material/Modal';
+import Row from './Layout/Row';
+import Column from './Layout/Column';
+
+//selection
+import InputLabel from '@mui/material/InputLabel';
+import FormHelperText from '@mui/material/FormHelperText';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import TextField from '@mui/material/TextField';
+import { fontWeight } from '@mui/system';
+
+// LogIn / SignUp
+import AlertDialog from "./Alert";
+import Login from "./Login";
+import SingUp from "./SingUp";
+import { LOG_OUT_MUTATION, GET_BOARD_QUERY  } from  "../graphql";
+import { useMutation } from '@apollo/client';
+
+import { pttContext } from '../Containers/App';
+
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   appBar:{
     boxShadow: 'none',
+    backgroundColor: '#333',
   },
   grow: {
     flexGrow: 1,
@@ -45,15 +73,18 @@ const useStyles = makeStyles((theme) => ({
     },
     marginRight: theme.spacing(2),
     marginLeft: 0,
-    width: '100%',
+    width: '40%',
     [theme.breakpoints.up('sm')]: {
-      marginLeft: theme.spacing(3),
+      marginLeft: theme.spacing(0),
       width: 'auto',
     },
   },
+  iconContainer:{
+    padding: '5px',
+  },
   searchIcon: {
-    padding: theme.spacing(0, 2),
-    height: '100%',
+    padding: theme.spacing(0, 1),
+    height: '90%',
     position: 'absolute',
     pointerEvents: 'none',
     display: 'flex',
@@ -62,13 +93,17 @@ const useStyles = makeStyles((theme) => ({
   },
   inputRoot: {
     color: 'inherit',
+    
   },
   inputInput: {
-    padding: theme.spacing(1, 1, 1, 0),
+    padding: theme.spacing(0, 1, 0, 0),
     // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+    paddingLeft: `calc(1em + ${theme.spacing(1)}px)`,
     transition: theme.transitions.create('width'),
-    width: '100%',
+    width: '100px',
+    [theme.breakpoints.up('sm')]: {
+      width: '1000px',
+    },
     [theme.breakpoints.up('md')]: {
       width: '20ch',
     },
@@ -87,7 +122,135 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
+const LOCALSTORAGE_USERNAME = "saveMyUsername";
+const LOCALSTORAGE_HASHEDPW = "saveMyHashedPassword";
+
+
 export default function PrimarySearchAppBar() {
+
+  const {
+    username,
+    setUsername,
+    myHashPassword,
+    setMyHashPassword,
+    isLogIn,
+    setIsLogIn,
+
+    simpleBoardSearch, setSimpleBoardSearch,
+    advBoardSearch, setAdvBoardSearch,
+    advTitleSearch, setAdvTitleSearch,
+    timeSearch, setTimeSearch,
+    ownerSearch, setOwnerSearch,
+
+    } = useContext(pttContext)
+
+    const navigate = useNavigate();
+  // insert ===========================
+  const [splits_boards, setSplits_boards] = useState([""])
+  const [boardInput, setBoardInput] = useState("");
+  const [titleInput, setTitleInput] = useState("");
+  const [timeInput, setTimeInput] = useState(240);
+  const [ownerInput, setOwnerInput] = useState("");
+
+
+  const time_interval = [
+    {time:6,name:"6小時內"},
+    {time:12,name:"12小時內"},
+    {time:72,name:"3天內"},
+    {time:168,name:"一週內"}
+  ]
+
+
+
+
+  const handleBasicSearch =  () => {
+    var splits_boards2 = splits_boards.split(" ");
+    setSimpleBoardSearch(splits_boards2);
+    navigate("/search/boards")
+  }
+
+  const handleAdvanceSearch =  () => {
+    var splits_boards = boardInput.split(" ");
+    var splits_title = titleInput.split(" ");
+
+    setAdvBoardSearch(splits_boards);
+    setAdvTitleSearch(splits_title);
+    setOwnerSearch(ownerInput);
+    setTimeSearch(timeInput);
+    navigate("/search/Articles")
+  }
+  // Advance Search
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const handleSubmit = () =>{
+    setOpen(false);
+    // QUERY
+  }
+  const LoginButton = () =>(            
+    <AlertDialog
+        btntext="Login"
+        maintitle="Login"
+        mainfiled=
+            {<Login
+                username={username}
+                setUsername={setUsername}
+                myHashPassword={myHashPassword}
+                setMyHashPassword={setMyHashPassword}
+                isLogIn={isLogIn}
+                setIsLogIn={setIsLogIn}
+            />}
+    />)
+
+    const SignUpButton = () =>(            
+        <AlertDialog
+            btntext="SingUp"
+            maintitle="SingUp"
+            mainfiled=
+                {<SingUp
+                    setUsername={setUsername}
+                    setMyHashPassword={setMyHashPassword}
+                    isLogIn={isLogIn}
+                    setIsLogIn={setIsLogIn}
+                />}
+        />)
+
+  // logout
+  const [checkLogout] = useMutation(LOG_OUT_MUTATION);
+
+  const logout = async () => {
+    
+    if(!username || !myHashPassword) {
+        console.log("username and hashed password cannot be null");
+        return;
+    }
+
+    const logoutResult = await checkLogout({
+        variables:{
+            username: username,
+            password: myHashPassword,
+        }
+    });
+
+    if(logoutResult.data?.logout) {
+        console.log("logout~~");
+        setIsLogIn(false);
+        setMyHashPassword("");
+        setUsername("");
+
+        localStorage.removeItem(LOCALSTORAGE_USERNAME);
+        localStorage.removeItem(LOCALSTORAGE_HASHEDPW);
+    } else {
+        console.log("logout error...");
+    }
+}
+
+
+
+  // TODO:  Mutation in Search
+  //  =================================
+
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -113,22 +276,43 @@ export default function PrimarySearchAppBar() {
   };
 
   const menuId = 'primary-search-account-menu';
-  const renderMenu = (
+
+  const guestMenu = (
     <Menu
       anchorEl={anchorEl}
-      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
       id={menuId}
       keepMounted
       transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>Setting</MenuItem>
-      <MenuItem onClick={handleMenuClose} color="red">Log Out</MenuItem>
+        <Link href ="/signup">
+          <MenuItem onClick={handleMenuClose} >Sign Up</MenuItem>
+        </Link>
+        <Link href ="/login">
+          <MenuItem onClick={handleMenuClose} >Log In</MenuItem>
+        </Link>
     </Menu>
   );
+
+  const userMenu =  (
+      <Menu
+      anchorEl={anchorEl}
+      anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+      id={menuId}
+      keepMounted
+      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+      open={isMenuOpen}
+      onClose={()=>handleMenuClose}
+    >
+
+        <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+        <MenuItem onClick={handleMenuClose}>Setting</MenuItem>
+        <MenuItem onClick={()=>{logout();handleMenuClose()}} color="red">Log Out</MenuItem>
+    </Menu>
+    )
+  
 
   const mobileMenuId = 'primary-search-account-menu-mobile';
   const renderMobileMenu = (
@@ -193,60 +377,129 @@ export default function PrimarySearchAppBar() {
 
   return (
     <div className={classes.grow}>
+
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
           <Typography className={classes.title} variant="h6" noWrap>
-            ModernPTT
+            <Link underline="none" href="/home" className="text-gradient nav-title">
+              ModernPTT
+            </Link>
           </Typography>
           <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
-            </div>
+
             <InputBase
               placeholder="搜尋看板..."
               classes={{
                 root: classes.inputRoot,
                 input: classes.inputInput,
               }}
+              value={splits_boards}
+              onChange={(e) => {setSplits_boards(e.target.value);
+                console.log(splits_boards)
+
+              }}
               inputProps={{ 'aria-label': 'search' }}
             />
+
+            <Button onClick={handleOpen} >進階搜尋</Button>
+
+            <Modal 
+              width="500"
+              open={open}
+              onClose={handleClose}
+              display="flex"
+              align-items="center"
+              justify-content="center"
+            >
+                <Card  sx={{position: 'absolute', width: 500 }}>
+                    <p>進階搜尋</p>
+                    <div padding="20px">
+                    <Column>
+                      <Row>看板
+                        <TextField  
+                          fullWidth
+                          placeholder="用空白間隔開關鍵字，如 B k"
+                          id="board_search" 
+                          value={boardInput} 
+                          onChange={(e)=>setBoardInput(e.target.value)} 
+                          variant="outlined" 
+                        />
+                      </Row>
+                      <Row>
+                        作者
+                        <TextField  
+                          fullWidth
+                          placeholder="輸入作者id"
+                          id="board_search" 
+                          value={ownerInput} 
+                          onChange={(e)=>setOwnerInput(e.target.value)} 
+                          variant="outlined" 
+                        />
+                      </Row>
+                      <Row>
+                        標題
+                        <TextField  
+                          fullWidth
+                          placeholder="用空白間隔開關鍵字，如 B k"
+                          id="title_search" 
+                          value={titleInput} 
+                          onChange={(e)=>setTitleInput(e.target.value)} 
+                          variant="outlined" 
+                        />
+                      </Row>
+                      <Row>時間</Row>
+                        <FormControl sx={{ m: 1, minWidth: 120 }}>
+                        {/* <FormHelperText>Without label</FormHelperText>  */}
+                          <Select
+                            value={timeInput}
+                            onChange={(e)=>setTimeInput(e.target.value)}
+                            displayEmpty
+                          >
+                            {time_interval.map((item, index)=>(
+                              <MenuItem  key={index} value={item.time}>{item.name}</MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
+                    </Column>
+                    </div>
+                  <div>
+                    <Button onClick={handleClose} >取消</Button>
+                    <Button onClick={()=>{handleAdvanceSearch();handleClose()}} >送出</Button>
+                  </div>
+                </Card>
+            </Modal>
+
+
+            <IconButton className={classes.iconContainer}>
+                <SearchIcon onClick={()=>handleBasicSearch()}/>
+            </IconButton>
           </div>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
+          {(isLogIn)?
+              <>
 
-            <Tooltip title="發文">  
-              <IconButton aria-label="New Post" color="inherit">
-                  {/* <BorderColorIcon /> */}
-                  <ModeEditIcon/>
-              </IconButton>
-            </Tooltip>
-
-            <Tooltip title="站內信">
-              <IconButton aria-label="show 4 new mails" color="inherit">
-                <Badge badgeContent={4} color="secondary">
-                  <MailIcon />
-                </Badge>
-              </IconButton>
-            </Tooltip>
-
-            <Tooltip title="通知">
-              <IconButton aria-label="show 17 new notifications" color="inherit">
-                <Badge badgeContent={17} color="secondary">
-                  <NotificationsIcon />
-                </Badge>
-              </IconButton>
-            </Tooltip>
-            <IconButton
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton>
-          </div>
+                <Tooltip title="站內信">
+                  <IconButton aria-label="show 4 new mails" color="inherit">
+                    <Badge badgeContent={4} color="secondary">
+                      <MailIcon />
+                    </Badge>
+                  </IconButton>
+                </Tooltip>
+              </>
+              :<></>}
+          <IconButton
+            edge="end"
+            aria-label="account of current user"
+            aria-controls={menuId}
+            aria-haspopup="true"
+            onClick={handleProfileMenuOpen}
+            color="inherit"
+          >
+            <AccountCircle />
+          </IconButton>
+        </div>
+          
           <div className={classes.sectionMobile}>
             <IconButton
               aria-label="show more"
@@ -261,7 +514,8 @@ export default function PrimarySearchAppBar() {
         </Toolbar>
       </AppBar>
       {renderMobileMenu}
-      {renderMenu}
+      {/* {renderMenu} */}
+      {(isLogIn)?userMenu:guestMenu}
     </div>
   );
 }
