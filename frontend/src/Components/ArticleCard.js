@@ -111,7 +111,7 @@ export default function ArticleCard( {item, showBrdname} ) {
                     <Row justify="space-between">
                       
                         <>{item.push - item.boo}
-                        {(showBrdname)?<p>{item.brdname}</p>:<></>}
+                        {(showBrdname)?<>{item.brdname}</>:<></>}
 
                         <Link href={`/${item.brdname}/${item.aid}`}>
                         {item.title}

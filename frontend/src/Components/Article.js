@@ -40,6 +40,8 @@ import {
 
 import {pttContext}  from "../Containers/App"
 
+import { useNavigate } from 'react-router-dom';
+
 const useStyles = makeStyles({
   root: {
     minWidth: 275,
@@ -88,7 +90,9 @@ const msgState = (input)=>{
 
 
 export default function Article( {item} ) {
-  console.log("item", item)
+
+  const [postAid, setPost] = useState(item.aid)
+  const [brdname, setBrdname] = useState(item.brdname)
   const {
     username,
     myHashPassword,
@@ -98,6 +102,8 @@ export default function Article( {item} ) {
   const classesText = useTextStyles();
   const bull = <span className={classes.bullet}>•</span>;
 
+  const navigate = useNavigate();
+
   const showTime = (time)=>{
       return moment(time).format('YYYY/MM/DD hh:mm:ss')
   }
@@ -105,7 +111,6 @@ export default function Article( {item} ) {
   // Edit Comment Part
   const [commentType, setCommentType] = useState(3)
   const [inputcomment, setInputComment] = useState('')
-  // const [inputaid, setInputaid]=useState(item.aid)
   const [createComment] = useMutation(CREATE_COMMENT_MUTATION);
 
   // Edit Article Part
@@ -118,14 +123,13 @@ export default function Article( {item} ) {
   const [deleteOpen, setDeleteOpen] = useState(false);
 
   const handleEditOpen = () => {setEditOpen(true);};
-  const handleEditClose = () => {setEditOpen(false);};
 
   const handleDeleteOpen = () => {setDeleteOpen(true);};
-  const handleDeleteClose = () => {setDeleteOpen(false);};
+
 
   const EditCard = ()=>{
     return(
-      <Dialog open={editOpen} onClose={handleEditClose}>
+      <Dialog open={editOpen} onClose={()=>setEditOpen(false)}>
           <DialogTitle>{item.username}</DialogTitle>
           <DialogContent>
             <DialogContentText>
@@ -138,19 +142,20 @@ export default function Article( {item} ) {
               type="editTitle"
               fullWidth
               value={editTitle}
-              onChange={(e)=>setEditTitle(e.target.value)}
+              onChange={(e)=>{setEditTitle(e.target.value);console.log(editTitle);}}
               variant="standard"
             />
             <DialogContentText>
               內文
             </DialogContentText>
             <TextField
+              multiline
               margin="dense"
-              id="editTitle"
+              id="editContent"
               type="editTitle"
-              fullWidth
+              // fullWidth
               value={editContent}
-              onChange={(e)=>setEditContent(e.target.value)}
+              onChange={(e)=>{setEditContent(e.target.value);console.log(editContent);}}
               variant="standard"
             />
 
@@ -178,8 +183,8 @@ export default function Article( {item} ) {
           </CardContent>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleEditClose}>取消</Button>
-            <Button onClick={()=>{handleEditClose();updateEdit();}}>更改</Button>
+            <Button onClick={()=>setEditOpen(false)}>取消</Button>
+            <Button onClick={()=>{setEditOpen(false);updateEdit();}}>更改</Button>
           </DialogActions>
         </Dialog>
     )
@@ -188,26 +193,23 @@ export default function Article( {item} ) {
   const DeleteCard = () => {
     return (
       <div>
-        <Button variant="outlined" onClick={handleDeleteOpen}>
-          Open alert dialog
-        </Button>
         <Dialog
           open={deleteOpen}
-          onClose={handleDeleteClose}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
+          onClose={()=>setDeleteOpen(false)}
+          aria-labelledby="delete-title"
+          aria-describedby="delete-description"
         >
-          <DialogTitle id="alert-dialog-title">
-            {"Use Google's location service?"}
+          <DialogTitle id="delete-title">
+            刪除
           </DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              Let Google help apps determine location. This means sending anonymous
-              location data to Google, even when no apps are running.
+             <h1> 確定刪除文章？</h1>
+             <p> 此步驟無法恢復</p>
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleDeleteClose}>取消</Button>
+            <Button onClick={()=>setDeleteOpen(false)}>取消</Button>
             <Button onClick={()=>sendDelete()} autoFocus color="red">
               刪除
             </Button>
@@ -219,6 +221,7 @@ export default function Article( {item} ) {
 
   const [deleteArticle] = useMutation(DELETE_ARTICLE_MUTATION)
   const sendDelete = async () => {
+
     var delete1 = await deleteArticle({
       variables:{
         input:{
@@ -226,15 +229,20 @@ export default function Article( {item} ) {
             username: username,
             password: myHashPassword,
           },
-          aid: item.aid,
+          aid: postAid,
         }
       }
     })
-    if(delete1.data) console.log("delete") 
+    if(delete1.data) {
+      console.log(item.brdname)
+      console.log("Post is deleted.") 
+      // navigate(`/${brdname}`)
+      navigate("/home")
+    }
 
   }
 
-  const [updateArticle] = useMutation(DELETE_ARTICLE_MUTATION)
+  const [updateArticle] = useMutation(UPDATE_ARTICLE_MUTATION,)
   const updateEdit = async() =>{
     var update = await updateArticle({
       variables: {
@@ -246,11 +254,12 @@ export default function Article( {item} ) {
           aid: item.aid,
           title: editTitle,
           content: editContent,
-          comment_reply: [{}],
+          comment_reply: [],
         }
-      }
+      },refetchQueries: [GET_ARTICLE_QUERY]
     })
-    if(update.data) console.log("delete") 
+    if(update.data) alert("Article is updated.") 
+    
   }
 
   const submitComment = async () =>{
@@ -262,7 +271,7 @@ export default function Article( {item} ) {
               username: username,
               password: myHashPassword,
             },
-            aid: item.aid,
+            aid: postAid,
             type: commentType,
             content: inputcomment,
           }
@@ -296,8 +305,9 @@ export default function Article( {item} ) {
                               </IconButton>
                             </Tooltip>
                           </>
-
                           :<></>}
+
+                          <DeleteCard/>
                           <EditCard/>
 
                           {/* {isLogIn?

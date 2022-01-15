@@ -60,20 +60,20 @@ const Board =  () => {
     if(data) setArticles(data.board.articles);
   }, [data])
 
-  useEffect(() => {
-    var update = updateFavArticles({
-      variables:{
-        input:{
-          token:{
-            username: username,
-            password: myHashPassword
-          },
-          aids:  favArticles
-        }
-      }
-    })
+  // useEffect(() => {
+  //   var update = updateFavArticles({
+  //     variables:{
+  //       input:{
+  //         token:{
+  //           username: username,
+  //           password: myHashPassword
+  //         },
+  //         aids:  favArticles
+  //       }
+  //     }
+  //   })
 
-  }, [favArticles])
+  // }, [favArticles])
 
     return(
       <>
