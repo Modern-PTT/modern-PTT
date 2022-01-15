@@ -112,8 +112,7 @@ export default function ArticleCard( {item, showBrdname} ) {
                       
                         <>{item.push - item.boo}
                         {(showBrdname)?<p>{item.brdname}</p>:<></>}
-                        {/* {console.log("item.brdname"+item.brdname)}
-                        {console.log("showBrdname"+showBrdname)} */}
+
                         <Link href={`/${item.brdname}/${item.aid}`}>
                         {item.title}
                           </Link> 
