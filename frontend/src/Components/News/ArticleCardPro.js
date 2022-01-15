@@ -5,7 +5,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import Link from '@mui/material/Link';
 import {useState, useEffect, useContext} from 'react'
 import { pttContext } from '../../Containers/App';
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 import { MEDIA_QUERY_MD,MEDIA_QUERY_LG,MEDIA_QUERY_XL } from '../../css/Media_query';
 
@@ -20,7 +20,7 @@ const Wrapper = styled.div`
   margin: 7px;
   margin-left: auto;
   margin-right: auto;
-  overflow: scroll;
+  overflow: hidden;
   .main{
     width: 100%;
     font-size: 1.5rem;
@@ -60,32 +60,11 @@ const Wrapper = styled.div`
   }
 `;
 
-
-const msgState = (input)=>{
-  if (input == "1")return "👍"
-  else if (input == "2")return "👎🏼"
-  else return "-"
-}
 const showTime = (time)=>{
-  return moment(time).format('YYYY/MM/DD hh:mm:ss')
+  return moment(time).tz("Asia/Taipei").format('YYYY/MM/DD HH:mm:ss')
 }
 
-export default function ArticleCard({item, showBrdname}) {
-  
-
-  const {
-    favArticles,
-    setFavArticles
-  } = useContext(pttContext)
-
-  const AddLoveArticles = (input) =>{
-    console.log(input)
-    setFavArticles(favArticles.concat(input));
-  }
-
-  useEffect(() => {
-  }, [favArticles])
-
+export default function ArticleCard({item, showBrdname}) { 
   
   return (
     (item.deleted)?
@@ -98,7 +77,7 @@ export default function ArticleCard({item, showBrdname}) {
       <Wrapper className="bordered">
           <div className="boardName">
           {item.push - item.boo}
-                        {(showBrdname)?<>{item.brdname}</>:<></>}
+                        {(showBrdname)?<> ({item.brdname})</>:<></>}
           </div>
         <Link underline="none" href={`/${item.brdname}/${item.aid}`} className="main font-color-link ">
           <div className="title">

@@ -1,6 +1,7 @@
 import { ArticleModel, BoardModel, CommentModel, UserModel } from '../models';
 import { createArticle } from '../utilities/articleUtil';
 import { createUser } from '../utilities/userUtil';
+import { hashPassword } from '../utilities/userUtil';
 
 const defaultUsers = [
   {
@@ -51,12 +52,12 @@ const defaultArticles = [
     plainComments: [
       {
         owner: "test456",
-        type: "推",
+        type: 1,
         content: "Hello?",
       },
       {
         owner: "test789",
-        type: "→",
+        type: 3,
         content: "Hi~~~",
       },
     ],
@@ -69,7 +70,7 @@ const defaultArticles = [
     plainComments: [
       {
         owner: "test789",
-        type: "噓",
+        type: 2,
         content: "紅的喜氣",
       },
     ],
@@ -85,6 +86,9 @@ const defaultArticles = [
 const userInit = async () => {
   await UserModel.deleteMany({});
   for(let user of defaultUsers) {
+    let { hashed_password, salt } = await hashPassword(user.password)
+    user.password = hashed_password;
+    user.salt = salt;
     await createUser(user);
   }
   console.log("Database: users initialized!");
@@ -101,7 +105,11 @@ const articleInit = async () => {
   await CommentModel.deleteMany({});
   await ArticleModel.deleteMany({});
   for(let article of defaultArticles) {
-    await createArticle(article);
+    try {
+      await createArticle(article, "article init");
+    } catch (e) {
+      console.log(`articleInit error with ${article}: ${e}`);
+    }
   }
   console.log("Database: articles and comments initialized!");
 }

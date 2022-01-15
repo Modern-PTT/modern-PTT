@@ -11,8 +11,8 @@ const Article = {
     return toAIDc(aidu, brdname);
   },
 
-  comments(parent, args, { db }, info) {
-    return Promise.all(
+  async comments(parent, args, { db }, info) {
+    return await Promise.all(
       parent.comments.map(
         (c_id) => db.CommentModel.findById(c_id)
       )

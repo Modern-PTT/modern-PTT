@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "cd frontend && yarn start",
-    "server": "cd backend && yarn start"
+    "start": "cd frontend && npm start",
+    "server": "cd backend && npm start"
   },
   "repository": "git@github.com:lydia7635/modern-PTT.git",
   "author": "lydia7635 <lydia7635@gmail.com>",

@@ -2,25 +2,42 @@ import { ArticleModel } from "../models";
 import { createRandom, makeAIDu } from "./creater";
 import { checkBoard, pushNewArticle } from "./boardUtil";
 import { checkUser } from "./userUtil";
-import { createComment } from "./commentUtil";
+import { createComment, updateCommentReply } from "./commentUtil";
 
-const checkArticle = async (aid, errFunc) => {
+const checkArticle = async (aid, errFunc, db=undefined) => {
   if(!aid) {
     throw new Error("Missing aid for: " + errFunc);
   }
-  return ArticleModel.findOne({aid});
+
+  let article;
+  if(db) {
+    article = await db.ArticleModel.findOne({aid});
+  }
+  else {
+    article = await ArticleModel.findOne({aid});
+  }
+
+  if(!article) {
+    throw new Error(`aid ${aid} not found for ${errFunc}`);
+  }
+
+  if(article.deleted) {
+    throw new Error(`aid ${aid} has been deleted.`);
+  }
+
+  return article;
 }
 
 const pushNewComment = async (article, comment) => {
   article.comments = [...article.comments, comment];
   switch(comment.type) {
-    case "推":
+    case 1:
       ++article.push;
       break;
-    case "噓":
+    case 2:
       ++article.boo;
       break;
-    case "→":
+    case 3:
       ++article.neutral;
       break;
     default:
@@ -30,15 +47,17 @@ const pushNewComment = async (article, comment) => {
   await article.save();
 }
 
-const createArticle = async (article) => {
-  const board = await checkBoard(article.brdname, "createArticle");
-  if(!board) {
-    throw new Error(`board named ${article.brdname} not found for createArticle`);
-  }  
+const createArticle = async (article, errFunc, user=undefined, db=undefined) => {
+  const board = await checkBoard(article.brdname, errFunc, db); 
 
-  const user = await checkUser(article.owner, "createArticle");
+  if(!user) {
+    user = await checkUser(article.owner, errFunc, db);
+  }
+
+  let defaultIP = "140.112.172.11";
   if(user) {
     ++user.post;  
+    defaultIP = user.last_ip;
     await user.save();  
   }
 
@@ -55,7 +74,7 @@ const createArticle = async (article) => {
   article.neutral = 0;
   article.boo = 0;
 
-  article.ip = (article.ip)? article.ip : "140.112.172.11",
+  article.ip = (article.ip)? article.ip : defaultIP,
   article.modified_time = article.create_time;
 
   let plainComments = null;
@@ -64,20 +83,67 @@ const createArticle = async (article) => {
     delete article.plainComments;
   }
 
-  const newArticle = new ArticleModel(article);
+  let newArticle;
+  if(db) {
+    newArticle = new db.ArticleModel(article);
+  }  
+  else {
+    newArticle = new ArticleModel(article);
+  }
   await newArticle.save();
   await pushNewArticle(board, newArticle);
 
   // create comments
   if(plainComments) {
     for(let comment of plainComments) {
-      await createComment(article.aid, comment);
+      await createComment(article.aid, comment, db);
     }
   }
+}
+
+const updateArticle = async (aid, user, title, content, comment_reply, errFunc, db) => {
+  const article = await checkArticle(aid, errFunc, db);
+
+  if(user.username !== article.owner) {
+    throw new Error(`permission denied for update article.`);
+  }
+
+  article.title = title;
+  article.content = content;
+
+  try {
+    await updateCommentReply(aid, comment_reply, db);
+  } catch (e) {
+    console.log(`${e}`);
+  }
+
+  article.modified_time = new Date();
+  await article.save();
+
+}
+
+const deleteArticle = async (aid, user, errFunc, db) => {
+  const article = await checkArticle(aid, errFunc, db);
+
+  if(user.username !== article.owner) {
+    throw new Error(`permission denied for delete article.`);
+  }
+
+  article.deleted = true;
+  user.post -= 1;
+  article.modified_time = new Date();
+
+  console.log(article.deleted);
+  console.log(user.post);
+
+  await article.save();
+  await user.save();
 }
 
 export {
   checkArticle,
   pushNewComment,
   createArticle,
+  updateArticle,
+  deleteArticle,
 };
