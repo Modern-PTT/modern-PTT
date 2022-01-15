@@ -12,6 +12,10 @@ import Button from '@mui/material/Button';
 import styled from 'styled-components';
 import Row from './Layout/Row'
 
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
+import Tooltip from '@mui/material/Tooltip';
+import Link from '@mui/material/Link';
+
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -35,6 +39,15 @@ export default function BoardNameCard({nowAtWhere}) {
               <Typography component="div" variant="h5">
                   您現在位於 {nowAtWhere} 板
               </Typography>
+
+              <Tooltip title="發文">  
+                  <IconButton aria-label="NewPost" color="inherit">
+                    <Link href={`/${nowAtWhere}/NewPost`}>
+                      <ModeEditIcon/>
+                    </Link>
+                  </IconButton>
+                </Tooltip>
+
               </CardContent>
           </div>
         </Card>

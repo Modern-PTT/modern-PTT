@@ -59,7 +59,7 @@ const AllBoards =  () =>{
       headerName: 'BoardName',
       flex: 1,
       renderCell: (params) => (
-        <Link href={`/boards/${params.value}`}>{params.value}</Link>
+        <Link href={`/${params.value}`}>{params.value}</Link>
       )
     },
     {
@@ -75,10 +75,7 @@ const AllBoards =  () =>{
     {
       field: 'moderators',
       headerName: 'moderators',
-      flex: .5,
-      renderCell: (params) => (
-        <Link href={`/boards/${params.value}`}>{params.value}</Link>
-      )
+      flex: .5
     },
     
   ];

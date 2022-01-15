@@ -56,15 +56,11 @@ const Home = () => {
         <Navbar />
         <div className="contents">
             <DashBoard/>
-            {/* <BoardList
-                myLoveBoards={myLoveBoards}
-                setMyLoveBoards={setMyLoveBoards}
-            /> */}
-
             <Wrapper>
                 {/* <Button variant="contained">Default</Button> */}
                 <>{articles ? articles.map((item)=>(
                     <ArticleCard
+                        showBrdname={true}
                         key={item.aid}
                         item={item}
                     />

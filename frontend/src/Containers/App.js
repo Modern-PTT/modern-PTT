@@ -63,8 +63,8 @@ function App() {
 
               <Route path='/search/boards' element={<SearchBoards/>}/>
               {/* <Route path='/search/articles' element={<Board/>}/> */}
-              <Route path='/boards/:brdname' element={<Board/>}/>
-              <Route path='/boards/:brdname/:aid' element={<Article/>}/>
+              <Route path='/:brdname' element={<Board/>}/>
+              <Route path='/:brdname/:aid' element={<Article/>}/>
               <Route path='/:brdname/NewPost' element={<NewPost />}/>
               <Route path='*' element={<Home/>}/>
             </Routes> 

@@ -26,8 +26,7 @@ const NewPost =  () =>{
 
     return(
       <>
-        <Navbar/>
-        <BoardNameCard nowAtWhere="" />
+        <Navbar/> 
         <div className="contents">
           <Row>
             <DashBoard />

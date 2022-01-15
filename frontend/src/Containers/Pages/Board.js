@@ -10,7 +10,7 @@ import { useQuery, useMutation } from '@apollo/client';
 import { GET_BOARD_QUERY, UPDATE_FAV_ARTICLES_MUTATION } from "../../graphql";
 import { useState, useEffect, useContext} from 'react';
 import moment from 'moment';
-
+import BoardNameCard from '../../Components/BoardNameCard';
 import Navbar from "../../Components/Navbar"
 import DashBoard from "../../Components/DashBoard"
 
@@ -81,8 +81,8 @@ const Board =  () => {
         <div className="contents">
             <DashBoard />
         </div>
+        <BoardNameCard nowAtWhere={brdname}/>
         <Wrapper>
-            {/* <Button variant="contained">Default</Button> */}
             <>{articles ? articles.map((item)=>(
                 <ArticleCard
                     key={item.aid}

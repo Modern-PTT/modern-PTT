@@ -71,7 +71,7 @@ const showTime = (time)=>{
   return moment(time).format('YYYY/MM/DD hh:mm:ss')
 }
 
-export default function ArticleCard( {item} ) {
+export default function ArticleCard( {item, showBrdname} ) {
   
 
   const {
@@ -109,9 +109,16 @@ export default function ArticleCard( {item} ) {
             <CardContent>
                     {/* <Typography className={classes.title} color="textSecondary" gutterBottom> */}
                     <Row justify="space-between">
-                      <Link href={`/boards/${item.brdname}/${item.aid}`}>
-                        <>{item.push - item.boo}{item.brdname}{item.title} {item.owner}</>
-                      </Link>
+                      
+                        <>{item.push - item.boo}
+                        {(showBrdname)?<p>{item.brdname}</p>:<></>}
+                        {/* {console.log("item.brdname"+item.brdname)}
+                        {console.log("showBrdname"+showBrdname)} */}
+                        <Link href={`/${item.brdname}/${item.aid}`}>
+                        {item.title}
+                          </Link> 
+                        {item.owner}</>
+
 
                       <>{showTime(item.create_time)}</>
                       <div>
