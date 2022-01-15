@@ -56,7 +56,6 @@ const Board =  () =>{
             {(data)?
             <Article
                 item={data.article}
-
             />:<></>}
         </Wrapper>
     </>);

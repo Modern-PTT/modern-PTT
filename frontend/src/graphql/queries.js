@@ -12,6 +12,8 @@ query board($brdname: String!){
             title
             create_time
             deleted
+            push
+            boo
           }
     }
   }
@@ -134,6 +136,8 @@ query newestArticles($limit: Int!){
         title
         owner
         create_time
+        push
+        boo
     }
 }
 `;

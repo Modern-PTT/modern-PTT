@@ -22,7 +22,7 @@ import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import Link from '@mui/material/Link';
 import {useState, useEffect, useContext} from 'react'
 import { pttContext } from '../Containers/App';
-
+import moment from 'moment';
 const useStyles = makeStyles({
   root: {
     minWidth: 700,
@@ -67,8 +67,11 @@ const msgState = (input)=>{
   else return "-"
 }
 
+const showTime = (time)=>{
+  return moment(time).format('YYYY/MM/DD hh:mm:ss')
+}
 
-export default function ArticleCard({brdname,title,owner,create_time,aid,deleted}) {
+export default function ArticleCard( {item} ) {
   
 
   const {
@@ -92,7 +95,7 @@ export default function ArticleCard({brdname,title,owner,create_time,aid,deleted
 
   
   return (
-    (deleted)?
+    (item.deleted)?
     <Wrapper>
       <Card className={classes.root} variant="outlined">
           <CardContent>
@@ -106,11 +109,11 @@ export default function ArticleCard({brdname,title,owner,create_time,aid,deleted
             <CardContent>
                     {/* <Typography className={classes.title} color="textSecondary" gutterBottom> */}
                     <Row justify="space-between">
-                      <Link href={`/boards/${brdname}/${aid}`}>
-                        <>{}{brdname}{title} {owner}</>
+                      <Link href={`/boards/${item.brdname}/${item.aid}`}>
+                        <>{item.push - item.boo}{item.brdname}{item.title} {item.owner}</>
                       </Link>
 
-                      <>{create_time}</>
+                      <>{showTime(item.create_time)}</>
                       <div>
                       {/* <Tooltip title="收藏">
                           <IconButton onClick={()=>AddLoveArticles(aid)}>

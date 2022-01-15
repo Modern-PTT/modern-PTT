@@ -87,7 +87,8 @@ const msgState = (input)=>{
 
 
 
-export default function Article({item}) {
+export default function Article( {item} ) {
+  console.log("item", item)
   const {
     username,
     myHashPassword,
@@ -110,6 +111,9 @@ export default function Article({item}) {
   // Edit Article Part
   const [editTitle, setEditTitle] = useState(item.title)
   const [editContent, setEditContent] = useState(item.content)
+  const [edit_reply, setEdit_reply] = useState([])
+// ({cid: ,})
+// setEdit_reply([...edit_reply,])
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
 
@@ -118,11 +122,6 @@ export default function Article({item}) {
 
   const handleDeleteOpen = () => {setDeleteOpen(true);};
   const handleDeleteClose = () => {setDeleteOpen(false);};
-
-  const updateEdit = () =>{
-
-  }
-
 
   const EditCard = ()=>{
     return(
@@ -231,12 +230,30 @@ export default function Article({item}) {
         }
       }
     })
-    if(delete1.data) return "delete"
+    if(delete1.data) console.log("delete") 
 
   }
 
+  const [updateArticle] = useMutation(DELETE_ARTICLE_MUTATION)
+  const updateEdit = async() =>{
+    var update = await updateArticle({
+      variables: {
+        input: {
+          token: {
+            username: username,
+            password: myHashPassword,
+          },
+          aid: item.aid,
+          title: editTitle,
+          content: editContent,
+          comment_reply: [{}],
+        }
+      }
+    })
+    if(update.data) console.log("delete") 
+  }
+
   const submitComment = async () =>{
-    
     if(inputcomment!== ""){
       var submit = await createComment({
         variables:{
