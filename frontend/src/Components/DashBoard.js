@@ -14,6 +14,8 @@ import Row from '../Components/Layout/Row'
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 
+import { pttContext } from '../Containers/App';
+import { useContext } from 'react'
 //do styling
 const StyledDiv = styled.div`
   border: solid 1px grey;
@@ -41,12 +43,19 @@ function ListItemLink(props) {
   return <ListItem button component="a" {...props} />;
 }
 
-export default function SimpleList({myLoveBoards, setMyLoveBoards}) {
+export default function SimpleList() {
+  
+  const {
+    favBoards,
+    setFavBoards
+  } = useContext(pttContext)
+
+
   const classes = useStyles();
 
   const handleRemove = (remove_one)=>{
-    myLoveBoards.filter("gossip")
-    console.log("after:"+ myLoveBoards)
+    favBoards.filter("gossip")
+    console.log("after:"+ favBoards)
   }
   
 
@@ -99,7 +108,7 @@ export default function SimpleList({myLoveBoards, setMyLoveBoards}) {
       </List>
       
       {/* <List component="nav" aria-label="secondary mailbox folders">
-        {(!myLoveBoards)? myLoveBoards.map((item) => (
+        {(!favBoards)? favBoards.map((item) => (
           <ListItem button id={item} key ={item}>
               <Link href={`/boards/${item}`}>
                 <ListItemText primary={item}  />

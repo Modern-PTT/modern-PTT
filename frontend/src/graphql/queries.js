@@ -1,18 +1,5 @@
 import { gql } from "@apollo/client";
 
-<<<<<<< HEAD
-// query - 全站最新文章List
-// export const GET_NEWEST_AIRTICLES_QUERY = gql`
-//   query newestArticles($limit: ) 
-//     newestArticles(limit: $limit){
-//         brdname
-//         title
-//         owner
-//         create_time
-//     }
-//   }
-// `;
-=======
 
 // 1. query - 特定看板 list
 export const GET_BOARD_QUERY  = gql`
@@ -29,7 +16,6 @@ query board($brdname: String!){
     }
   }
 `;
->>>>>>> merge
 
 
 // 2. query all or search board HotBoards

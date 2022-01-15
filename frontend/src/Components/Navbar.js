@@ -24,7 +24,7 @@ import Link from '@mui/material/Link';
 
 import Button from '@mui/material/Button';
 // const [showAlert, setShowAlert] = useState(null)
-import { useState, useEffect} from 'react';
+import { useState, useEffect, useContext} from 'react';
 import { useQuery } from '@apollo/client';
 import Card from '@mui/material/Card';
 import Modal from '@mui/material/Modal';
@@ -45,6 +45,8 @@ import Login from "./Login";
 import SingUp from "./SingUp";
 import { LOG_OUT_MUTATION  } from  "../graphql";
 import { useMutation } from '@apollo/client';
+
+import { pttContext } from '../Containers/App';
 
 const useStyles = makeStyles((theme) => ({
   appBar:{
@@ -118,14 +120,17 @@ const LOCALSTORAGE_USERNAME = "saveMyUsername";
 const LOCALSTORAGE_HASHEDPW = "saveMyHashedPassword";
 
 
-export default function PrimarySearchAppBar({
-  username,
-  setUsername,
-  myHashPassword,
-  setMyHashPassword,
-  isLogIn,
-  setIsLogIn,
-}) {
+export default function PrimarySearchAppBar() {
+
+  const {
+    username,
+    setUsername,
+    myHashPassword,
+    setMyHashPassword,
+    isLogIn,
+    setIsLogIn,
+    } = useContext(pttContext)
+
   // insert ===========================
   const [boardInput, setBoardInput] = useState([""])
   const [titleInput, setTitleInput] = useState([""])

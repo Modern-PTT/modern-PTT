@@ -1,6 +1,6 @@
 import { GET_SALT, GET_USER, LOG_IN_MUTATION, LOG_OUT_MUTATION  } from  "../graphql";
 import { useQuery, useMutation } from '@apollo/client';
-import { useState, useEffect} from 'react';
+import { useState, useEffect, useContext} from 'react';
 import Button from '@mui/material/Button';
 import styled from 'styled-components';
 import bcrypt from "bcryptjs"
@@ -18,6 +18,8 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 import Link from '@mui/material/Link';
 
+import { pttContext } from "../Containers/App";
+
 const LOCALSTORAGE_USERNAME = "saveMyUsername";
 const LOCALSTORAGE_HASHEDPW = "saveMyHashedPassword";
 
@@ -31,14 +33,18 @@ const Wrapper = styled.div`
   width: 800px;
   margin: auto;
 `;
-const Login = (
-    {   username,
+const Login = () => {
+
+    const {    
+        username,
         setUsername,
         myHashPassword,
         setMyHashPassword,
         isLogIn,
-        setIsLogIn,
-    }) => {
+        setIsLogIn} = useContext(pttContext)
+
+
+
     const [usernameInput,setUsernameInput] = useState('')
     const [password, setPassword] = useState('')
 

@@ -3,7 +3,7 @@ import DashBoard from "../../Components/DashBoard"
 import ArticleCard from "../../Components/ArticleCard";
 import { GET_HOTARTICLES } from  "../../graphql";
 import { useQuery } from '@apollo/client';
-import { useState, useEffect} from 'react';
+import { useState, useEffect, useContext} from 'react';
 import moment from "moment";
 import Button from '@mui/material/Button';
 import styled from 'styled-components';
@@ -59,10 +59,7 @@ const Home = ({
             setIsLogIn={setIsLogIn}
         />
         <div className="contents">
-            <DashBoard
-                myLoveBoards={myLoveBoards}
-                setMyLoveBoards={setMyLoveBoards}
-            />
+            <DashBoard/>
             {/* <BoardList
                 myLoveBoards={myLoveBoards}
                 setMyLoveBoards={setMyLoveBoards}

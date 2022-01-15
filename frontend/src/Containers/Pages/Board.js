@@ -6,7 +6,7 @@ import ArticleCard from '../../Components/ArticleCard'
 
 // import  graphql  from 'graphql';
 import { useParams, useHistory } from 'react-router-dom';
-import { useQuery, useMutation } from '@apollo/client';
+import { useQuery, useMutation, useContext } from '@apollo/client';
 import { GET_BOARD_QUERY, UPDATE_FAV_ARTICLES_MUTATION } from "../../graphql";
 import { useState, useEffect} from 'react';
 import moment from 'moment';
@@ -74,16 +74,15 @@ const Board =  ({myLoveArticles, setMyLoveArticles, isLogIn, username, myHashPas
             {/* <Button variant="contained">Default</Button> */}
             <>{articles ? articles.map((item)=>(
                 <ArticleCard
+                    key={item.aid}
+                    item={item}
+                    create_time={showTime(item.create_time)}
                     brdname={item.brdname}
                     title={item.title}
                     owner={item.owner}
-                    create_time={showTime(item.create_time)}
+                    // create_time={item.create_time}
                     aid={item.aid}
                     deleted={item.deleted}
-                    myLoveArticles={myLoveArticles}
-                    setMyLoveArticles={setMyLoveArticles}
-                    username={username}
-                    myHashPassword={myHashPassword}
                 />
             )): ''}  
             </>

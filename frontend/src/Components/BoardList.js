@@ -1,11 +1,14 @@
 import * as React from 'react';
-import {useEffect} from 'react';
+import { useEffect, useContext } from 'react';
 import  {DataGrid}  from '@material-ui/data-grid';
 import styled from 'styled-components';
 import Link from '@mui/material/Link';
 import IconButton from '@mui/material/IconButton';
 
 import NotificationAddIcon from '@mui/icons-material/NotificationAdd';
+import { pttContext } from '../Containers/App';
+
+
 //set styled div
 const StyledDiv = styled.div`
     height: 60vh;
@@ -14,16 +17,21 @@ const StyledDiv = styled.div`
 `
 
 
-export default function DataTable({myLoveBoards,setMyLoveBoards}) {
+export default function DataTable() {
 
-  const AddLoveBoards = (input) =>{
+  const {
+    favBoards,
+    setFavBoards,
+  } = useContext(pttContext)
+
+  const AddFavBoards = (input) =>{
     console.log(input)
-    setMyLoveBoards(myLoveBoards.concat(input));
+    setFavBoards(favBoards.concat(input));
   }
 
   useEffect(() => {
-    console.log(myLoveBoards)
-  }, [myLoveBoards])
+    console.log(favBoards)
+  }, [favBoards])
 
   const columns = [
     {
@@ -50,7 +58,7 @@ export default function DataTable({myLoveBoards,setMyLoveBoards}) {
       flex: .5,
       renderCell: (params) => (
         <IconButton>
-            <NotificationAddIcon onClick={()=>AddLoveBoards(params.row.brdname)} />
+            <NotificationAddIcon onClick={()=>AddFavBoards(params.row.brdname)} />
         </IconButton>
       )
     },

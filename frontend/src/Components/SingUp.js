@@ -1,6 +1,6 @@
 import { GET_SALT, GET_USER, LOG_IN_MUTATION, SIGN_UP_MUTATION } from  "../graphql";
 import { useQuery, useMutation } from '@apollo/client';
-import { useState, useEffect} from 'react';
+import { useState, useEffect, useContext} from 'react';
 import Button from '@mui/material/Button';
 import styled from 'styled-components';
 import bcrypt from "bcryptjs"
@@ -22,6 +22,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 import Link from '@mui/material/Link';
 
+import { pttContext } from "../Containers/App";
 
 
 const Wrapper = styled.div`
@@ -33,18 +34,18 @@ const Wrapper = styled.div`
   width: 800px;
   margin: auto;
 `;
-const SingUp = (
-    {   setUsername,
+const SingUp = () => {
+    
+    const {
+        setUsername,
         setMyHashPassword,
         isLogIn,
-        setIsLogIn,
-    }) => {
-    
+        setIsLogIn} = useContext(pttContext)
+
     const [usernameInput,setUsernameInput] = useState('')
     const [realnameInput,setRealnameInput] = useState('')
     const [password, setPassword] = useState('')
 
- 
     const [checkSingUp] = useMutation(SIGN_UP_MUTATION)
 
     // useEffect(() => {

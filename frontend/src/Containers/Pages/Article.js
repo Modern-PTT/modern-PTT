@@ -8,7 +8,7 @@ import ArticleCard from '../../Components/ArticleCard'
 import { useParams, useHistory } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 import { GET_ARTICLE_QUERY } from "../../graphql";
-import { useState, useEffect} from 'react';
+import { useState, useEffect, useContext} from 'react';
 
 import Navbar from "../../Components/Navbar"
 import DashBoard from "../../Components/DashBoard"

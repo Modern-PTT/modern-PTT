@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { useParams, useHistory } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import { CREATE_ARTICLE_MUTATION } from "../../graphql";
-import { useState, useEffect} from 'react';
+import { useState, useEffect, useContext} from 'react';
 import NewPostCard from '../../Components/NewPostCard';
 import Navbar from "../../Components/Navbar"
 import DashBoard from "../../Components/DashBoard"

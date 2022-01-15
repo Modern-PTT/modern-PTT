@@ -20,7 +20,8 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import NotificationAddIcon from '@mui/icons-material/NotificationAdd';
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import Link from '@mui/material/Link';
-import {useState, useEffect} from 'react'
+import {useState, useEffect, useContext} from 'react'
+import { pttContext } from '../Containers/App';
 
 const useStyles = makeStyles({
   root: {
@@ -67,19 +68,27 @@ const msgState = (input)=>{
 }
 
 
-export default function ArticleCard({brdname,title,owner,create_time,aid,deleted,myLoveArticles,setMyLoveArticles}) {
+export default function ArticleCard({brdname,title,owner,create_time,aid,deleted}) {
+  
+
+  const {
+    favArticles,
+    setFavArticles
+  } = useContext(pttContext)
+  
+  
   const classes = useStyles();
   const classesText = useTextStyles();
   const bull = <span className={classes.bullet}>•</span>;
 
   const AddLoveArticles = (input) =>{
     console.log(input)
-    setMyLoveArticles(myLoveArticles.concat(input));
+    setFavArticles(favArticles.concat(input));
   }
 
   useEffect(() => {
-    console.log(myLoveArticles)
-  }, [myLoveArticles])
+    console.log(favArticles)
+  }, [favArticles])
 
   
   return (
