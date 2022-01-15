@@ -38,6 +38,7 @@ export const GET_ARTICLE_QUERY = gql`
         article(aid: $aid){
             title
             owner
+            create_time
             content
             location {
                 ip

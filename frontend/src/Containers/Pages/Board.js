@@ -9,6 +9,7 @@ import { useParams, useHistory } from 'react-router-dom';
 import { useQuery, useMutation } from '@apollo/client';
 import { GET_BOARD_QUERY, UPDATE_FAV_ARTICLES_MUTATION } from "../../graphql";
 import { useState, useEffect} from 'react';
+import moment from 'moment';
 
 import Navbar from "../../Components/Navbar"
 import DashBoard from "../../Components/DashBoard"
@@ -38,6 +39,10 @@ const Board =  ({myLoveArticles, setMyLoveArticles, isLogIn, username, myHashPas
       brdname: brdname,
     }
   })
+
+  const showTime = (time)=>{
+    return moment(time).format('YYYY/MM/DD hh:mm:ss')
+}
   
   useEffect(() => {
     if(data) setArticles(data.board.articles);
@@ -72,7 +77,7 @@ const Board =  ({myLoveArticles, setMyLoveArticles, isLogIn, username, myHashPas
                     brdname={item.brdname}
                     title={item.title}
                     owner={item.owner}
-                    create_time={item.create_time}
+                    create_time={showTime(item.create_time)}
                     aid={item.aid}
                     deleted={item.deleted}
                     myLoveArticles={myLoveArticles}

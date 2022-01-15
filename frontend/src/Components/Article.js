@@ -12,6 +12,7 @@ import { Divider } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import Row from './Layout/Row';
 import {useState} from 'react';
+import moment from 'moment';
 
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -74,8 +75,8 @@ const Wrapper = styled.div`
 
 
 const msgState = (input)=>{
-  if (input == "推")return <ThumbUpAltOutlinedIcon/>
-  else if (input == "噓")return <ThumbDownOutlinedIcon/>
+  if (input == 1)return <ThumbUpAltOutlinedIcon/>
+  else if (input == 2)return <ThumbDownOutlinedIcon/>
   else return <ArrowRightAltIcon/>
 }
 
@@ -88,124 +89,111 @@ export default function Article({article,username,myHashPassword}) {
   const classesText = useTextStyles();
   const bull = <span className={classes.bullet}>•</span>;
 
-
-  let testdate = 1637848118000
-
-  const secondToDate = (seconds)=>{
-      const date = seconds.getDate() //15
-      const day = seconds.getDay()  //5
-      const month = seconds.getMonth()  //6
-      const year = seconds.getFullYear()  //2016
-      return date
+  const showTime = (time)=>{
+      return moment(time).format('YYYY/MM/DD hh:mm:ss')
   }
 
-// Edit Comment Part
-const [commentType, setCommentType] = useState(3)
-const [inputcomment, setInputComment] = useState('')
-const [inputaid, setInputaid]=useState(article.aid)
-const [createComment] = useMutation(CREATE_COMMENT_MUTATION);
+  // Edit Comment Part
+  const [commentType, setCommentType] = useState(3)
+  const [inputcomment, setInputComment] = useState('')
+  const [inputaid, setInputaid]=useState(article.aid)
+  const [createComment] = useMutation(CREATE_COMMENT_MUTATION);
 
-// Edit Article Part
-const [editTitle, setEditTitle] = useState(article.title)
-const [editContent, setEditContent] = useState(article.content)
-const [open, setOpen] = useState(false);
-const handleClickOpen = () => {
-  setOpen(true);
-};
+  // Edit Article Part
+  const [editTitle, setEditTitle] = useState(article.title)
+  const [editContent, setEditContent] = useState(article.content)
+  const [open, setOpen] = useState(false);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
 
-const handleClose = () => {
-  setOpen(false);
-};
+  const handleClose = () => {
+    setOpen(false);
+  };
 
-const handelEdit = () => {
+  const handelEdit = () => {
 
-}
+  }
 
-const EditCard = ()=>{
-  return(
-    <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>{article.username}</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            標題
-          </DialogContentText>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="editTitle"
-            type="editTitle"
-            fullWidth
-            value={editTitle}
-            onChange={(e)=>setEditTitle(e.target.value)}
-            variant="standard"
-          />
-          <DialogContentText>
-            內文
-          </DialogContentText>
-          <TextField
-            margin="dense"
-            id="editTitle"
-            type="editTitle"
-            fullWidth
-            value={editContent}
-            onChange={(e)=>setEditContent(e.target.value)}
-            variant="standard"
-          />
-          {/* {article.comments.map((item)=>(
+  const EditCard = ()=>{
+    return(
+      <Dialog open={open} onClose={handleClose}>
+          <DialogTitle>{article.username}</DialogTitle>
+          <DialogContent>
             <DialogContentText>
-            {item.owner}{item.owner}
+              標題
             </DialogContentText>
-          ))} */}
-        <Divider />
+            <TextField
+              autoFocus
+              margin="dense"
+              id="editTitle"
+              type="editTitle"
+              fullWidth
+              value={editTitle}
+              onChange={(e)=>setEditTitle(e.target.value)}
+              variant="standard"
+            />
+            <DialogContentText>
+              內文
+            </DialogContentText>
+            <TextField
+              margin="dense"
+              id="editTitle"
+              type="editTitle"
+              fullWidth
+              value={editContent}
+              onChange={(e)=>setEditContent(e.target.value)}
+              variant="standard"
+            />
+            {/* {article.comments.map((item)=>(
+              <DialogContentText>
+              {item.owner}{item.owner}
+              </DialogContentText>
+            ))} */}
+          <Divider />
 
-    
-        <CardContent>
-            {article.comments.map((item)=>(
-                <Typography className={classes.title} color="textSecondary" gutterBottom>
-                <Row align="center">
-                    <>{msgState(item.type) }{item.owner} </> <>{item.location.ip}   {item.create_time}</>
-                </Row>
-                {item.body}
-                </Typography>
-            
-            ))}
-        </CardContent>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>取消</Button>
-          <Button onClick={()=>{handleClose();handelEdit();}}>更改</Button>
-        </DialogActions>
-      </Dialog>
-  )
-}
+      
+          <CardContent>
+              {article.comments.map((item)=>(
+                  <Typography className={classes.title} color="textSecondary" gutterBottom>
+                  <Row align="center">
+                      <>{msgState(item.type) }{item.owner} </> <>{item.location.ip}   {item.create_time}</>
+                  </Row>
+                  {item.body}
+                  </Typography>
+              
+              ))}
+          </CardContent>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>取消</Button>
+            <Button onClick={()=>{handleClose();handelEdit();}}>更改</Button>
+          </DialogActions>
+        </Dialog>
+    )
+  }
     
 
-const submitComment = () =>{
-    var submit = createComment({
-      variables:{
-        input:{
-          token: {
-            username: username,
-            password: myHashPassword,
-          },
-          aid: "M.1642183234.A.2D6",
-          type: commentType,
-          content: inputcomment,
+  const submitComment = () =>{
+      var submit = createComment({
+        variables:{
+          input:{
+            token: {
+              username: username,
+              password: myHashPassword,
+            },
+            aid: "M.1642183234.A.2D6",
+            type: commentType,
+            content: inputcomment,
+          }
         }
+      })
+      if(submit.data) {
+        alert("Comment submit")
+        console.log(submit)
       }
-    })
-    if(submit.data) {
-      alert("Comment submit")
-      console.log(submit)
-    }
-    else alert("Comment failed")
-}
-
-
-
-
-
-
+      else alert("Comment failed")
+  }
   
   var username = "amy"
   var myHashPassword = "$2a$10$FUeuUN9JDCOmpVW324HKoOPpl7vKQ3tWeT6tCaLzvEoUQCKi9Fd/G"
@@ -240,16 +228,21 @@ const submitComment = () =>{
                     作者｜{article.owner}
                 </Typography>
                 <Typography className={classes.title} color="textSecondary" gutterBottom>
-                    時間｜{article.time}
+                    時間｜{showTime(article.create_time)}
                 </Typography>
                 <p></p>
                 <Divider />
                 <p></p>
                 <Typography className={classes.title} color="textSecondary" gutterBottom>
-                {article.content}
+                  {article.content.split("\n").map(e => (
+                            <>
+                              {e}
+                              <br />
+                            </>
+                  ))}
                 </Typography>
                 <Typography className={classes.title} color="textSecondary" gutterBottom l>
-                {/* {data.url} */}
+                  {/* {data.url} */}
                 </Typography>
 
             </CardContent>
@@ -260,7 +253,19 @@ const submitComment = () =>{
                 {article.comments.map((item)=>(
                     <Typography className={classes.title} color="textSecondary" gutterBottom>
                     <Row align="center">
-                        <>{msgState(item.type) }{item.owner}{item.content} </> <>{item.location.ip}   {item.create_time}</>
+                        <>{msgState(item.type)}
+                          {item.owner}
+                          {item.content.split("\n").map(e => (
+                            <>
+                              {e}
+                              <br />
+                            </>
+                          ))}
+                        </>
+                        <>
+                          {item.location.ip}
+                          {showTime(item.create_time)}
+                        </>
                     </Row>
                     {item.body}
                     </Typography>

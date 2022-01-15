@@ -42,17 +42,19 @@ const AllBoards =  ({myLoveArticles, setMyLoveArticles,isLogIn, username, myHash
 
 
   useEffect(() => {
-    var update = updateFavArticles({
-      variables:{
-        input:{
-          token:{
-            username: username,
-            myHashPassword: myHashPassword
-          },
-          aids:  myLoveArticles
+    if(username) {
+      var update = updateFavArticles({
+        variables:{
+          input:{
+            token:{
+              username: username,
+              password: myHashPassword
+            },
+            aids:  myLoveArticles
+          }
         }
-      }
-    })
+      })
+    }
     // if(update)alert("update myLoveArticles success!")
 
   }, [myLoveArticles])
