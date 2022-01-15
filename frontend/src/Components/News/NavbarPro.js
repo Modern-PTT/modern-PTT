@@ -1,16 +1,9 @@
 import styled from "@emotion/styled";
-import Link from '@mui/material/Link'
-import SearchIcon from '@material-ui/icons/Search';
-import Drawer from '@mui/material/Drawer';
-import DriveFileRenameOutlineOutlinedIcon from '@mui/icons-material/DriveFileRenameOutlineOutlined';
-import MailOutlineOutlinedIcon from '@mui/icons-material/MailOutlineOutlined';
-import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
-import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
-import {MEDIA_QUERY_MD, MEDIA_QUERY_LG, MEDIA_QUERY_XL} from '../css/Media_query'
-import Burger from "./NavItems/Burger";
-import Search from "./NavItems/Search";
+import Burger from "../NavItems/Burger";
+import Search from "../NavItems/Search";
 import {useState} from 'react';
-
+import { MEDIA_QUERY_XL } from "../../css/Media_query";
+import { Link } from "react-router-dom";
 
 // const StyledDiv = styled.div`
 //     width: 100%;
@@ -57,13 +50,28 @@ import {useState} from 'react';
 
 const StyledDiv = styled.div`
     z-index: 100;
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-column-gap: 10px;
     position: fixed;
     top: 0;
     height: 72px;
     width: 100%;
-    justify-content: end;
-    align-items: center;
+    justify-items: center;
+    align-items: end;
+    .brand{
+        display: none;
+        font-weight: bold;
+        font-size: 24px;
+        justify-self: flex-start;
+        margin-left: 60px;
+    }
+    ${MEDIA_QUERY_XL}{
+        grid-template-columns: 10fr 1fr ;
+        .brand{
+            display: initial;
+        }
+    }
     
 `
 
@@ -71,8 +79,13 @@ const NavbarPro = () => {
     const [drawerOpen, setDrawerOpen] = useState(false);
 
     return ( <StyledDiv >
-            <Search />
-            <Burger/>
+            <div className="brand">
+                <Link to="/home" className="text-gradient">
+                ModernPTT
+                </Link> 
+            </div>
+            <Search className="search"/>
+            <Burger className="burger"/>
     </StyledDiv> );
 }
  

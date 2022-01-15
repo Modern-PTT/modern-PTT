@@ -21,10 +21,10 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 //RWD
-import { MEDIA_QUERY_MD, MEDIA_QUERY_LG, MEDIA_QUERY_XL } from '../../css/Media_query'
+import { MEDIA_QUERY_MD, MEDIA_QUERY_LG, MEDIA_QUERY_XL } from '../css/Media_query'
 
 //bg
-import { BgBubble, colors } from "../Effects/BgBubble";
+import { BgBubble, colors } from "../Containers/Effects/BgBubble";
 import Link from '@mui/material/Link';
 
 import { pttContext } from "../Containers/App";
@@ -96,10 +96,6 @@ const SingUp = () => {
     const generateSalt = () => { return bcrypt.genSaltSync(10); }
     const generateHash = (password, salt) => { return bcrypt.hashSync(password, salt); }
 
-    const generateSalt=() =>{return bcrypt.genSaltSync(10);} 
-    const generateHash = async (password, salt) => {
-        return bcrypt.hashSync(password, salt);
-    }
 
 
     const sendSignUp = async () => {

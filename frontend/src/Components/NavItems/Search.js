@@ -19,11 +19,18 @@ import {
 const StyledDiv = styled.div`
     display: grid;
     justify-content: end;
+    justify-self: end;
+    align-content: flex-end;
+    align-items: flex-end;
     .search-box{
         width: fit-content;
         height: fit-content;
+        display: grid;
+        grid-template-columns: auto auto;
+        align-items: center;
+        justify-content: center;
         position: relative;
-        transform-origin: right center;
+        transform-origin: right bottom;
     }
     .input-search{
         transform-origin: right center;
@@ -50,7 +57,7 @@ const StyledDiv = styled.div`
         height: 50px;
         border-style: none;
         font-size: 20px;
-        top: 10px;
+        /* top: 10px; */
         font-weight: bold;
         outline: none;
         cursor: pointer;

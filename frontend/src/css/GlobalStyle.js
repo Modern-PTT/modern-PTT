@@ -3,6 +3,7 @@ import { colors, hue } from '../Containers/Effects/BgBubble';
 import { MEDIA_QUERY_MD, MEDIA_QUERY_LG, MEDIA_QUERY_XL } from './Media_query'
 
 const GlobalStyle = createGlobalStyle`
+
     .card-container-modal{
         width: 100%;
         height: 100%;
@@ -29,6 +30,13 @@ const GlobalStyle = createGlobalStyle`
           }
         }
     }
+    .font-color-link{
+      color: #1976d2;
+    }
+    .bordered{
+      border: solid 1px rgba(0,0,0,0.3);
+      border-radius: 10px;
+    }
     .background-gradient{
       background: ${colors['bg-gradient']};
     }
@@ -36,7 +44,7 @@ const GlobalStyle = createGlobalStyle`
       background: rgba(255, 255, 255, 0.375);
     }
     .page-container{
-      padding-top: 64px;
+      padding-top: 100px;
     }
     .overlay{
         max-width: 840px;

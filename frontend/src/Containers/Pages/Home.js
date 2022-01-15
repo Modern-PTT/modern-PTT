@@ -1,7 +1,7 @@
-import NavbarPro from "../../Components/NavbarPro"
+import NavbarPro from "../../Components/News/NavbarPro"
 import Navbar from "../../Components/Navbar"
 import DashBoard from "../../Components/DashBoard"
-import ArticleCard from "../../Components/ArticleCard";
+// import ArticleCard from "../../Components/ArticleCard";
 import { GET_HOTARTICLES } from  "../../graphql";
 import { useQuery } from '@apollo/client';
 import { useState, useEffect, useContext} from 'react';
@@ -10,22 +10,44 @@ import Button from '@mui/material/Button';
 import styled from 'styled-components';
 import BoardNameCard from '../../Components/BoardNameCard'
 
+import ArticleCard from "../../Components/News/ArticleCardPro";
+import { MEDIA_QUERY_XL } from "../../css/Media_query";
 
 
 
 const StyledDiv = styled.div`
-
-width: 100%;
-    .wrapper{
-        display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 500px;
-    width: 800px;
-    margin: auto;
-    
+    padding-left: 1rem;
+    padding-right: 1rem;
+    width: 100%;
+    grid-template-columns: 1fr 3fr;
+    .dashBoard{
+        display: none;
+        position: fixed;
     }
+    .wrapper{
+        width: 100%;
+        border: solid 1px rgba(0,0,0,0.1);
+        padding: 100px 10px;
+        overflow: scroll;
+        height: 90vh;
+
+    }
+    ${MEDIA_QUERY_XL}{
+        display: grid;
+        grid-template-columns: 1fr 3fr;
+        justify-content: center;
+        align-content: center;
+        padding-top: 120px;
+        .dashBoard{
+            justify-self: center;
+            align-self: center;
+        }
+        .wrapper{
+            justify-self: start;
+            max-width: 1200px;
+        }
+    }
+    
 `
 const Home = ({myLoveBoards, setMyLoveBoards, myLoveArticles, setMyLoveArticles,username,
     setUsername,
@@ -53,9 +75,10 @@ const Home = ({myLoveBoards, setMyLoveBoards, myLoveArticles, setMyLoveArticles,
             <DashBoard
                 myLoveBoards={myLoveBoards}
                 setMyLoveBoards={setMyLoveBoards}
+                className="dashBoard"
             />
-            <div className="wrapper">
-                <BoardNameCard nowAtWhere="home" />
+            <div className="wrapper bordered">
+                {/* <BoardNameCard nowAtWhere="home" /> */}
                 <>{articles ? articles.map((item)=>(
                     <ArticleCard
                         brdname={item.brdname}  

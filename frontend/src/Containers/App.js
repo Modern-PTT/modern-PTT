@@ -6,7 +6,6 @@ import favBoards from "./Pages/favBoards";
 import AllBoards from './Pages/AllBoards'
 import HotBoards from './Pages/HotBoards'
 import SearchBoards from './Pages/SearchBoards'
-import LoginRegister from './Pages/LoginRegister'
 import NotFound from "./Pages/NotFound";
 import favArticles from "./Pages/favArticles";
 import Intro from "../Containers/Pages/Intro";
@@ -14,6 +13,7 @@ import Home from '../Containers/Pages/Home'
 
 import Login from '../Components/Login'
 import SingUp from '../Components/SingUp'
+import styled from "styled-components";
 
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import GlobalStyle from "../css/GlobalStyle";
@@ -55,6 +55,7 @@ function App() {
       favBoards, setFavBoards,
       favArticles, setFavArticles
     }>
+      <GlobalStyle/>
       <BrowserRouter>
             <Routes>
               <Route path='/' element={<Navigate to='/intro'/>}/>

@@ -3,11 +3,12 @@ import { Link } from "@mui/material";
 
 
 const StyledDiv = styled.div`
+grid-column: -1;
+right: 10px;
 #burger-toggle {
   position: absolute;
   appearance: none;
   opacity: 0;
-
   &:checked {
     & ~ .menu {
       opacity: 1;

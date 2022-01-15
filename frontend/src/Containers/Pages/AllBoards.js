@@ -1,112 +1,137 @@
 import styled from 'styled-components';
 import { useQuery, useMutation } from '@apollo/client';
 import { GET_BOARDS_QUERY, UPDATE_FAV_ARTICLES_MUTATION } from "../../graphql";
-import { useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 
-import  {DataGrid}  from '@material-ui/data-grid';
+import { DataGrid } from '@material-ui/data-grid';
 import Link from '@mui/material/Link';
 
-import Navbar from "../../Components/Navbar"
+import Navbar from "../../Components/News/NavbarPro"
 import DashBoard from "../../Components/DashBoard"
-// import HotList from '../../Components/HotList'
-//query某看板後拿回的簡要文章列表
 
+import { MEDIA_QUERY_MD ,MEDIA_QUERY_XL } from '../../css/Media_query';
 
 //set styled div
 const StyledDiv = styled.div`
-    height: 60vh;
-    width: 80%;
-    max-width: 1200px;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    width: 100%;
+    grid-template-columns: 1fr 3fr;
+    .dashBoard{
+        display: none;
+        position: fixed;
+    }
+    .wrapper{
+        width: 100%;
+        border: solid 1px rgba(0,0,0,0.1);
+        padding: 100px 10px;
+        padding-top: 50px;
+        overflow: scroll;
+        height: 90vh;
+
+    }
+    ${MEDIA_QUERY_MD}{
+      .wrapper{
+            justify-self: start;
+            max-width: 1200px;
+            padding: 120px 30px 100px 30px;
+        }
+    }
+    ${MEDIA_QUERY_XL}{
+        display: grid;
+        grid-template-columns: 1fr 3fr;
+        justify-content: center;
+        align-content: center;
+        padding-top: 120px;
+        
+        .dashBoard{
+            justify-self: center;
+            align-self: center;
+        }
+        .wrapper{
+            justify-self: start;
+            max-width: 1200px;
+            padding: 120px 30px 100px 30px;
+        }
+    }
+    
 `
 
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 500px;
-  width: 1000px;
-  margin: auto;
-`;
 
-
-const AllBoards =  ({myLoveArticles, setMyLoveArticles,isLogIn, username, myHashPassword}) =>{
+const AllBoards = ({ myLoveArticles, setMyLoveArticles, isLogIn, username, myHashPassword }) => {
   const [allBoards, setAllBoards] = useState('');
   const [updateFavArticles] = useMutation(UPDATE_FAV_ARTICLES_MUTATION)
-  const {data, error, loading} =  useQuery(GET_BOARDS_QUERY)
+  const { data, error, loading } = useQuery(GET_BOARDS_QUERY)
 
-  
+
   useEffect(() => {
-    if(data) setAllBoards(data.boards);
+    if (data) setAllBoards(data.boards);
   }, [data])
 
 
   useEffect(() => {
-    if(username) {
+    if (username) {
       var update = updateFavArticles({
-        variables:{
-          input:{
-            token:{
+        variables: {
+          input: {
+            token: {
               username: username,
               password: myHashPassword
             },
-            aids:  myLoveArticles
+            aids: myLoveArticles
           }
         }
       })
     }
-    // if(update)alert("update myLoveArticles success!")
 
   }, [myLoveArticles])
 
   const columns = [
     {
       field: 'brdname',
-      headerName: 'BoardName',
+      headerName: '看板',
       flex: 1,
       renderCell: (params) => (
-        <Link href={`/boards/${params.value}`}>{params.value}</Link>
+        <Link underline="none" href={`/boards/${params.value}`}>{params.value}</Link>
       )
     },
     {
       field: 'class',
-      headerName: 'class',
+      headerName: '類別',
       flex: .5
     },
     {
       field: 'title',
-      headerName: 'title',
+      headerName: '標題',
       flex: 1
     },
     {
       field: 'moderators',
-      headerName: 'moderators',
+      headerName: '版主',
       flex: .5
     }
   ];
-    return(
-      <>
-        <Navbar/>
-        <div className="contents">
-            <DashBoard />
+  return (
+    <>
+      <Navbar />
+      <StyledDiv className="contents page-container">
+        <DashBoard
+          className="dashBoard" />
+        <div className="wrapper bordered">
+          {allBoards ?
+            <DataGrid
+              rows={allBoards}
+              columns={columns}
+              pageSize={10}
+              getRowId={(row) => row.brdname}
+              disableSelectionOnClick
+            />
+            : ''
+          }
         </div>
-        <Wrapper>
-                {/* <HotList/> */}
-                <StyledDiv>
-                  {allBoards?
-                    <DataGrid
-                    rows={allBoards}
-                    columns={columns}
-                    pageSize={10}
-                    getRowId={(row) => row.brdname}
-                    disableSelectionOnClick
-                  />
-                  :''
-                  }
-
-                </StyledDiv>
-          </Wrapper>
-    </>);
+      </StyledDiv>
+    </>
+    );
 
 }
 

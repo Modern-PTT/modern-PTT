@@ -140,6 +140,9 @@ query newestArticles($limit: Int!){
 export const GET_HOTARTICLES = gql`
 query hotArticles{
     hotArticles{
+        brdname
+        aid
+        owner
         title
         create_time
         push

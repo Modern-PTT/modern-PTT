@@ -69,7 +69,7 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: center;
   height: 100vh;
-  width: 700px;
+  /* width: 700px; */
   margin: auto;
 `;
 
