@@ -86,7 +86,6 @@ const Board =  () => {
 
 
   const { brdname } = useParams()
-  console.log(brdname)
   const { data, error, loading } = useQuery(GET_BOARD_QUERY, {
     variables: {
       brdname: brdname,

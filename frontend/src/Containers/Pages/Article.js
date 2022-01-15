@@ -59,8 +59,6 @@ const Board =  () =>{
   const navigate = useNavigate();
 
   const {aid, brdname} = useParams()
-  console.log(aid)
-  console.log(brdname)
   const {data, error, loading} =  useQuery(GET_ARTICLE_QUERY,{
     variables: {
       aid: aid,

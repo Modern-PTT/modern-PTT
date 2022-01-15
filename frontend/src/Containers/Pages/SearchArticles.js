@@ -64,12 +64,12 @@ const SearchArticles = () => {
     setAdvBoardSearch
   } = useContext(pttContext)
 
-  console.log(
-    advBoardSearch,
-    advTitleSearch,
-    ownerSearch,
-    timeSearch
-  );
+  // console.log(
+  //   advBoardSearch,
+  //   advTitleSearch,
+  //   ownerSearch,
+  //   timeSearch
+  // );
 
   const [articles, setArticles] = useState('');
 
@@ -87,10 +87,10 @@ const SearchArticles = () => {
   useEffect(() => {
     if (data) {
       setArticles(data.articles);
-      setAdvTitleSearch([]);
-      setTimeSearch()
-      setOwnerSearch("");
-      setAdvBoardSearch([]);
+      // setAdvTitleSearch([]);
+      // setTimeSearch()
+      // setOwnerSearch("");
+      // setAdvBoardSearch([]);
     }
   }, [data])
 

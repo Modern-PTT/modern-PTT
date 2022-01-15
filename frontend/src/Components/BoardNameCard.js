@@ -4,6 +4,8 @@ import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutli
 import { MEDIA_QUERY_MD, MEDIA_QUERY_XL } from "../css/Media_query";
 
 import Link from '@mui/material/Link';
+import { pttContext } from '../Containers/App';
+import { useContext } from 'react';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -48,7 +50,7 @@ const Wrapper = styled.div`
 
 
 export default function BoardNameCard({ nowAtWhere, isEdible = true }) {
-
+  const{ isLogIn }=useContext(pttContext)
 
   return (
     <Wrapper>
@@ -59,7 +61,7 @@ export default function BoardNameCard({ nowAtWhere, isEdible = true }) {
             {nowAtWhere}
           </div>
         </div>
-        {isEdible ?
+        {isEdible && isLogIn ?
           <Link className='link' href={`/${nowAtWhere}/NewPost`}><DriveFileRenameOutlineIcon className='icon' /></Link> : <></>
         }
       </div>

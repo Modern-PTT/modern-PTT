@@ -5,7 +5,7 @@ import DashBoard from "../../Components/DashBoard"
 import { GET_HOTARTICLES } from  "../../graphql";
 import { useQuery } from '@apollo/client';
 import { useState, useEffect, useContext} from 'react';
-import moment from "moment";
+import moment from "moment-timezone";
 import Button from '@mui/material/Button';
 import styled from 'styled-components';
 import BoardNameCard from '../../Components/BoardNameCard'
@@ -70,7 +70,7 @@ const Home = () => {
     const {data, error, loading} =  useQuery(GET_HOTARTICLES)
     
     const showTime = (time)=>{
-        return moment(time).format('YYYY/MM/DD hh:mm:ss')
+        return moment(time).tz("Asia/Taipei").format('YYYY/MM/DD HH:mm:ss')
     }
 
     useEffect(() => {

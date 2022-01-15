@@ -12,7 +12,7 @@ import { Divider } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import Row from './Layout/Row';
 import { useState, useContext} from 'react';
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -188,7 +188,7 @@ const DeleteCard = ({deleteOpen, setDeleteOpen, sendDelete}) => {
 }
 
 const showTime = (time)=>{
-  return moment(time).format('YYYY/MM/DD hh:mm:ss')
+  return moment(time).format('YYYY/MM/DD HH:mm:ss')
 }
 
 export default function Article( {item} ) {

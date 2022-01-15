@@ -8,7 +8,7 @@ import styled from 'styled-components';
 
 import{ BgBubble} from '../Effects/BgBubble'
 import { pttContext } from '../App';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import Link from '@mui/material/Link';
 
 const StyledDiv = styled.div`
@@ -45,11 +45,11 @@ const StyledP = styled.p`
 `
 
 const showTime = (time)=>{
-    return moment(time).format('YYYY/MM/DD hh:mm:ss')
+    return moment(time).tz("Asia/Taipei").format('YYYY/MM/DD HH:mm:ss')
   }
 
   const showDate = (time)=>{
-    return moment(time).format('YYYY/MM/DD hh:mm:ss')
+    return moment(time).tz("Asia/Taipei").format('YYYY/MM/DD HH:mm:ss')
   }
 
 

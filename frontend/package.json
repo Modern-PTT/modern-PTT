@@ -22,7 +22,6 @@
     "debounce": "^1.2.1",
     "graphql": "^16.2.0",
     "hsl-to-hex": "^1.0.0",
-    "moment": "^2.29.1",
     "moment-timezone": "^0.5.34",
     "pixi.js": "^6.2.1",
     "react": "^17.0.2",

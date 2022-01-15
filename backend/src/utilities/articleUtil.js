@@ -133,9 +133,6 @@ const deleteArticle = async (aid, user, errFunc, db) => {
   user.post -= 1;
   article.modified_time = new Date();
 
-  console.log(article.deleted);
-  console.log(user.post);
-
   await article.save();
   await user.save();
 }

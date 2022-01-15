@@ -12,7 +12,7 @@ import { Divider } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import Row from '../Layout/Row';
 import { useState, useContext } from 'react';
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -85,9 +85,111 @@ const msgState = (input) => {
     else return <ArrowRightAltIcon />
 }
 
+const EditCard = ({
+  item,
+  editOpen,
+  setEditOpen,
+  editTitle,
+  setEditTitle,
+  editContent,
+  setEditContent,
+  classes,
+  updateEdit,
+}) => {
+    return (
+        <Dialog open={editOpen} onClose={() => setEditOpen(false)}>
+            <DialogTitle>{item.username}</DialogTitle>
+            <DialogContent>
+                <DialogContentText>
+                    標題
+                </DialogContentText>
+                <TextField
+                    autoFocus
+                    margin="dense"
+                    id="editTitle"
+                    type="editTitle"
+                    fullWidth
+                    value={editTitle}
+                    onChange={(e) => { setEditTitle(e.target.value); }}
+                    variant="standard"
+                />
+                <DialogContentText>
+                    內文
+                </DialogContentText>
+                <TextField
+                    multiline
+                    margin="dense"
+                    id="editContent"
+                    type="editTitle"
+                    // fullWidth
+                    value={editContent}
+                    onChange={(e) => { setEditContent(e.target.value); }}
+                    variant="standard"
+                />
 
+                <CardContent>
+                    {item.comments.map((item) => (
+                        <Typography className={classes.title} color="textSecondary" gutterBottom key={item.cid}>
+                            <Row align="center">
+                                <>{msgState(item.type)}
+                                    {item.owner}
+                                    {item.content.split("\n").map(e => (
+                                        <>
+                                            {e}
+                                            <br />
+                                        </>
+                                    ))}
+                                </>
+                                <>
+                                    {item.location.ip}
+                                    {showTime(item.create_time)}
+                                </>
+                            </Row>
+                            {item.body}
+                        </Typography>
+                    ))}
+                </CardContent>
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={() => setEditOpen(false)}>取消</Button>
+                <Button onClick={() => { setEditOpen(false); updateEdit(); }}>更改</Button>
+            </DialogActions>
+        </Dialog>
+    )
+}
 
+const DeleteCard = ({deleteOpen, setDeleteOpen, sendDelete}) => {
+    return (
+        <div>
+            <Dialog
+                open={deleteOpen}
+                onClose={() => setDeleteOpen(false)}
+                aria-labelledby="delete-title"
+                aria-describedby="delete-description"
+            >
+                <DialogTitle id="delete-title">
+                    刪除
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        <h1> 確定刪除文章？</h1>
+                        <p> 此步驟無法恢復</p>
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setDeleteOpen(false)}>取消</Button>
+                    <Button onClick={() => sendDelete()} autoFocus color="red">
+                        刪除
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        </div>
+    );
+}
 
+const showTime = (time) => {
+    return moment(time).tz("Asia/Taipei").format('YYYY/MM/DD HH:mm:ss')
+}
 
 export default function Article({ item }) {
 
@@ -103,10 +205,6 @@ export default function Article({ item }) {
     const bull = <span className={classes.bullet}>•</span>;
 
     const navigate = useNavigate();
-
-    const showTime = (time) => {
-        return moment(time).format('YYYY/MM/DD hh:mm:ss')
-    }
 
     // Edit Comment Part
     const [commentType, setCommentType] = useState(3)
@@ -127,97 +225,8 @@ export default function Article({ item }) {
     const handleDeleteOpen = () => { setDeleteOpen(true); };
 
 
-    const EditCard = () => {
-        return (
-            <Dialog open={editOpen} onClose={() => setEditOpen(false)}>
-                <DialogTitle>{item.username}</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        標題
-                    </DialogContentText>
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="editTitle"
-                        type="editTitle"
-                        fullWidth
-                        value={editTitle}
-                        onChange={(e) => { setEditTitle(e.target.value); }}
-                        variant="standard"
-                    />
-                    <DialogContentText>
-                        內文
-                    </DialogContentText>
-                    <TextField
-                        multiline
-                        margin="dense"
-                        id="editContent"
-                        type="editTitle"
-                        // fullWidth
-                        value={editContent}
-                        onChange={(e) => { setEditContent(e.target.value); }}
-                        variant="standard"
-                    />
-
-                    <CardContent>
-                        {item.comments.map((item) => (
-                            <Typography className={classes.title} color="textSecondary" gutterBottom key={item.cid}>
-                                <Row align="center">
-                                    <>{msgState(item.type)}
-                                        {item.owner}
-                                        {item.content.split("\n").map(e => (
-                                            <>
-                                                {e}
-                                                <br />
-                                            </>
-                                        ))}
-                                    </>
-                                    <>
-                                        {item.location.ip}
-                                        {showTime(item.create_time)}
-                                    </>
-                                </Row>
-                                {item.body}
-                            </Typography>
-                        ))}
-                    </CardContent>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={() => setEditOpen(false)}>取消</Button>
-                    <Button onClick={() => { setEditOpen(false); updateEdit(); }}>更改</Button>
-                </DialogActions>
-            </Dialog>
-        )
-    }
-
-    const DeleteCard = () => {
-        return (
-            <div>
-                <Dialog
-                    open={deleteOpen}
-                    onClose={() => setDeleteOpen(false)}
-                    aria-labelledby="delete-title"
-                    aria-describedby="delete-description"
-                >
-                    <DialogTitle id="delete-title">
-                        刪除
-                    </DialogTitle>
-                    <DialogContent>
-                        <DialogContentText id="alert-dialog-description">
-                            <h1> 確定刪除文章？</h1>
-                            <p> 此步驟無法恢復</p>
-                        </DialogContentText>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={() => setDeleteOpen(false)}>取消</Button>
-                        <Button onClick={() => sendDelete()} autoFocus color="red">
-                            刪除
-                        </Button>
-                    </DialogActions>
-                </Dialog>
-            </div>
-        );
-    }
+    
+    
 
     const [deleteArticle] = useMutation(DELETE_ARTICLE_MUTATION)
     const sendDelete = async () => {
@@ -235,8 +244,8 @@ export default function Article({ item }) {
         })
         if (delete1.data) {
             console.log("Post is deleted.")
-            // navigate(`/${brdname}`)
-            navigate("/home")
+            navigate(`/${brdname}`)
+            // navigate("/home")
         }
 
     }
@@ -305,8 +314,18 @@ export default function Article({ item }) {
                                 </>
                                 : <></>}
 
-                            <DeleteCard />
-                            <EditCard />
+                                <EditCard item={item}
+                                          editOpen={editOpen}
+                                          setEditOpen={setEditOpen}
+                                          editTitle={editTitle}
+                                          setEditTitle={setEditTitle}
+                                          editContent={editContent}
+                                          setEditContent={setEditContent}
+                                          classes={classes}
+                                          updateEdit={updateEdit}/>
+                                <DeleteCard deleteOpen={deleteOpen}
+                                          setDeleteOpen={setDeleteOpen}
+                                          sendDelete={sendDelete}/>
 
                         </div>
                     </Row>

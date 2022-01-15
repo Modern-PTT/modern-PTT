@@ -29,7 +29,8 @@ import { BgBubble, colors } from "../Containers/Effects/BgBubble";
 import Link from '@mui/material/Link';
 
 import { pttContext } from "../Containers/App";
-
+const LOCALSTORAGE_USERNAME = "saveMyUsername";
+const LOCALSTORAGE_HASHEDPW = "saveMyHashedPassword";
 
 const Wrapper = styled.div`
   display: grid;
@@ -137,8 +138,8 @@ const SingUp = () => {
             if (signUpResult.data.signup) {
                 console.log("signup success and login!!");
                 setIsLogIn(true);
-                setUsername(usernameInput);
-                setMyHashPassword(hashPassword);
+                localStorage.setItem(LOCALSTORAGE_USERNAME, usernameInput);
+                localStorage.setItem(LOCALSTORAGE_HASHEDPW, hashPassword)
             } else {
                 alert("username is existed!");
                 return;

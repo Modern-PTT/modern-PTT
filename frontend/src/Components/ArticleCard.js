@@ -8,7 +8,7 @@ import Row from './Layout/Row';
 import Link from '@mui/material/Link';
 import {useContext} from 'react'
 import { pttContext } from '../Containers/App';
-import moment from 'moment';
+import moment from 'moment-timezone';
 const useStyles = makeStyles({
   root: {
     
@@ -51,7 +51,7 @@ const msgState = (input)=>{
 }
 
 const showTime = (time)=>{
-  return moment(time).format('YYYY/MM/DD hh:mm:ss')
+  return moment(time).format('YYYY/MM/DD HH:mm:ss')
 }
 
 export default function ArticleCard( {item, showBrdname} ) {
