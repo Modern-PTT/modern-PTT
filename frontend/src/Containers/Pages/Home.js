@@ -88,7 +88,7 @@ const Home = () => {
                 className="dashBoard"
             />
             <div className="wrapper bordered">
-                {/* <BoardNameCard nowAtWhere="home" /> */}
+                <BoardNameCard nowAtWhere="首頁" isEdible={false}/>
                 <>{articles ? articles.map((item)=>(
                     <ArticleCard
                         showBrdname={true}

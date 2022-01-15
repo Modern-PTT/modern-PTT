@@ -142,7 +142,7 @@ export default function Article({ item }) {
                         type="editTitle"
                         fullWidth
                         value={editTitle}
-                        onChange={(e) => { setEditTitle(e.target.value); console.log(editTitle); }}
+                        onChange={(e) => { setEditTitle(e.target.value); }}
                         variant="standard"
                     />
                     <DialogContentText>
@@ -155,7 +155,7 @@ export default function Article({ item }) {
                         type="editTitle"
                         // fullWidth
                         value={editContent}
-                        onChange={(e) => { setEditContent(e.target.value); console.log(editContent); }}
+                        onChange={(e) => { setEditContent(e.target.value); }}
                         variant="standard"
                     />
 
@@ -234,7 +234,6 @@ export default function Article({ item }) {
             }
         })
         if (delete1.data) {
-            console.log(item.brdname)
             console.log("Post is deleted.")
             // navigate(`/${brdname}`)
             navigate("/home")
@@ -295,12 +294,12 @@ export default function Article({ item }) {
                                 <>
                                     <Tooltip title="刪除">
                                         <IconButton>
-                                            <DeleteIcon onClick={() => { handleDeleteOpen(); console.log("door open"); }} />
+                                            <DeleteIcon onClick={() => { handleDeleteOpen(); }} />
                                         </IconButton>
                                     </Tooltip>
                                     <Tooltip title="編輯">
                                         <IconButton>
-                                            <EditIcon onClick={() => { handleEditOpen(); console.log("door open"); }} />
+                                            <EditIcon onClick={() => { handleEditOpen();  }} />
                                         </IconButton>
                                     </Tooltip>
                                 </>

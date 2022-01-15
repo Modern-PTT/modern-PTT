@@ -39,10 +39,12 @@ export const GET_ARTICLE_QUERY = gql`
     query article ($aid: String!) {
         article(aid: $aid){
             aid
+            brdname
             title
             owner
             create_time
             content
+            brdname
             location {
                 ip
                 country
@@ -64,9 +66,11 @@ export const GET_ARTICLE_QUERY = gql`
 
 // 4. query - 
 export const GET_ARTICLES_QUERY = gql`
-    query articles ($aid: String!) {
-        articles(aid: $aid){
+    query articles ($input: articlesInput!) {
+        articles(input: $input){
             title
+            aid
+            brdname
             owner
             content
             location {
@@ -83,14 +87,16 @@ export const GET_ARTICLES_QUERY = gql`
                     }
                 create_time
             }
+            boo
+            push
         }
 }
 `;
 
 // 5. query - user
 export const GET_USER = gql`
-    query user ($username: String!, $password: String){
-        user(username: $username, password: $password){
+    query user ($input: userInput!){
+        user(input: $input){
             username
             realname
             nickname
@@ -150,6 +156,7 @@ query hotArticles{
         brdname
         title
         create_time
+        owner
         push
         boo
         owner

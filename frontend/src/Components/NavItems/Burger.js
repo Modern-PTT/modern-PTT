@@ -201,10 +201,11 @@ const Burger = () => {
 
     if (logoutResult.data?.logout) {
       console.log("logout~~");
-      navigate('/home');
       setIsLogIn(false);
       setMyHashPassword("");
       setUsername("");
+      document.querySelector('#burger-toggle').checked = false;
+      navigate('/home');
 
       localStorage.removeItem(LOCALSTORAGE_USERNAME);
       localStorage.removeItem(LOCALSTORAGE_HASHEDPW);
@@ -232,18 +233,18 @@ const Burger = () => {
           <li className="menu-nav-item"><Link className="menu-nav-link" href="/home"><span>
             <div>首頁</div>
           </span></Link></li>
-          <li className="menu-nav-item"><Link className="menu-nav-link" href=""><span>
+          {/* <li className="menu-nav-item"><Link className="menu-nav-link" href=""><span>
             <div>站內信</div>
-          </span></Link></li>
-          <li className="menu-nav-item"><Link className="menu-nav-link" href="#"><span>
+          </span></Link></li> */}
+          {/* <li className="menu-nav-item"><Link className="menu-nav-link" href="#"><span>
             <div>我的通知</div>
-          </span></Link></li>
-          <li className="menu-nav-item"><Link className="menu-nav-link" href="#"><span>
+          </span></Link></li> */}
+          {!isLogIn ? <></> :<li className="menu-nav-item"><Link className="menu-nav-link" href={'/user/'+username}><span>
             <div>個人檔案</div>
-          </span></Link></li>
-          <li className="menu-nav-item"><Link className="menu-nav-link" href="#"><span>
+          </span></Link></li>}
+          {!isLogIn ? <></> :<li className="menu-nav-item"><Link className="menu-nav-link" href="#"><span>
             <div>設定</div>
-          </span></Link></li>
+          </span></Link></li>}
           {isLogIn ? <li className="menu-nav-item"><Link className="menu-nav-link" href="#" onClick={logout}><span>
             <div>登出</div>
           </span></Link></li> : <></>}

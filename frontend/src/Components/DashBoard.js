@@ -150,8 +150,7 @@ export default function SimpleList() {
         </ListItem>
           </Link>
 
-          <Link className="link" underline="none" href="/lavboards">
-        <ListItem button id="all">
+        {/* <ListItem button id="all">
           <ListItemIcon>
             <InboxIcon />
           </ListItemIcon>
@@ -166,8 +165,8 @@ export default function SimpleList() {
             <DraftsIcon />
           </ListItemIcon>
             <ListItemText primary="收藏文章" />
-        </ListItem>
           </Link>
+        </ListItem> */}
       </List>
     </StyledDiv>
     </>

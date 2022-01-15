@@ -1,69 +1,138 @@
 import styled from 'styled-components';
 import ArticleCard from '../../Components/ArticleCard'
-
+import { DataGrid } from '@material-ui/data-grid';
+import Link from '@mui/material/Link';
 // import  graphql  from 'graphql';
 import { useParams, useHistory } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
-import { GET_BOARD_ARTICLES_QUERY } from "../../graphql";
-import { useState, useEffect} from 'react';
+import { GET_BOARDS_QUERY } from "../../graphql";
+import { useState, useEffect, useContext } from 'react';
 
-import Navbar from "../../Components/Navbar"
+import { pttContext } from '../App';
+
+import Navbar from "../../Components/News/NavbarPro"
 import DashBoard from "../../Components/DashBoard"
 //query某看板後拿回的簡要文章列表
 
 
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 500px;
-  width: 800px;
-  margin: auto;
-`;
+import { MEDIA_QUERY_MD, MEDIA_QUERY_XL } from '../../css/Media_query';
 
-const Board =  ({myLoveArticles, setMyLoveArticles}) =>{
-  const [articles, setArticles] = useState('');
+//set styled div
+const StyledDiv = styled.div`
+    padding-left: 1rem;
+    padding-right: 1rem;
+    width: 100%;
+    grid-template-columns: 1fr 3fr;
+    .dashBoard{
+        display: none;
+        position: fixed;
+    }
+    .wrapper{
+        width: 100%;
+        border: solid 1px rgba(0,0,0,0.1);
+        padding: 100px 10px;
+        padding-top: 50px;
+        overflow: scroll;
+        height: 90vh;
 
-  const {brdname} = useParams()
-  console.log(brdname)
-  const {data, error, loading} =  useQuery(GET_BOARD_ARTICLES_QUERY,{
+    }
+    ${MEDIA_QUERY_MD}{
+      .wrapper{
+            justify-self: start;
+            max-width: 1200px;
+            padding: 120px 30px 100px 30px;
+        }
+    }
+    ${MEDIA_QUERY_XL}{
+        display: grid;
+        grid-template-columns: 1fr 3fr;
+        justify-content: center;
+        align-content: center;
+        padding-top: 120px;
+        
+        .dashBoard{
+            justify-self: center;
+            align-self: center;
+        }
+        .wrapper{
+            justify-self: start;
+            max-width: 1200px;
+            padding: 120px 30px 100px 30px;
+        }
+    }
+    
+`
+
+const SearchBoard = () => {
+
+
+
+  const { simpleBoardSearch } = useContext(pttContext)
+  console.log(simpleBoardSearch);
+
+  const [allBoards, setAllBoards] = useState('');
+
+  const { data, error, loading } = useQuery(GET_BOARDS_QUERY, {
     variables: {
-      brdname: brdname,
+      keywords: simpleBoardSearch,
     }
   })
-  
+
   useEffect(() => {
-    if(data) setArticles(data.board.articles);
+    if (data) setAllBoards(data.boards);
   }, [data])
 
+  //set styled div
 
-    return(
-      <>
-        <Navbar />
-        <div className="contents">
-            <DashBoard />
+  const columns = [
+    {
+      field: 'brdname',
+      headerName: 'BoardName',
+      flex: 1,
+      renderCell: (params) => (
+        <Link href={`/${params.value}`}>{params.value}</Link>
+      )
+    },
+    {
+      field: 'class',
+      headerName: 'class',
+      flex: .5
+    },
+    {
+      field: 'title',
+      headerName: 'title',
+      flex: 1
+    },
+    {
+      field: 'moderators',
+      headerName: 'moderators',
+      flex: .5
+    },
+
+  ];
+  return (
+    <>
+      <Navbar />
+      <StyledDiv className="contents page-container">
+        <DashBoard
+          className="dashBoard" />
+        <div className="wrapper bordered">
+          {allBoards ?
+            <DataGrid
+              rows={allBoards}
+              columns={columns}
+              pageSize={10}
+              getRowId={(row) => row.brdname}
+              disableSelectionOnClick
+            />
+            : ''
+          }
         </div>
-        <Wrapper>
-            {/* <Button variant="contained">Default</Button> */}
-            <>{articles ? articles.map((item)=>(
-                <ArticleCard
-                    key={item.aid}
-                    brdname={item.brdname}
-                    title={item.title}
-                    owner={item.owner}
-                    create_time={item.create_time}
-                    aid={item.aid}
-                    deleted={item.deleted}
-                    myLoveArticles={myLoveArticles}
-                    setMyLoveArticles={setMyLoveArticles}
-                />
-            )): ''}  
-            </>
-          </Wrapper>
-    </>);
+      </StyledDiv>
+    </>
+  );
 
 }
 
-export default Board;
+export default SearchBoard;
 

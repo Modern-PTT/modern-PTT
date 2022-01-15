@@ -113,6 +113,7 @@ const Board =  () => {
         <DashBoard
           className="dashBoard" />
         <div className="wrapper bordered">
+        <BoardNameCard nowAtWhere={brdname} />
           {articles ? articles.map((item) => (
             <ArticleCard
               key={item.aid}

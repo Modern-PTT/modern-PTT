@@ -1,6 +1,6 @@
-import { GET_SALT, GET_USER, LOG_IN_MUTATION, SIGN_UP_MUTATION } from  "../graphql";
+import { GET_SALT, GET_USER, LOG_IN_MUTATION, SIGN_UP_MUTATION } from "../graphql";
 import { useQuery, useMutation } from '@apollo/client';
-import { useState, useEffect, useContext} from 'react';
+import { useState, useEffect, useContext } from 'react';
 import Button from '@mui/material/Button';
 import styled from 'styled-components';
 import bcrypt from "bcryptjs"
@@ -19,6 +19,7 @@ import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import Intro from '../Containers/Pages/Intro'
 
 //RWD
 import { MEDIA_QUERY_MD, MEDIA_QUERY_LG, MEDIA_QUERY_XL } from '../css/Media_query'
@@ -41,7 +42,7 @@ const Wrapper = styled.div`
   .inner-container{
       display: grid;
       justify-items: center;
-      grid-row-gap: 30px;
+      grid-row-gap: 20px;
       padding: 8rem 4rem;
         .overlay-title{
             background-image: linear-gradient(
@@ -61,8 +62,12 @@ const Wrapper = styled.div`
             grid-row-gap: 10px;
             justify-items: center;
             align-content: center;
+            margin-bottom: 30px;
         }
         .overlay-btns{
+            .link{
+                width: 100%;
+            }
             .overlay-btn{
                 width: 100%;
             }
@@ -79,15 +84,15 @@ const Wrapper = styled.div`
   }
 `;
 const SingUp = () => {
-    
+
     const {
         setUsername,
         setMyHashPassword,
         isLogIn,
-        setIsLogIn} = useContext(pttContext)
+        setIsLogIn } = useContext(pttContext)
 
-    const [usernameInput,setUsernameInput] = useState('')
-    const [realnameInput,setRealnameInput] = useState('')
+    const [usernameInput, setUsernameInput] = useState('')
+    const [realnameInput, setRealnameInput] = useState('')
     const [password, setPassword] = useState('')
 
     const [checkSingUp] = useMutation(SIGN_UP_MUTATION)
@@ -101,7 +106,6 @@ const SingUp = () => {
     const sendSignUp = async () => {
         var randomSalt = generateSalt();
 
-        console.log("Salt: "+randomSalt)
 
         // each prop. should be filled
         if (!usernameInput) {
@@ -115,13 +119,13 @@ const SingUp = () => {
         if (!password) {
             alert("username can not be empty!");
             return;
-        } else{ 
+        } else {
             const hashPassword = await generateHash(password, randomSalt);
             setMyHashPassword(hashPassword);
-            console.log("hashPassword"+hashPassword)
+            console.log("hashPassword" + hashPassword)
             const signUpResult = await checkSingUp({
-                variables:{
-                    input:{
+                variables: {
+                    input: {
                         username: usernameInput,
                         password: hashPassword,
                         salt: randomSalt,
@@ -130,12 +134,12 @@ const SingUp = () => {
                 }
             });
 
-            if(signUpResult.data.signup) {
+            if (signUpResult.data.signup) {
                 console.log("signup success and login!!");
                 setIsLogIn(true);
                 setUsername(usernameInput);
                 setMyHashPassword(hashPassword);
-            }else{
+            } else {
                 alert("username is existed!");
                 return;
             }
@@ -150,8 +154,8 @@ const SingUp = () => {
         weight: '',
         weightRange: '',
         showPassword: false,
-      });
-    
+    });
+
 
     const handleClickShowPassword = () => {
         setValues({
@@ -167,60 +171,62 @@ const SingUp = () => {
 
     return (
         (!isLogIn)
-        ?<Column>
-            <p> 註冊新帳號 </p>
-            <TextField
-                label="username"
-                id="username"
-                value={usernameInput}
-                onChange={(e)=>{setUsernameInput(e.target.value);console.log("name: "+usernameInput)}}
-                sx={{ m: 1, width: '25ch' }}
-            />
-            
-            <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
-            <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
-            <OutlinedInput
-                id="outlined-adornment-password"
-                type={values.showPassword ? 'text' : 'password'}
-                value={password}
-                onChange={(e)=>{setPassword(e.target.value);console.log("password: "+password)}}
-                endAdornment={
-                <InputAdornment position="end">
-                    <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={handleClickShowPassword}
-                    onMouseDown={handleMouseDownPassword}
-                    edge="end"
-                    >
-                    {values.showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                </InputAdornment>
-                }
-                label="Password"
-            />
-            <TextField
-                label="realname"
-                id="realname"
-                value={realnameInput}
-                onChange={(e)=>{setRealnameInput(e.target.value);console.log("name: "+realnameInput)}}
-                sx={{ m: 1, width: '25ch' }}
-            />
+            ?
+            <Wrapper >
+                <BgBubble />
+                <div className="inner-container overlay">
 
-            </FormControl>
-            <Row>
-                <Link href="/login">
-                    <Button variant="outlined">回登入</Button>
-                </Link>
-                <Button variant="contained" onClick={()=>sendSignUp()}>送出</Button>
-            </Row>
-        </Column>
-        :<>
-            <h1>Welcome to NEW PTT</h1>
-            <Link href="/home">
-                <Button variant="outlined">進入新世界</Button>
-            </Link>
-        </>
+                    <p className="overlay-title"> 加入新世界 </p>
+                    <div className="input-container">
+                    <TextField
+                        label="Username"
+                        id="username"
+                        value={usernameInput}
+                        onChange={(e) => { setUsernameInput(e.target.value); console.log("name: " + usernameInput) }}
+                        sx={{width: '25ch' }}
+                    />
+                        <FormControl id="psw" sx={{ width: '25ch' }} variant="outlined">
+                            <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+                            <OutlinedInput
+                                id="outlined-adornment-password"
+                                type={values.showPassword ? 'text' : 'password'}
+                                value={password}
+                                onChange={(e) => { setPassword(e.target.value); console.log("password: " + password) }}
+                                endAdornment={
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            aria-label="toggle password visibility"
+                                            onClick={handleClickShowPassword}
+                                            onMouseDown={handleMouseDownPassword}
+                                            edge="end"
+                                        >
+                                            {values.showPassword ? <VisibilityOff /> : <Visibility />}
+                                        </IconButton>
+                                    </InputAdornment>
+                                }
+                                label="Password"
+                            />
+                                </FormControl>
+                            <TextField
+                                label="真實姓名"
+                                id="realname"
+                                value={realnameInput}
+                                onChange={(e) => { setRealnameInput(e.target.value); console.log("name: " + realnameInput) }}
+                                sx={{ width: '25ch' }}
+                            />
 
+                    </div>
+                    <Row className="overlay-btns">
+                        <Link underline="none" href="/login" className='link'>
+                            <button className="overlay-btn overlay-btn-transparent">回登入</button>
+                        </Link>
+                        <button className="overlay-btn" onClick={() => sendSignUp()}>送出</button>
+                    </Row>
+                </div>
+            </Wrapper>
+            : <>
+                <Intro />
+            </>
     );
 }
 

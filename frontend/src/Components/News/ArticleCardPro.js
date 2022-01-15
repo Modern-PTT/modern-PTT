@@ -84,7 +84,6 @@ export default function ArticleCard({item, showBrdname}) {
   }
 
   useEffect(() => {
-    console.log(favArticles)
   }, [favArticles])
 
   

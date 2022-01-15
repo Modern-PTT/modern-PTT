@@ -7,6 +7,7 @@ import AllBoards from './Pages/AllBoards'
 import HotBoards from './Pages/HotBoards'
 import SearchBoards from './Pages/SearchBoards'
 import NotFound from "./Pages/NotFound";
+import SearchArticles from './Pages/SearchArticles'
 import favArticles from "./Pages/favArticles";
 import Intro from "../Containers/Pages/Intro";
 import Home from '../Containers/Pages/Home'
@@ -18,6 +19,7 @@ import styled from "styled-components";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import GlobalStyle from "../css/GlobalStyle";
 import {colors} from '../Containers/Effects/BgBubble';
+import UserPage from "./Pages/UserPage";
 
 // const LOCALSTORAGE_KEY = "save-me";
 
@@ -39,9 +41,15 @@ function App() {
   const [username, setUsername] = useState(savedUsername || '')
   const [myHashPassword, setMyHashPassword] = useState(savedHashedPassword || '')
   const [isLogIn, setIsLogIn] = useState((savedUsername && savedHashedPassword)? true : false)
-
   const [favBoards, setFavBoards] = useState([])
   const [favArticles, setFavArticles] = useState([])
+
+  const [simpleBoardSearch, setSimpleBoardSearch] = useState([])
+
+  const [advTitleSearch, setAdvTitleSearch] = useState([])
+  const [timeSearch, setTimeSearch] = useState(6)
+  const [ownerSearch, setOwnerSearch] = useState("")
+  const [advBoardSearch, setAdvBoardSearch] = useState([])
 
 
   return (
@@ -51,7 +59,14 @@ function App() {
       myHashPassword, setMyHashPassword,
       isLogIn, setIsLogIn,
       favBoards, setFavBoards,
-      favArticles, setFavArticles
+      favArticles, setFavArticles,
+
+      simpleBoardSearch, setSimpleBoardSearch,
+
+      advBoardSearch, setAdvBoardSearch,
+      advTitleSearch, setAdvTitleSearch,
+      timeSearch, setTimeSearch,
+      ownerSearch, setOwnerSearch,
     }}>
       <GlobalStyle/>
       <BrowserRouter>
@@ -61,6 +76,7 @@ function App() {
               <Route path='/login' element={<Login/>}/>
               <Route path='/signup' element={<SingUp/>}/>
               <Route path='/home' element={<Home />}/>
+              <Route path={'/user/:'+username} element={<UserPage />}/>
 
                 {/* Home_熱門文章 */}
               <Route path='/allboards' element={<AllBoards />}/>
@@ -69,12 +85,13 @@ function App() {
                 {/* Home_熱門看板 */}
               <Route path='/favArticles' element={<favArticles/>}/>
               <Route path='/favBoards' element={<favBoards/>}/>
-
               <Route path='/search/boards' element={<SearchBoards/>}/>
+              <Route path='/search/articles' element={<SearchArticles/>}/>
               {/* <Route path='/search/articles' element={<Board/>}/> */}
               <Route path='/:brdname' element={<Board/>}/>
               <Route path='/:brdname/:aid' element={<Article/>}/>
               <Route path='/:brdname/NewPost' element={<NewPost />}/>
+              
               <Route path='/404' element={<NotFound/>}/>
             </Routes> 
       </BrowserRouter>

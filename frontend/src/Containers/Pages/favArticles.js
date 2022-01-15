@@ -50,7 +50,7 @@ const FavArticles =  () =>{
 
     return(
       <>
-        <Navbar isLogIn={isLogIn} />
+        <Navbar/>
         <div className="contents">
           <DashBoard />
         </div>

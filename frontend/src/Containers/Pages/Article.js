@@ -2,7 +2,7 @@ import Button from '@material-ui/core/Button';
 import styled from 'styled-components';
 // import MessageBox from './old/MessageBox';
 import Article from '../../Components/News/ArticlePro';
-
+import BoardNameCard from '../../Components/BoardNameCard';
 
 // import  graphql  from 'graphql';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -83,7 +83,7 @@ const Board =  () =>{
                 className="dashBoard"
             />
             <div className="wrapper bordered">
-                {/* <BoardNameCard nowAtWhere="home" /> */}
+                <BoardNameCard nowAtWhere={brdname} />
                 <>{(data)?
                     (data.article)?
             <Article

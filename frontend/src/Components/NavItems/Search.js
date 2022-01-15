@@ -1,12 +1,15 @@
 import SearchIcon from '@material-ui/icons/Search';
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 
 
 import Card from '@mui/material/Card';
 import Modal from '@mui/material/Modal';
 import Row from '../Layout/Row';
 import Column from '../Layout/Column';
+
+import { pttContext } from '../../Containers/App';
+import { useNavigate } from "react-router-dom";
 
 import {
     Button,
@@ -110,32 +113,65 @@ const StyledDiv = styled.div`
 
 
 const Search = () => {
-    const [boardInput, setBoardInput] = useState([""])
-    const [titleInput, setTitleInput] = useState([""])
-    const [ownerInput, setOwnerInput] = useState([""])
-    const [time, setTime] = useState(3);
+    const {
+        username,
+        setUsername,
+        myHashPassword,
+        setMyHashPassword,
+        isLogIn,
+        setIsLogIn,
+
+        simpleBoardSearch, setSimpleBoardSearch,
+        advBoardSearch, setAdvBoardSearch,
+        advTitleSearch, setAdvTitleSearch,
+        timeSearch, setTimeSearch,
+        ownerSearch, setOwnerSearch,
+
+    } = useContext(pttContext)
+
+    const navigate = useNavigate();
+    // insert ===========================
+    const [splits_boards, setSplits_boards] = useState([""])
+    const [boardInput, setBoardInput] = useState("");
+    const [titleInput, setTitleInput] = useState("");
+    const [timeInput, setTimeInput] = useState(168);
+    const [ownerInput, setOwnerInput] = useState("");
+
     const time_interval = [
         { time: 6, name: "6小時內" },
         { time: 12, name: "12小時內" },
         { time: 72, name: "3天內" },
         { time: 168, name: "一週內" }
     ]
-    const handleTimeChange = (event) => {
-        setTime(event.target.value);
-    };
 
-    const [isSearchOpen, setIsSearchOpen] = useState(false);
+
+    const handleBasicSearch = () => {
+        var splits_boards2 = splits_boards.split(" ");
+        setSimpleBoardSearch(splits_boards2);
+        navigate("/search/boards")
+    }
+
+    const handleAdvanceSearch = () => {
+        var splits_boards = boardInput.split(" ");
+        var splits_title = titleInput.split(" ");
+
+        setAdvBoardSearch(splits_boards);
+        setAdvTitleSearch(splits_title);
+        setOwnerSearch(ownerInput);
+        setTimeSearch(timeInput);
+        navigate("/search/Articles")
+    }
+    // Advance Search
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
-    const handleSubmit = () => {
-        setOpen(false);
-        // QUERY
-    }
+
+    //check if search open
+    const [isSearchOpen, setIsSearchOpen] = useState(false)
 
     return (<StyledDiv>
         <div className="search-box">
-            <button className="btn-search" onClick={() => { setIsSearchOpen(!isSearchOpen) }}><SearchIcon className='icon-search' /></button>
+            <button className="btn-search" onClick={() => { setIsSearchOpen(!isSearchOpen) }}><SearchIcon className='icon-search' onClick={handleBasicSearch}/></button>
             <Button onClick={handleOpen} className={`advanced ${isSearchOpen ? 'visible' : ''}`}>進階搜尋</Button>
             <Modal className="card-container-modal" open={open}
                 onClose={handleClose}>
@@ -181,27 +217,29 @@ const Search = () => {
                         />
                     </Row>
                     <Row className='row'>時間
-                    <FormControl sx={{ m: 1, minWidth: 120 }} id='form'>
-                        <Select
-                            value={time}
-                            onChange={handleTimeChange}
-                            displayEmpty
-                            id="select_form"
-                            sx={{padding: 1}}
-                        >
-                            {time_interval.map((item) => (
-                                <MenuItem value={item.time} className="menu">{item.name}</MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
+                        <FormControl sx={{ m: 1, minWidth: 120 }} id='form'>
+                            <Select
+                                value={timeInput}
+                                onChange={(e)=>setTimeInput(e.target.value)}
+                                displayEmpty
+                                id="select_form"
+                                sx={{ padding: 1 }}
+                            >
+                                {time_interval.map((item, index) => (
+                                    <MenuItem key={index} value={item.time} className="menu">{item.name}</MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
                     </Row>
                     <div>
                         <Button onClick={handleClose} >取消</Button>
-                        <Button onClick={handleSubmit} >送出</Button>
+                        <Button onClick={()=>{handleAdvanceSearch(); handleClose()}} >送出</Button>
                     </div>
                 </Card>
             </Modal>
-            <input type="text" className="input-search" placeholder="找些什麼..." />
+            <input type="text" value={splits_boards} onChange={(e) => {setSplits_boards(e.target.value);
+
+              }}className="input-search" placeholder="搜尋看板..." />
         </div>
     </StyledDiv>
 
