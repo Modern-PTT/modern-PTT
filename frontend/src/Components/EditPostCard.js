@@ -1,5 +1,5 @@
 // import Button from '@material-ui/core/Button';
-import {useState, useContext} from 'react'
+import {useState} from 'react'
 
 import styled from 'styled-components';
 import React from 'react';
@@ -25,8 +25,6 @@ import InputBase from '@material-ui/core/InputBase';
 import { useParams, useHistory } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import { CREATE_ARTICLE_MUTATION } from "../graphql";
-
-import { pttContext } from '../Containers/App';
 
 const Wrapper = styled.div`
   display: flex;
@@ -71,12 +69,7 @@ const msgState = (input)=>{
 
 
 
-export default function NewPostCard() {
-    
-    const {
-      username,
-      myHashPassword} = useContext(pttContext)
-  
+export default function NewPostCard({username,myHashPassword}) {
     const classes = useStyles();
     const classesText = useTextStyles();
     const bull = <span className={classes.bullet}>•</span>;

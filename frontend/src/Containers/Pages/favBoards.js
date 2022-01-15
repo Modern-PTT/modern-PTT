@@ -1,13 +1,15 @@
-import Button from '@material-ui/core/Button';
 import styled from 'styled-components';
-import { useParams, useHistory } from 'react-router-dom';
-import { useQuery } from '@apollo/client';
-import { GET_HOTBOARDS } from "../../graphql";
+import { useQuery, useMutation } from '@apollo/client';
+import { GET_BOARDS_QUERY, UPDATE_FAV_ARTICLES_MUTATION } from "../../graphql";
 import { useState, useEffect} from 'react';
+
 import  {DataGrid}  from '@material-ui/data-grid';
 import Link from '@mui/material/Link';
+
 import Navbar from "../../Components/Navbar"
 import DashBoard from "../../Components/DashBoard"
+// import HotList from '../../Components/HotList'
+//query某看板後拿回的簡要文章列表
 
 
 //set styled div
@@ -28,16 +30,34 @@ const Wrapper = styled.div`
 `;
 
 
-const HotBoards =  ({isLogIn}) =>{
-  const [hotBoards, setHotBoards] = useState('');
+const AllBoards =  ({myLoveArticles, setMyLoveArticles,isLogIn, username, myHashPassword}) =>{
+  const [allBoards, setAllBoards] = useState('');
+  const [updateFavArticles] = useMutation(UPDATE_FAV_ARTICLES_MUTATION)
+  const {data, error, loading} =  useQuery(GET_BOARDS_QUERY)
 
-  const {data, error, loading} =  useQuery(GET_HOTBOARDS)
-   
   
   useEffect(() => {
-    if(data) setHotBoards(data.hotBoards);
+    if(data) setAllBoards(data.boards);
   }, [data])
-  console.log(hotBoards)
+
+
+  useEffect(() => {
+    if(username) {
+      var update = updateFavArticles({
+        variables:{
+          input:{
+            token:{
+              username: username,
+              password: myHashPassword
+            },
+            aids:  myLoveArticles
+          }
+        }
+      })
+    }
+    // if(update)alert("update myLoveArticles success!")
+
+  }, [myLoveArticles])
 
   const columns = [
     {
@@ -66,16 +86,16 @@ const HotBoards =  ({isLogIn}) =>{
   ];
     return(
       <>
-        <Navbar />
-        <div className="contents page-container">
+        <Navbar isLogIn={isLogIn} />
+        <div className="contents">
             <DashBoard />
         </div>
         <Wrapper>
                 {/* <HotList/> */}
                 <StyledDiv>
-                  {hotBoards?
+                  {allBoards?
                     <DataGrid
-                    rows={hotBoards}
+                    rows={allBoards}
                     columns={columns}
                     pageSize={10}
                     getRowId={(row) => row.brdname}
@@ -90,5 +110,5 @@ const HotBoards =  ({isLogIn}) =>{
 
 }
 
-export default HotBoards;
+export default AllBoards;
 

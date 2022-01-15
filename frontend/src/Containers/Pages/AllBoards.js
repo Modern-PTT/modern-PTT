@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { useQuery } from '@apollo/client';
-import { GET_BOARDS_QUERY } from "../../graphql";
+import { useQuery, useMutation } from '@apollo/client';
+import { GET_BOARDS_QUERY, UPDATE_FAV_ARTICLES_MUTATION } from "../../graphql";
 import { useState, useEffect} from 'react';
 
 import  {DataGrid}  from '@material-ui/data-grid';
@@ -30,15 +30,34 @@ const Wrapper = styled.div`
 `;
 
 
-const AllBoards =  () =>{
+const AllBoards =  ({myLoveArticles, setMyLoveArticles,isLogIn, username, myHashPassword}) =>{
   const [allBoards, setAllBoards] = useState('');
-
+  const [updateFavArticles] = useMutation(UPDATE_FAV_ARTICLES_MUTATION)
   const {data, error, loading} =  useQuery(GET_BOARDS_QUERY)
 
   
   useEffect(() => {
     if(data) setAllBoards(data.boards);
   }, [data])
+
+
+  useEffect(() => {
+    if(username) {
+      var update = updateFavArticles({
+        variables:{
+          input:{
+            token:{
+              username: username,
+              password: myHashPassword
+            },
+            aids:  myLoveArticles
+          }
+        }
+      })
+    }
+    // if(update)alert("update myLoveArticles success!")
+
+  }, [myLoveArticles])
 
   const columns = [
     {
@@ -67,8 +86,8 @@ const AllBoards =  () =>{
   ];
     return(
       <>
-        <Navbar />
-        <div className="contents page-container">
+        <Navbar/>
+        <div className="contents">
             <DashBoard />
         </div>
         <Wrapper>

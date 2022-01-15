@@ -2,12 +2,16 @@ import Button from '@material-ui/core/Button';
 import styled from 'styled-components';
 import { useParams, useHistory } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
-import { GET_HOTBOARDS } from "../../graphql";
+import { GET_ALLBOARDS_QUERY } from "../../graphql";
 import { useState, useEffect} from 'react';
+
 import  {DataGrid}  from '@material-ui/data-grid';
 import Link from '@mui/material/Link';
+
 import Navbar from "../../Components/Navbar"
 import DashBoard from "../../Components/DashBoard"
+// import HotList from '../../Components/HotList'
+//query某看板後拿回的簡要文章列表
 
 
 //set styled div
@@ -28,16 +32,25 @@ const Wrapper = styled.div`
 `;
 
 
-const HotBoards =  ({isLogIn}) =>{
-  const [hotBoards, setHotBoards] = useState('');
+// {
+//   "id":11,
+//   "brdname": "WhoAmI",
+//   "type": "board",
+//   "class": "嘰哩",
+//   "title": "呵呵，猜猜我是誰！",
+//   "moderators": []
+// }
 
-  const {data, error, loading} =  useQuery(GET_HOTBOARDS)
-   
+const Hot =  () =>{
+  const [boards, setBoards] = useState('');
+
+
+  const {data, error, loading} =  useQuery(GET_ALLBOARDS_QUERY)
   
   useEffect(() => {
-    if(data) setHotBoards(data.hotBoards);
+    if(data) setBoards(data.boards);
   }, [data])
-  console.log(hotBoards)
+  console.log(boards)
 
   const columns = [
     {
@@ -67,15 +80,15 @@ const HotBoards =  ({isLogIn}) =>{
     return(
       <>
         <Navbar />
-        <div className="contents page-container">
+        <div className="contents">
             <DashBoard />
         </div>
         <Wrapper>
                 {/* <HotList/> */}
                 <StyledDiv>
-                  {hotBoards?
+                  {boards?
                     <DataGrid
-                    rows={hotBoards}
+                    rows={boards}
                     columns={columns}
                     pageSize={10}
                     getRowId={(row) => row.brdname}
@@ -90,5 +103,5 @@ const HotBoards =  ({isLogIn}) =>{
 
 }
 
-export default HotBoards;
+export default Hot;
 

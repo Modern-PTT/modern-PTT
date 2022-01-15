@@ -25,28 +25,28 @@ const Wrapper = styled.div`
   margin: auto;
 `;
 
-const Board =  ({myLoveAirticles, setMyLoveAirticles}) =>{
+const Board =  ({myLoveArticles, setMyLoveArticles, isLogIn, username, myHashPassword}) =>{
   const [articles, setArticles] = useState('');
 
 //   const {brdname} = useParams()
 //   console.log(brdname)
   const {data, error, loading} =  useQuery(GET_BOARD_ARTICLES_QUERY,{
     variables: {
-      aid: myLoveAirticles,
+      aid: myLoveArticles,
     }
   })
   
   useEffect(() => {
     if(data) setArticles(data.board.articles);
-    console.log(myLoveAirticles)
-  }, [myLoveAirticles])
+    console.log(myLoveArticles)
+  }, [myLoveArticles])
 
 
     return(
       <>
-        <Navbar />
+        <Navbar isLogIn={isLogIn} />
         <div className="contents">
-            <DashBoard />
+          <DashBoard />
         </div>
         <Wrapper>
             {/* <Button variant="contained">Default</Button> */}
@@ -57,8 +57,8 @@ const Board =  ({myLoveAirticles, setMyLoveAirticles}) =>{
                     owner={item.owner}
                     create_time={item.create_time}
                     aid={item.aid}
-                    myLoveAirticles={myLoveAirticles}
-                    setMyLoveAirticles={setMyLoveAirticles}
+                    myLoveArticles={myLoveArticles}
+                    setMyLoveArticles={setMyLoveArticles}
                 />
             )): ''}  
             </>

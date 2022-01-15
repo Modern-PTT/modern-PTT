@@ -11,17 +11,30 @@ import Paper from '@material-ui/core/Paper';
 import { Divider } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import Row from './Layout/Row';
+import {useState} from 'react';
+import moment from 'moment';
+
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+
 
 // import Message from '../hooks/Message';
 import ThumbUpAltOutlinedIcon from '@mui/icons-material/ThumbUpAltOutlined';
 import ThumbDownOutlinedIcon from '@mui/icons-material/ThumbDownOutlined';
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
-
+import EditIcon from '@mui/icons-material/Edit';
 
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import NotificationAddIcon from '@mui/icons-material/NotificationAdd';
+import { useMutation } from '@apollo/client';
+import { 
+  CREATE_COMMENT_MUTATION, 
+  UPDATE_ARTICLE_MUTATION,
+  MODIFY_COMMENT_MUTATION } from "../graphql";
 
 
 const useStyles = makeStyles({
@@ -62,80 +75,129 @@ const Wrapper = styled.div`
 
 
 const msgState = (input)=>{
-  if (input == "推")return <ThumbUpAltOutlinedIcon/>
-  else if (input == "噓")return <ThumbDownOutlinedIcon/>
+  if (input == 1)return <ThumbUpAltOutlinedIcon/>
+  else if (input == 2)return <ThumbDownOutlinedIcon/>
   else return <ArrowRightAltIcon/>
 }
 
 
 
-const  GET_AIRTICLE_QUERY=
-    {
-      "data": {
-        "article": {
-          "title": "[問題] openbbsmiddleware-0.17.4",
-          "owner": "test2000",
-          "content": "會不會有問題呢？～ XD.\n",
-          "location": {
-            "ip": "172.18.0.1",
-            "country": "private"
-          },
-          "comments": [
-            {
-              "type": "推",
-              "owner": "test2000",
-              "content": "結果是沒問題喔～ 但是好像 frontend 的推/噓有問題 XD",
-              "location": {
-                "ip": "140.112.172.11",
-                "country": "TW, Taipei"
-              },
-              "create_time": 1626000949000
-            },
-            {
-              "type": "噓",
-              "owner": "test2000",
-              "content": "結果是沒問題喔～ 但是好像 frontend 的推/噓有問題 XD",
-              "location": {
-                "ip": "140.112.172.11",
-                "country": "TW, Taipei"
-              },
-              "create_time": 1626000949000
-            }
-          ]
-        }
-      }
-    }
 
 
-export default function Airticle({article}) {
+export default function Article({article,username,myHashPassword}) {
   const classes = useStyles();
   const classesText = useTextStyles();
   const bull = <span className={classes.bullet}>•</span>;
-  let testdate = 1637848118000
 
-  const secondToDate = (seconds)=>{
-      const date = seconds.getDate() //15
-      const day = seconds.getDay()  //5
-      const month = seconds.getMonth()  //6
-      const year = seconds.getFullYear()  //2016
-      return date
+  const showTime = (time)=>{
+      return moment(time).format('YYYY/MM/DD hh:mm:ss')
   }
 
-  // change to attach each airticle
-  // const [articles, setArticles] = useState('');
+  // Edit Comment Part
+  const [commentType, setCommentType] = useState(3)
+  const [inputcomment, setInputComment] = useState('')
+  const [inputaid, setInputaid]=useState(article.aid)
+  const [createComment] = useMutation(CREATE_COMMENT_MUTATION);
 
-  // const {brdname} = useParams()
-  // console.log(brdname)
-  // const {data, error, loading} =  useQuery(GET_BOARD_ARTICLES_QUERY,{
-  //   variables: {
-  //     brdname: brdname,
-  //   }
-  // })
+  // Edit Article Part
+  const [editTitle, setEditTitle] = useState(article.title)
+  const [editContent, setEditContent] = useState(article.content)
+  const [open, setOpen] = useState(false);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handelEdit = () => {
+
+  }
+
+  const EditCard = ()=>{
+    return(
+      <Dialog open={open} onClose={handleClose}>
+          <DialogTitle>{article.username}</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              標題
+            </DialogContentText>
+            <TextField
+              autoFocus
+              margin="dense"
+              id="editTitle"
+              type="editTitle"
+              fullWidth
+              value={editTitle}
+              onChange={(e)=>setEditTitle(e.target.value)}
+              variant="standard"
+            />
+            <DialogContentText>
+              內文
+            </DialogContentText>
+            <TextField
+              margin="dense"
+              id="editTitle"
+              type="editTitle"
+              fullWidth
+              value={editContent}
+              onChange={(e)=>setEditContent(e.target.value)}
+              variant="standard"
+            />
+            {/* {article.comments.map((item)=>(
+              <DialogContentText>
+              {item.owner}{item.owner}
+              </DialogContentText>
+            ))} */}
+          <Divider />
+
+      
+          <CardContent>
+              {article.comments.map((item)=>(
+                  <Typography className={classes.title} color="textSecondary" gutterBottom>
+                  <Row align="center">
+                      <>{msgState(item.type) }{item.owner} </> <>{item.location.ip}   {item.create_time}</>
+                  </Row>
+                  {item.body}
+                  </Typography>
+              
+              ))}
+          </CardContent>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>取消</Button>
+            <Button onClick={()=>{handleClose();handelEdit();}}>更改</Button>
+          </DialogActions>
+        </Dialog>
+    )
+  }
+    
+
+  const submitComment = () =>{
+      var submit = createComment({
+        variables:{
+          input:{
+            token: {
+              username: username,
+              password: myHashPassword,
+            },
+            aid: "M.1642183234.A.2D6",
+            type: commentType,
+            content: inputcomment,
+          }
+        }
+      })
+      if(submit.data) {
+        alert("Comment submit")
+        console.log(submit)
+      }
+      else alert("Comment failed")
+  }
   
-  // useEffect(() => {
-  //   if(data) setArticles(data.board.articles);
-  // }, [data])
-
+  var username = "amy"
+  var myHashPassword = "$2a$10$FUeuUN9JDCOmpVW324HKoOPpl7vKQ3tWeT6tCaLzvEoUQCKi9Fd/G"
+  // const isOwner = compare();
   return (
       <Wrapper>
         <Card className={classes.root} variant="outlined">
@@ -144,7 +206,16 @@ export default function Airticle({article}) {
                       <Row justify="space-between" align="center">
                         <div>標題｜{article.title}</div>
                         <div>
-                        <Tooltip title="收藏">
+                          {(username==article.owner)?
+                            <Tooltip title="編輯">
+                              <IconButton>
+                                <EditIcon onClick={()=>{handleClickOpen();console.log("door open");}}/>
+                              </IconButton>
+                            </Tooltip>
+                          :<></>}
+                          <EditCard/>
+
+                          <Tooltip title="收藏">
                             <IconButton>
                               <FavoriteIcon />
                             </IconButton>
@@ -157,16 +228,21 @@ export default function Airticle({article}) {
                     作者｜{article.owner}
                 </Typography>
                 <Typography className={classes.title} color="textSecondary" gutterBottom>
-                    時間｜{article.time}
+                    時間｜{showTime(article.create_time)}
                 </Typography>
                 <p></p>
                 <Divider />
                 <p></p>
                 <Typography className={classes.title} color="textSecondary" gutterBottom>
-                {article.content}
+                  {article.content.split("\n").map(e => (
+                            <>
+                              {e}
+                              <br />
+                            </>
+                  ))}
                 </Typography>
                 <Typography className={classes.title} color="textSecondary" gutterBottom l>
-                {/* {data.url} */}
+                  {/* {data.url} */}
                 </Typography>
 
             </CardContent>
@@ -177,7 +253,19 @@ export default function Airticle({article}) {
                 {article.comments.map((item)=>(
                     <Typography className={classes.title} color="textSecondary" gutterBottom>
                     <Row align="center">
-                        <>{msgState(item.type) }{item.owner} </> <>{item.location.ip}   {item.create_time}</>
+                        <>{msgState(item.type)}
+                          {item.owner}
+                          {item.content.split("\n").map(e => (
+                            <>
+                              {e}
+                              <br />
+                            </>
+                          ))}
+                        </>
+                        <>
+                          {item.location.ip}
+                          {showTime(item.create_time)}
+                        </>
                     </Row>
                     {item.body}
                     </Typography>
@@ -186,16 +274,24 @@ export default function Airticle({article}) {
             </CardContent>
             <Row justify="space-around"align="center">
               <div>
-                <ThumbUpAltOutlinedIcon/>
-                <ThumbDownOutlinedIcon/>
-                <ArrowRightAltIcon/>
+                <ThumbUpAltOutlinedIcon onClick={()=>{setCommentType(1);console.log(1);}}/>
+                <ThumbDownOutlinedIcon onClick={()=>{setCommentType(2);console.log(2);}}/>
+                <ArrowRightAltIcon onClick={()=>{setCommentType(3);console.log(3);}}/>
               </div>
               <form className={classesText.root} noValidate autoComplete="off">
-                <TextField id="outlined-basic"  variant="outlined" />
+                <TextField 
+                  id="outlined-basic"  
+                  variant="outlined" 
+                  value={inputcomment}
+                  onChange={(e)=>{
+                    setInputComment(e.target.value)
+                    console.log(inputcomment)
+                  }}
+                  />
               </form>
               {/* <CardActions > */}
                 <Row justify="flex-end">
-                  <Button size="small">留言</Button>
+                  <Button size="small" onClick={()=>submitComment()}>留言</Button>
                 </Row>
               {/* </CardActions> */}
             </Row>
@@ -205,14 +301,3 @@ export default function Airticle({article}) {
   );
 }
 
-// const Airticle = () =>{
-
-//     return(
-//         <Wrapper>
-//             <Button variant="contained">Default</Button>
-//         </Wrapper>
-
-//     )
-// }
-
-// export default Airticle;

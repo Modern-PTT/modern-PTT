@@ -8,7 +8,7 @@ import ArticleCard from '../../Components/ArticleCard'
 import { useParams, useHistory } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 import { GET_ARTICLE_QUERY } from "../../graphql";
-import { useState, useEffect} from 'react';
+import { useState, useEffect, useContext} from 'react';
 
 import Navbar from "../../Components/Navbar"
 import DashBoard from "../../Components/DashBoard"
@@ -25,7 +25,7 @@ const Wrapper = styled.div`
   margin: auto;
 `;
 
-const Board =  ({myLoveArticles, setMyLoveArticles}) =>{
+const Board =  ({myLoveArticles, setMyLoveArticles,isLogIn,username,myHashPassword}) =>{
   const [articles, setArticles] = useState('');
 
   const {aid, brdname} = useParams()
@@ -47,7 +47,7 @@ const Board =  ({myLoveArticles, setMyLoveArticles}) =>{
 
     return(
       <>
-        <Navbar />
+        <Navbar  />
         <div className="contents">
             <DashBoard />
         </div>
@@ -58,6 +58,8 @@ const Board =  ({myLoveArticles, setMyLoveArticles}) =>{
                 article={data.article}
                 myLoveArticles={myLoveArticles}
                 setMyLoveArticles={setMyLoveArticles}
+                username={username}
+                myHashPassword={myHashPassword}
             />:<></>}
         </Wrapper>
     </>);
