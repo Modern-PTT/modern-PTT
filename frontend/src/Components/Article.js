@@ -11,7 +11,7 @@ import Paper from '@material-ui/core/Paper';
 import { Divider } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import Row from './Layout/Row';
-import {useState} from 'react';
+import { useState, useContext} from 'react';
 import moment from 'moment';
 
 import Dialog from '@mui/material/Dialog';
@@ -36,6 +36,7 @@ import {
   UPDATE_ARTICLE_MUTATION,
   MODIFY_COMMENT_MUTATION } from "../graphql";
 
+import {pttContext}  from "../Containers/App"
 
 const useStyles = makeStyles({
   root: {
@@ -84,7 +85,12 @@ const msgState = (input)=>{
 
 
 
-export default function Article({article,username,myHashPassword}) {
+export default function Article({article}) {
+  const {
+    username,
+    myHashPassword,
+    isLogin } = useContext(pttContext)
+
   const classes = useStyles();
   const classesText = useTextStyles();
   const bull = <span className={classes.bullet}>•</span>;
@@ -155,7 +161,7 @@ export default function Article({article,username,myHashPassword}) {
       
           <CardContent>
               {article.comments.map((item)=>(
-                  <Typography className={classes.title} color="textSecondary" gutterBottom>
+                  <Typography className={classes.title} color="textSecondary" gutterBottom key={item}>
                   <Row align="center">
                       <>{msgState(item.type) }{item.owner} </> <>{item.location.ip}   {item.create_time}</>
                   </Row>
@@ -195,8 +201,8 @@ export default function Article({article,username,myHashPassword}) {
       else alert("Comment failed")
   }
   
-  var username = "amy"
-  var myHashPassword = "$2a$10$FUeuUN9JDCOmpVW324HKoOPpl7vKQ3tWeT6tCaLzvEoUQCKi9Fd/G"
+  // var username = "amy"
+  // var myHashPassword = "$2a$10$FUeuUN9JDCOmpVW324HKoOPpl7vKQ3tWeT6tCaLzvEoUQCKi9Fd/G"
   // const isOwner = compare();
   return (
       <Wrapper>
@@ -215,11 +221,14 @@ export default function Article({article,username,myHashPassword}) {
                           :<></>}
                           <EditCard/>
 
+                          {isLogin?
                           <Tooltip title="收藏">
                             <IconButton>
                               <FavoriteIcon />
                             </IconButton>
                           </Tooltip>
+                          :<></>}
+
 
                         </div>
                       </Row>
@@ -233,7 +242,7 @@ export default function Article({article,username,myHashPassword}) {
                 <p></p>
                 <Divider />
                 <p></p>
-                <Typography className={classes.title} color="textSecondary" gutterBottom>
+                <Typography className={classes.title} color="textSecondary" gutterBottom >
                   {article.content.split("\n").map(e => (
                             <>
                               {e}
@@ -251,7 +260,7 @@ export default function Article({article,username,myHashPassword}) {
     
             <CardContent>
                 {article.comments.map((item)=>(
-                    <Typography className={classes.title} color="textSecondary" gutterBottom>
+                    <Typography className={classes.title} color="textSecondary" gutterBottom> key={item.cid}
                     <Row align="center">
                         <>{msgState(item.type)}
                           {item.owner}
@@ -272,29 +281,31 @@ export default function Article({article,username,myHashPassword}) {
                 
                 ))}
             </CardContent>
-            <Row justify="space-around"align="center">
-              <div>
-                <ThumbUpAltOutlinedIcon onClick={()=>{setCommentType(1);console.log(1);}}/>
-                <ThumbDownOutlinedIcon onClick={()=>{setCommentType(2);console.log(2);}}/>
-                <ArrowRightAltIcon onClick={()=>{setCommentType(3);console.log(3);}}/>
-              </div>
-              <form className={classesText.root} noValidate autoComplete="off">
-                <TextField 
-                  id="outlined-basic"  
-                  variant="outlined" 
-                  value={inputcomment}
-                  onChange={(e)=>{
-                    setInputComment(e.target.value)
-                    console.log(inputcomment)
-                  }}
-                  />
-              </form>
-              {/* <CardActions > */}
-                <Row justify="flex-end">
-                  <Button size="small" onClick={()=>submitComment()}>留言</Button>
-                </Row>
-              {/* </CardActions> */}
-            </Row>
+            {isLogin?
+              <Row justify="space-around"align="center">
+                <div>
+                  <ThumbUpAltOutlinedIcon onClick={()=>{setCommentType(1);console.log(1);}}/>
+                  <ThumbDownOutlinedIcon onClick={()=>{setCommentType(2);console.log(2);}}/>
+                  <ArrowRightAltIcon onClick={()=>{setCommentType(3);console.log(3);}}/>
+                </div>
+                <form className={classesText.root} noValidate autoComplete="off">
+                  <TextField 
+                    id="outlined-basic"  
+                    variant="outlined" 
+                    value={inputcomment}
+                    onChange={(e)=>{
+                      setInputComment(e.target.value)
+                      console.log(inputcomment)
+                    }}
+                    />
+                </form>
+                {/* <CardActions > */}
+                  <Row justify="flex-end">
+                    <Button size="small" onClick={()=>submitComment()}>留言</Button>
+                  </Row>
+                {/* </CardActions> */}
+              </Row>
+            :<></>}
 
         </Card>
     </Wrapper>

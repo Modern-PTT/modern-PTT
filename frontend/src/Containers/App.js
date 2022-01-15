@@ -40,13 +40,13 @@ function App() {
 
   return (
 
-    <pttContext.Provider value={
+    <pttContext.Provider value={{
       username, setUsername,
       myHashPassword, setMyHashPassword,
       isLogIn, setIsLogIn,
       favBoards, setFavBoards,
       favArticles, setFavArticles
-    }>
+    }}>
       <BrowserRouter>
             <Routes>
               <Route path='/' element={<Navigate to='/intro'/>}/>

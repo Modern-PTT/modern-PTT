@@ -8,6 +8,7 @@ import moment from "moment";
 import Button from '@mui/material/Button';
 import styled from 'styled-components';
 import BoardNameCard from '../../Components/BoardNameCard'
+import { pttContext } from "../App";
 
 
 
@@ -20,19 +21,21 @@ const Wrapper = styled.div`
   width: 800px;
   margin: auto;
 `;
-const Home = ({
-    myLoveBoards, 
-    setMyLoveBoards, 
-    myLoveArticles, 
-    setMyLoveArticles,
-    //for login btn
-    username,
-    setUsername,
-    myHashPassword,
-    setMyHashPassword,
-    isLogIn,
-    setIsLogIn,
-}) => {
+const Home = () => {
+
+    const {
+        myLoveBoards, 
+        setMyLoveBoards, 
+        myLoveArticles, 
+        setMyLoveArticles,
+        //for login btn
+        username,
+        setUsername,
+        myHashPassword,
+        setMyHashPassword,
+        isLogIn,
+        setIsLogIn,
+    } = useContext(pttContext)
 
     const [articles, setArticles] = useState('');
     const {data, error, loading} =  useQuery(GET_HOTARTICLES)
@@ -70,6 +73,7 @@ const Home = ({
                 {/* <Button variant="contained">Default</Button> */}
                 <>{articles ? articles.map((item)=>(
                     <ArticleCard
+                        key={item.aid}
                         brdname={item.brdname}  
                         title={item.title}
                         owner={item.owner}

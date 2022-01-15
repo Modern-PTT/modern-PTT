@@ -17,8 +17,8 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 import Link from '@mui/material/Link';
-
 import { pttContext } from "../Containers/App";
+import { useNavigate } from "react-router-dom";
 
 const LOCALSTORAGE_USERNAME = "saveMyUsername";
 const LOCALSTORAGE_HASHEDPW = "saveMyHashedPassword";
@@ -33,6 +33,7 @@ const Wrapper = styled.div`
   width: 800px;
   margin: auto;
 `;
+
 const Login = () => {
 
     const {    
@@ -43,7 +44,7 @@ const Login = () => {
         isLogIn,
         setIsLogIn} = useContext(pttContext)
 
-
+    const navigate = useNavigate();
 
     const [usernameInput,setUsernameInput] = useState('')
     const [password, setPassword] = useState('')
@@ -92,7 +93,7 @@ const Login = () => {
                 }
             });
             if(loginResult.data?.login) {
-                setUsername(loginResult.data.login);
+                setUsername(usernameInput);
                 setMyHashPassword(hashPassword)
                 localStorage.setItem(LOCALSTORAGE_USERNAME, loginResult.data.login);
                 localStorage.setItem(LOCALSTORAGE_HASHEDPW, hashPassword);
@@ -161,7 +162,7 @@ const Login = () => {
                 label="username"
                 id="username"
                 value={usernameInput}
-                onChange={(e)=>{setUsernameInput(e.target.value);console.log("name: "+usernameInput)}}
+                onChange={(e)=>{setUsernameInput(e.target.value);}}
                 sx={{ m: 1, width: '25ch' }}
             />
             
@@ -171,7 +172,7 @@ const Login = () => {
                 id="outlined-adornment-password"
                 type={values.showPassword ? 'text' : 'password'}
                 value={password}
-                onChange={(e)=>{setPassword(e.target.value);console.log("password: "+password)}}
+                onChange={(e)=>{setPassword(e.target.value);}}
                 endAdornment={
                 <InputAdornment position="end">
                     <IconButton
@@ -188,18 +189,21 @@ const Login = () => {
             />
             </FormControl>
             <Row>
-                <Link href="home">
+                <Link href="/home">
                     <Button variant="outlined">訪客</Button>
                 </Link>
-                <Link href="signup">
+                <Link href="/signup">
                     <Button variant="outlined">註冊</Button>
                 </Link>
                 <Button variant="contained" onClick={()=>login()}>登入</Button>
             </Row>
             </Column>
 
-        :<>You have been login as {username}
-            <Button variant="contained" onClick={()=>logout()}>test for logout</Button>
+        :<>
+        {/* You have been login as {username}
+            <Button variant="contained" onClick={()=>logout()}>test for logout</Button> */}
+        {/* {window.location.href="/home"} */}
+        {navigate("/home")}
         </>
     );
 }
