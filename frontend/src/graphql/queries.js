@@ -95,8 +95,8 @@ export const GET_ARTICLES_QUERY = gql`
 
 // 5. query - user
 export const GET_USER = gql`
-    query user ($username: String!, $password: String){
-        user(username: $username, password: $password){
+    query user ($input: userInput!){
+        user(input: $input){
             username
             realname
             nickname

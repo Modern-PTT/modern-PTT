@@ -10,7 +10,7 @@ import SearchArticles from './Pages/SearchArticles'
 import favArticles from "./Pages/favArticles";
 import Intro from "../Containers/Pages/Intro";
 import Home from '../Containers/Pages/Home'
-
+import UserPage from '../Components/UserPage'
 import Login from '../Components/Login'
 import SingUp from '../Components/SingUp'
 
@@ -76,7 +76,7 @@ function App() {
               <Route path='/favBoards' element={<favBoards/>}/>
               <Route path='/search/boards' element={<SearchBoards/>}/>
               <Route path='/search/articles' element={<SearchArticles/>}/>
-              {/* <Route path='/search/articles' element={<Board/>}/> */}
+              <Route path='/info' element={<UserPage/>}/>
               <Route path='/:brdname' element={<Board/>}/>
               <Route path='/:brdname/:aid' element={<Article/>}/>
               <Route path='/:brdname/NewPost' element={<NewPost />}/>

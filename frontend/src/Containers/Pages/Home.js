@@ -9,7 +9,7 @@ import Button from '@mui/material/Button';
 import styled from 'styled-components';
 import BoardNameCard from '../../Components/BoardNameCard'
 import { pttContext } from "../App";
-
+import { useNavigate } from "react-router-dom";
 
 
 const Wrapper = styled.div`
@@ -50,12 +50,17 @@ const Home = () => {
     }, [data])
 
 
+    const navigate = useNavigate();
+    const openUserPage  = ()=>{
+        navigate("/info")
+    }
+
     return (<>
 
 
         <Navbar />
         <div className="contents">
-            <DashBoard/>
+            <DashBoard/><Button  onClick={()=>openUserPage()}>Open User Page</Button>
             <Wrapper>
                 {/* <Button variant="contained">Default</Button> */}
                 <>{articles ? articles.map((item)=>(
