@@ -76,8 +76,8 @@ const Query = {
     }
     else {
       return await db.ArticleModel.find({
-        "$and": filter
-      });
+        "$and": filter,
+      }).sort({ create_time: -1 });
     }
   },
 
