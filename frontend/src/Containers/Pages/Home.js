@@ -1,3 +1,4 @@
+import NavbarPro from "../../Components/NavbarPro"
 import Navbar from "../../Components/Navbar"
 import DashBoard from "../../Components/DashBoard"
 import ArticleCard from "../../Components/ArticleCard";
@@ -10,15 +11,21 @@ import BoardNameCard from '../../Components/BoardNameCard'
 
 
 
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 500px;
-  width: 800px;
-  margin: auto;
-`;
+
+const StyledDiv = styled.div`
+
+width: 100%;
+    .wrapper{
+        display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 500px;
+    width: 800px;
+    margin: auto;
+    
+    }
+`
 const Home = ({myLoveBoards, setMyLoveBoards, myLoveArticles, setMyLoveArticles}) => {
 
     const [articles, setArticles] = useState('');
@@ -32,20 +39,14 @@ const Home = ({myLoveBoards, setMyLoveBoards, myLoveArticles, setMyLoveArticles}
 
 
     return (<>
-        <Navbar />
-        <div className="contents">
+        <NavbarPro />
+        <StyledDiv className="contents page-container">
             <DashBoard
                 myLoveBoards={myLoveBoards}
                 setMyLoveBoards={setMyLoveBoards}
             />
-            {/* <BoardList
-                myLoveBoards={myLoveBoards}
-                setMyLoveBoards={setMyLoveBoards}
-            /> */}
-
-            <Wrapper>
+            <div className="wrapper">
                 <BoardNameCard nowAtWhere="home" />
-                {/* <Button variant="contained">Default</Button> */}
                 <>{articles ? articles.map((item)=>(
                     <ArticleCard
                         brdname={item.brdname}  
@@ -61,10 +62,11 @@ const Home = ({myLoveBoards, setMyLoveBoards, myLoveArticles, setMyLoveArticles}
                     />
                 )): ''}   
                 </>
-            </Wrapper>
-        </div>
+            </div>
+        </StyledDiv>
 
     </>);
 }
 
 export default Home;
+

@@ -1,12 +1,19 @@
+@import url("https://fonts.googleapis.com/css?family=Lora:400,400i,700");
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500;600;700;900&display=swap');
 *{
   position: relative;
   box-sizing: border-box;
-  transition: .5s;
+  font-family: Lora, 'Noto Serif TC', sans-serif;
+  /* transition: .5s; */
 }
 
+html, body{
+  width: 100%;
+  height: 100%;
+}
 body {
   margin: 0;
-  height: 300vh;
+  /* height: 300vh; */
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;

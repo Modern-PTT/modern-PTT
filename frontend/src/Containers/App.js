@@ -20,10 +20,18 @@ import AllBoards from './Pages/AllBoards'
 import HotBoards from './Pages/HotBoards'
 import SearchBoards from './Pages/SearchBoards'
 import LoginRegister from './Pages/LoginRegister'
+import NotFound from "./Pages/NotFound";
 
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import GlobalStyle from "../css/GlobalStyle";
+import {colors} from '../Containers/Effects/BgBubble';
 
 // const LOCALSTORAGE_KEY = "save-me";
+
+
+//Css
+const StyledApp = styled.div`
+`
 
 function App() {
 
@@ -39,12 +47,14 @@ function App() {
   const [myLoveArticles, setMyLoveArticles] = useState([])
 
   return (
-    <>
+    
+    <StyledApp id="App">
+      <GlobalStyle/>
         <BrowserRouter>
               <Routes>
                 <Route path='/' element={<Navigate to='/intro'/>}/>
                 <Route path='/intro' element={<Intro/>}/>
-                <Route path='/LoginRegister' element={
+                <Route path='/login' element={
                   <LoginRegister
                     username={username}
                     setUsername={setUsername}
@@ -93,11 +103,10 @@ function App() {
                   />
                   }/>
                 <Route path='/:brdname/NewPost' element={<NewPost/>}/>
-                <Route path='*' element={<Home/>}/>
+                <Route path='*' element={<NotFound/>}/>
               </Routes> 
         </BrowserRouter>
-    </>
-
+    </StyledApp>
   );
 }
 

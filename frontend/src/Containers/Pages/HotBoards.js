@@ -67,7 +67,7 @@ const HotBoards =  () =>{
     return(
       <>
         <Navbar />
-        <div className="contents">
+        <div className="contents page-container">
             <DashBoard />
         </div>
         <Wrapper>

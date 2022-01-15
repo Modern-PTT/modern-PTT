@@ -28,7 +28,6 @@ import { useState, useEffect} from 'react';
 import { useQuery } from '@apollo/client';
 import Card from '@mui/material/Card';
 import Modal from '@mui/material/Modal';
-import styled from 'styled-components';
 import Row from './Layout/Row';
 import Column from './Layout/Column';
 
@@ -38,9 +37,12 @@ import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
+import { fontWeight } from '@mui/system';
+
 const useStyles = makeStyles((theme) => ({
   appBar:{
     boxShadow: 'none',
+    backgroundColor: '#333',
   },
   grow: {
     flexGrow: 1,
@@ -63,15 +65,18 @@ const useStyles = makeStyles((theme) => ({
     },
     marginRight: theme.spacing(2),
     marginLeft: 0,
-    width: '100%',
+    width: '40%',
     [theme.breakpoints.up('sm')]: {
-      marginLeft: theme.spacing(3),
+      marginLeft: theme.spacing(0),
       width: 'auto',
     },
   },
+  iconContainer:{
+    padding: '5px',
+  },
   searchIcon: {
-    padding: theme.spacing(0, 2),
-    height: '100%',
+    padding: theme.spacing(0, 1),
+    height: '90%',
     position: 'absolute',
     pointerEvents: 'none',
     display: 'flex',
@@ -80,13 +85,17 @@ const useStyles = makeStyles((theme) => ({
   },
   inputRoot: {
     color: 'inherit',
+    
   },
   inputInput: {
-    padding: theme.spacing(1, 1, 1, 0),
+    padding: theme.spacing(0, 1, 0, 0),
     // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+    paddingLeft: `calc(1em + ${theme.spacing(1)}px)`,
     transition: theme.transitions.create('width'),
-    width: '100%',
+    width: '100px',
+    [theme.breakpoints.up('sm')]: {
+      width: '1000px',
+    },
     [theme.breakpoints.up('md')]: {
       width: '20ch',
     },
@@ -251,7 +260,9 @@ export default function PrimarySearchAppBar() {
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
           <Typography className={classes.title} variant="h6" noWrap>
-            ModernPTT
+            <Link underline="none" href="/home" className="text-gradient nav-title">
+              ModernPTT
+            </Link>
           </Typography>
           <div className={classes.search}>
 
@@ -265,9 +276,6 @@ export default function PrimarySearchAppBar() {
               onChange={(e) => setBoardInput(e.target.value)}
               inputProps={{ 'aria-label': 'search' }}
             />
-            {/* <div className={classes.searchIcon}>
-              <SearchIcon />
-            </div> */}
 
             <Button onClick={handleOpen} >進階搜尋</Button>
             <Modal 
@@ -277,8 +285,6 @@ export default function PrimarySearchAppBar() {
               display="flex"
               align-items="center"
               justify-content="center"
-              // aria-labelledby="modal-modal-title"
-              // aria-describedby="modal-modal-description"
             >
                 <Card  sx={{position: 'absolute', width: 500 }}>
                     <p>進階搜尋</p>
@@ -341,10 +347,8 @@ export default function PrimarySearchAppBar() {
             </Modal>
 
 
-            <IconButton>
-              {/* <Link href="/search/boards"> */}
+            <IconButton className={classes.iconContainer}>
                 <SearchIcon onClick={()=>handleBasicSearch()}/>
-              {/* </Link> */}
             </IconButton>
           </div>
           <div className={classes.grow} />
@@ -352,7 +356,6 @@ export default function PrimarySearchAppBar() {
 
             <Tooltip title="發文">  
               <IconButton aria-label="NewPost" color="inherit">
-                  {/* <BorderColorIcon /> */}
                  <Link href="NewPost">
                   <ModeEditIcon/>
                  </Link>
