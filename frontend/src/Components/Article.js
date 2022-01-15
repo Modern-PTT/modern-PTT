@@ -11,17 +11,30 @@ import Paper from '@material-ui/core/Paper';
 import { Divider } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import Row from './Layout/Row';
+import {useState} from 'react';
+import moment from 'moment';
+
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+
 
 // import Message from '../hooks/Message';
 import ThumbUpAltOutlinedIcon from '@mui/icons-material/ThumbUpAltOutlined';
 import ThumbDownOutlinedIcon from '@mui/icons-material/ThumbDownOutlined';
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
-
+import EditIcon from '@mui/icons-material/Edit';
 
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import NotificationAddIcon from '@mui/icons-material/NotificationAdd';
+import { useMutation } from '@apollo/client';
+import { 
+  CREATE_COMMENT_MUTATION, 
+  UPDATE_ARTICLE_MUTATION,
+  MODIFY_COMMENT_MUTATION } from "../graphql";
 
 
 const useStyles = makeStyles({
@@ -62,141 +75,197 @@ const Wrapper = styled.div`
 
 
 const msgState = (input)=>{
-  if (input == "推")return <ThumbUpAltOutlinedIcon/>
-  else if (input == "噓")return <ThumbDownOutlinedIcon/>
+  if (input == 1)return <ThumbUpAltOutlinedIcon/>
+  else if (input == 2)return <ThumbDownOutlinedIcon/>
   else return <ArrowRightAltIcon/>
 }
 
-const data = 
-    {
-        airtile_id: "123254521",
-        title: "陽明大學與交通大學合併",
-        time: "2021.12.12",
-        poster_id: 'kky1',
-        poster_ip: '192.168.2.1',
-        detail: "國立交通大學與國立陽明大學合校作業，今天由廠商到交大校門拆除「國立交通大學」銜牌，預計週末掛上新校名「國立陽明交通大學」，並在2月1日揭牌。國立陽明大學與國立交通大學合併案獲行政院及教育部同意，預計2月1日起合併為「國立陽明交通大學」。國立交通大學與國立陽明大學合校作業，今天由廠商到交大校門拆除「國立交通大學」校銜名牌，預計週末掛上新校銜「國立陽明交通大學」。交大提供新聞資料表示，合校後的陽明交通大學，預計2月1日由首任校長林奇宏分別在台北陽明校區、新竹光復校區舉辦揭牌儀式。「國立交通大學」的校名將走入歷史，近期有不少民眾到校門口與「國立交通大學」字樣合影留念，希望將歷史畫面保留下來，甚至出現排隊拍照打卡人潮。交大工業工程與管理系鄧姓碩二生告訴中央社記者，未來學校名稱將成為國立陽明交大，得知校方今天要拆除校銜名牌，特別和老師、學生一起到場記錄歷史性一刻。去年從交大博士班畢業的校友則說，他在交大唸了7年博士班，宿舍就在校門附近，每天都會路過看到的校銜名牌今天將走入歷史，特別請假到場見證，盼陽明、交大合併後會有更棒的發展。（編輯李錫璋）",
-        url: "https://v4.mui.com/zh/components/dividers/",
-        messages:[{
-            message_id: "123254521",
-            time: "2021.12.12",
-            state: "1",
-            poster_id: 'kky2',
-            poster_ip: '192.168.2.1',
-            body: "這樣好嗎？",
-        },{
-            message_id: "123254521",
-            time: "2021.12.12",
-            state: "2",
-            poster_id: 'zxccvv',
-            poster_ip: '10.131.2.1',
-            body: "不知道誒",
-        },{
-            message_id: "123254521",
-            time: "2021.12.12",
-            state: "3",
-            poster_id: 'rwerhjk',
-            poster_ip: '192.168.2.100',
-            body: "居然～那我的畢業證書呢？？",
-        }
-        ]
-    }
-const  GET_AIRTICLE_QUERY=
-    {
-      "data": {
-        "article": {
-          "title": "[問題] openbbsmiddleware-0.17.4",
-          "owner": "test2000",
-          "content": "會不會有問題呢？～ XD.\n",
-          "location": {
-            "ip": "172.18.0.1",
-            "country": "private"
-          },
-          "comments": [
-            {
-              "type": "推",
-              "owner": "test2000",
-              "content": "結果是沒問題喔～ 但是好像 frontend 的推/噓有問題 XD",
-              "location": {
-                "ip": "140.112.172.11",
-                "country": "TW, Taipei"
-              },
-              "create_time": 1626000949000
-            },
-            {
-              "type": "噓",
-              "owner": "test2000",
-              "content": "結果是沒問題喔～ 但是好像 frontend 的推/噓有問題 XD",
-              "location": {
-                "ip": "140.112.172.11",
-                "country": "TW, Taipei"
-              },
-              "create_time": 1626000949000
-            }
-          ]
-        }
-      }
-    }
 
 
-export default function Airticle() {
+
+
+export default function Article({article,username,myHashPassword}) {
   const classes = useStyles();
   const classesText = useTextStyles();
   const bull = <span className={classes.bullet}>•</span>;
-  let testdate = 1637848118000
 
-  const secondToDate = (seconds)=>{
-      const date = seconds.getDate() //15
-      const day = seconds.getDay()  //5
-      const month = seconds.getMonth()  //6
-      const year = seconds.getFullYear()  //2016
-      return date
+  const showTime = (time)=>{
+      return moment(time).format('YYYY/MM/DD hh:mm:ss')
   }
+
+  // Edit Comment Part
+  const [commentType, setCommentType] = useState(3)
+  const [inputcomment, setInputComment] = useState('')
+  const [inputaid, setInputaid]=useState(article.aid)
+  const [createComment] = useMutation(CREATE_COMMENT_MUTATION);
+
+  // Edit Article Part
+  const [editTitle, setEditTitle] = useState(article.title)
+  const [editContent, setEditContent] = useState(article.content)
+  const [open, setOpen] = useState(false);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handelEdit = () => {
+
+  }
+
+  const EditCard = ()=>{
+    return(
+      <Dialog open={open} onClose={handleClose}>
+          <DialogTitle>{article.username}</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              標題
+            </DialogContentText>
+            <TextField
+              autoFocus
+              margin="dense"
+              id="editTitle"
+              type="editTitle"
+              fullWidth
+              value={editTitle}
+              onChange={(e)=>setEditTitle(e.target.value)}
+              variant="standard"
+            />
+            <DialogContentText>
+              內文
+            </DialogContentText>
+            <TextField
+              margin="dense"
+              id="editTitle"
+              type="editTitle"
+              fullWidth
+              value={editContent}
+              onChange={(e)=>setEditContent(e.target.value)}
+              variant="standard"
+            />
+            {/* {article.comments.map((item)=>(
+              <DialogContentText>
+              {item.owner}{item.owner}
+              </DialogContentText>
+            ))} */}
+          <Divider />
+
+      
+          <CardContent>
+              {article.comments.map((item)=>(
+                  <Typography className={classes.title} color="textSecondary" gutterBottom>
+                  <Row align="center">
+                      <>{msgState(item.type) }{item.owner} </> <>{item.location.ip}   {item.create_time}</>
+                  </Row>
+                  {item.body}
+                  </Typography>
+              
+              ))}
+          </CardContent>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>取消</Button>
+            <Button onClick={()=>{handleClose();handelEdit();}}>更改</Button>
+          </DialogActions>
+        </Dialog>
+    )
+  }
+    
+
+  const submitComment = () =>{
+      var submit = createComment({
+        variables:{
+          input:{
+            token: {
+              username: username,
+              password: myHashPassword,
+            },
+            aid: "M.1642183234.A.2D6",
+            type: commentType,
+            content: inputcomment,
+          }
+        }
+      })
+      if(submit.data) {
+        alert("Comment submit")
+        console.log(submit)
+      }
+      else alert("Comment failed")
+  }
+  
+  var username = "amy"
+  var myHashPassword = "$2a$10$FUeuUN9JDCOmpVW324HKoOPpl7vKQ3tWeT6tCaLzvEoUQCKi9Fd/G"
+  // const isOwner = compare();
   return (
       <Wrapper>
         <Card className={classes.root} variant="outlined">
             <CardContent>
                     {/* <Typography className={classes.title} color="textSecondary" gutterBottom> */}
                       <Row justify="space-between" align="center">
-                        <div>標題｜{GET_AIRTICLE_QUERY.data.article.title}</div>
+                        <div>標題｜{article.title}</div>
                         <div>
-                        <Tooltip title="收藏">
+                          {(username==article.owner)?
+                            <Tooltip title="編輯">
+                              <IconButton>
+                                <EditIcon onClick={()=>{handleClickOpen();console.log("door open");}}/>
+                              </IconButton>
+                            </Tooltip>
+                          :<></>}
+                          <EditCard/>
+
+                          <Tooltip title="收藏">
                             <IconButton>
                               <FavoriteIcon />
                             </IconButton>
                           </Tooltip>
-                          <Tooltip title="追蹤">
-                            <IconButton>
-                              <NotificationAddIcon />
-                            </IconButton>
-                          </Tooltip>
+
                         </div>
                       </Row>
 
                 <Typography className={classes.title} color="textSecondary" gutterBottom>
-                    作者｜{data.poster_id}
+                    作者｜{article.owner}
                 </Typography>
                 <Typography className={classes.title} color="textSecondary" gutterBottom>
-                    時間｜{data.time}
+                    時間｜{showTime(article.create_time)}
                 </Typography>
                 <p></p>
                 <Divider />
                 <p></p>
                 <Typography className={classes.title} color="textSecondary" gutterBottom>
-                {data.detail}
+                  {article.content.split("\n").map(e => (
+                            <>
+                              {e}
+                              <br />
+                            </>
+                  ))}
                 </Typography>
-                <Typography className={classes.title} color="textSecondary" gutterBottom link={data.url}>
-                {data.url}
+                <Typography className={classes.title} color="textSecondary" gutterBottom l>
+                  {/* {data.url} */}
                 </Typography>
 
             </CardContent>
             <Divider />
 
-            {/* <Message/> */}
+    
             <CardContent>
-                {data.messages.map((item)=>(
+                {article.comments.map((item)=>(
                     <Typography className={classes.title} color="textSecondary" gutterBottom>
                     <Row align="center">
-                        <>{msgState(item.state) }{item.poster_id} </> <>{item.poster_ip}   {item.time}</>
+                        <>{msgState(item.type)}
+                          {item.owner}
+                          {item.content.split("\n").map(e => (
+                            <>
+                              {e}
+                              <br />
+                            </>
+                          ))}
+                        </>
+                        <>
+                          {item.location.ip}
+                          {showTime(item.create_time)}
+                        </>
                     </Row>
                     {item.body}
                     </Typography>
@@ -205,16 +274,24 @@ export default function Airticle() {
             </CardContent>
             <Row justify="space-around"align="center">
               <div>
-                <ThumbUpAltOutlinedIcon/>
-                <ThumbDownOutlinedIcon/>
-                <ArrowRightAltIcon/>
+                <ThumbUpAltOutlinedIcon onClick={()=>{setCommentType(1);console.log(1);}}/>
+                <ThumbDownOutlinedIcon onClick={()=>{setCommentType(2);console.log(2);}}/>
+                <ArrowRightAltIcon onClick={()=>{setCommentType(3);console.log(3);}}/>
               </div>
               <form className={classesText.root} noValidate autoComplete="off">
-                <TextField id="outlined-basic"  variant="outlined" />
+                <TextField 
+                  id="outlined-basic"  
+                  variant="outlined" 
+                  value={inputcomment}
+                  onChange={(e)=>{
+                    setInputComment(e.target.value)
+                    console.log(inputcomment)
+                  }}
+                  />
               </form>
               {/* <CardActions > */}
                 <Row justify="flex-end">
-                  <Button size="small">留言</Button>
+                  <Button size="small" onClick={()=>submitComment()}>留言</Button>
                 </Row>
               {/* </CardActions> */}
             </Row>
@@ -224,14 +301,3 @@ export default function Airticle() {
   );
 }
 
-// const Airticle = () =>{
-
-//     return(
-//         <Wrapper>
-//             <Button variant="contained">Default</Button>
-//         </Wrapper>
-
-//     )
-// }
-
-// export default Airticle;

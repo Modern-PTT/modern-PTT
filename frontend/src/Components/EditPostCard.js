@@ -21,10 +21,10 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import InputBase from '@material-ui/core/InputBase';
-// import Message from '../hooks/Message';
 
-
-
+import { useParams, useHistory } from 'react-router-dom';
+import { useMutation } from '@apollo/client';
+import { CREATE_ARTICLE_MUTATION } from "../graphql";
 
 const Wrapper = styled.div`
   display: flex;
@@ -69,14 +69,23 @@ const msgState = (input)=>{
 
 
 
-export default function Airticle() {
+export default function NewPostCard({username,myHashPassword}) {
     const classes = useStyles();
     const classesText = useTextStyles();
     const bull = <span className={classes.bullet}>•</span>;
-
+    const {brdname} = useParams()
     //about send NewPost
     const [body,setBody] = useState('')
     const [title,setTitle] = useState('')
+
+    // const user_token = {
+    // var username = "newuser"
+    // var password = "$2b$10$ip6zuKhR4sm4qkv25HoURObkBHBHAeXzeKHl1UyAV3OTzIKkRVvDa"
+      // }
+
+    const [sendPost, { data, loading, error }] = useMutation(CREATE_ARTICLE_MUTATION);
+
+
     // const [articleInput,setArticleInput] = useState('')
 
     const handleChangeArticleBody=(input)=>{
@@ -89,10 +98,38 @@ export default function Airticle() {
     console.log("title: "+title)
     }  
 
-    const sendPost = ()=>{
-        if(!title && !body)console.log("NewPost create!")
-        else console.log("title and body can't be bull")
+    const handleSubmit = ()=>{
+        if(!title || !body) alert("title and body can't be bull")
+        else {
+          sendPost({
+              variables:{
+                input:{
+                  token: {
+                    username:username,
+                    password:myHashPassword,
+                  },
+                  brdname: brdname,
+                  title:  title,
+                  content: body,
+                  }
+                },
+              });
+          console.log(data)
+          if(data){
+            setBody('')
+            setTitle('')
+            alert("New Post is published.")
+          } else{
+            alert("New Post is denied.")
+          }
+
+        }
+        
     }
+
+
+
+
 
     return (
         <Wrapper>
@@ -154,7 +191,7 @@ export default function Airticle() {
                 </form>
                 <CardActions>
                     <Button size="small"
-                    onClick={()=>sendPost()}
+                    onClick={()=>handleSubmit()}
                     >
                         發文</Button>
                 </CardActions>
@@ -163,14 +200,3 @@ export default function Airticle() {
     );
     }
 
-// const Airticle = () =>{
-
-//     return(
-//         <Wrapper>
-//             <Button variant="contained">Default</Button>
-//         </Wrapper>
-
-//     )
-// }
-
-// export default Airticle;

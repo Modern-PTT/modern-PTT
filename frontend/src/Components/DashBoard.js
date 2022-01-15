@@ -9,12 +9,24 @@ import InboxIcon from '@material-ui/icons/Inbox';
 import DraftsIcon from '@material-ui/icons/Drafts';
 import styled from 'styled-components';
 import Link from '@mui/material/Link';
+import Row from '../Components/Layout/Row'
+
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 //do styling
 const StyledDiv = styled.div`
   border: solid 1px grey;
   border-radius: 10px;
 `
+
+
+// TODO: query user loves:
+const GET_LOVE_BOARDS = ["gossip", "baseball", "NTU"]
+
+// const LOVEBOARDS =  ["gossip", "baseball", "NTU"]
+
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -24,68 +36,80 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const BoardListData = [
-  {
-    ename: "Ntu",
-    cname: "台灣大學",
-    board_id: 124565432,
-    board_detail: "這是台灣大學版！！"
-  },
-  {
-    ename: "Ntcu",
-    cname: "交通大學",
-    board_id: 12456543333,
-    board_detail: "這是交通大學版！！"
-  },
-  {
-    ename: "Ntust",
-    cname: "台灣科技大學",
-    board_id: 1245654213,
-    board_detail: "這是台灣科技大學版！！"
-  },
-  {
-    ename: "Ntnu",
-    cname: "台灣師範大學",
-    board_id: 1245654324,
-    board_detail: "這是NTNU版！！"
-  }
-]
 
 function ListItemLink(props) {
   return <ListItem button component="a" {...props} />;
 }
 
-export default function SimpleList() {
+export default function SimpleList({myLoveBoards, setMyLoveBoards}) {
   const classes = useStyles();
+
+  const handleRemove = (remove_one)=>{
+    myLoveBoards.filter("gossip")
+    console.log("after:"+ myLoveBoards)
+  }
+  
 
   return (
     <StyledDiv className={classes.root}>
       <List component="nav" aria-label="main mailbox folders">
+        <ListItem button id="q1">
+          <ListItemIcon>
+            <InboxIcon />
+          </ListItemIcon>
+          <Link >
+            <ListItemText primary="123" />
+          </Link>
+        </ListItem>
         <ListItem button id="popular">
           <ListItemIcon>
             <InboxIcon />
           </ListItemIcon>
-          <Link href="hot">
-            <ListItemText primary="熱門看板" />
+          <Link href="/allboards">
+            <ListItemText primary="所有看板" />
           </Link>
         </ListItem>
-        <ListItem button id="separate" value="separates" onClick={(e) => console.log(e.target.value)}>
+        <ListItem button id="separate" >
           <ListItemIcon>
             <DraftsIcon />
           </ListItemIcon>
-          <Link href="category">
-            <ListItemText primary="分類看板" />
+          <Link href="/hotboards">
+            <ListItemText primary="熱門看板" />
+          </Link>
+        </ListItem>
+
+        <ListItem button id="all">
+          <ListItemIcon>
+            <InboxIcon />
+          </ListItemIcon>
+          <Link href="/favBoards">
+            <ListItemText primary="最愛看板" />
+          </Link>
+          </ListItem>
+
+          <Divider />
+        <ListItem button id="separate">
+          <ListItemIcon>
+            <DraftsIcon />
+          </ListItemIcon>
+          <Link href="/favArticles">
+            <ListItemText primary="收藏文章" />
           </Link>
         </ListItem>
       </List>
-      <Divider />
-      <List component="nav" aria-label="secondary mailbox folders">
-        {BoardListData.map((item) => (
-          <ListItem button id={item.ename}>
-            <ListItemText primary={item.ename} secondary={item.board_detail} />
-          </ListItem>
-        ))}
-      </List>
+      
+      {/* <List component="nav" aria-label="secondary mailbox folders">
+        {(!myLoveBoards)? myLoveBoards.map((item) => (
+          <ListItem button id={item} key ={item}>
+              <Link href={`/boards/${item}`}>
+                <ListItemText primary={item}  />
+              </Link>
+              <IconButton aria-label="DeleteIcon" onClick={()=>handleRemove(item)}>
+                <DeleteIcon />
+              </IconButton>
+           </ListItem> 
+        )):<></>}
+      </List> */}
     </StyledDiv>
   );
 }

@@ -17,9 +17,6 @@ var hue = {
 }
 var colors = {}
 
-
-
-
 const simplex = new SimplexNoise();
 
 function random(min, max) {
@@ -241,7 +238,7 @@ const StyledDiv = styled.div`
           ${colors['base']} 25%,
           ${colors['complimentary2']}
         );
-        -webkit-background-clip: text;
+        background-clip: text;
         -webkit-text-fill-color: transparent;
         -moz-background-clip: text;
         -moz-text-fill-color: transparent;

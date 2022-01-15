@@ -18,6 +18,7 @@
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
     "apollo-link-ws": "^1.0.20",
+    "bcryptjs": "^2.4.3",
     "debounce": "^1.2.1",
     "graphql": "^16.2.0",
     "hsl-to-hex": "^1.0.0",
@@ -36,7 +37,7 @@
     "web-vitals": "^2.1.2"
   },
   "scripts": {
-    "start": "BROWSER=none react-scripts start",
+    "start": "cross-env BROWSER=none react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -58,5 +59,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3"
   }
 }
