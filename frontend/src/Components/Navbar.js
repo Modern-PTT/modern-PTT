@@ -450,8 +450,8 @@ export default function PrimarySearchAppBar() {
                             onChange={(e)=>setTimeInput(e.target.value)}
                             displayEmpty
                           >
-                            {time_interval.map((item)=>(
-                              <MenuItem value={item.time}>{item.name}</MenuItem>
+                            {time_interval.map((item, index)=>(
+                              <MenuItem  key={index} value={item.time}>{item.name}</MenuItem>
                             ))}
                           </Select>
                         </FormControl>

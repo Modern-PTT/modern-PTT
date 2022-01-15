@@ -107,7 +107,6 @@ export default function ArticleCard( {item, showBrdname} ) {
       <Wrapper>
         <Card className={classes.root} variant="outlined">
             <CardContent>
-                    {/* <Typography className={classes.title} color="textSecondary" gutterBottom> */}
                     <Row justify="space-between">
                       
                         <>{item.push - item.boo}
@@ -134,12 +133,8 @@ export default function ArticleCard( {item, showBrdname} ) {
                         <Button size="small" variant="contained" color="primary">追蹤</Button> */}
                       </div>
                     </Row>
-                    {/* </Typography> */}
 
             </CardContent>
-            {/* <CardActions>
-                <Button size="small">留言</Button>
-            </CardActions> */}
         </Card>
       </Wrapper>
     

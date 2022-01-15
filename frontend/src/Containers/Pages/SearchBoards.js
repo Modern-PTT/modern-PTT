@@ -43,7 +43,7 @@ const SearchBoard =  ( ) =>{
   useEffect(() => {
     if(data) setAllBoards(data.boards);
   }, [data])
-  
+
 //set styled div
 const StyledDiv = styled.div`
     height: 60vh;

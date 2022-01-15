@@ -63,8 +63,8 @@ const Home = () => {
                         showBrdname={true}
                         key={item.aid}
                         item={item}
-                    />
-                )): ''}   
+                    />)
+                ): ''}   
                 </>
             </Wrapper>
         </div>

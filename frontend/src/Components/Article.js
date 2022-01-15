@@ -335,7 +335,7 @@ export default function Article( {item} ) {
                   {item.content.split("\n").map(e => (
                             <>
                               {e}
-                              <br />
+                              <br key={e}/>
                             </>
                   ))}
                 </Typography>
@@ -356,7 +356,7 @@ export default function Article( {item} ) {
                           {item.content.split("\n").map(e => (
                             <>
                               {e}
-                              <br />
+                              <br key={e}/>
                             </>
                           ))}
                         </>

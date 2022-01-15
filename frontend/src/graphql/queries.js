@@ -136,6 +136,7 @@ query hotBoards{
 export const GET_NEWEST_ARTICLES = gql`
 query newestArticles($limit: Int!){
     newestArticles(limit: $limit){
+        aid
         brdname
         title
         owner
