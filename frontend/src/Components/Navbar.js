@@ -40,10 +40,12 @@ import TextField from '@mui/material/TextField';
 import AlertDialog from "./Alert";
 import Login from "./Login";
 import SingUp from "./SingUp";
-import { LOG_OUT_MUTATION  } from  "../graphql";
+import { LOG_OUT_MUTATION, GET_BOARD_QUERY  } from  "../graphql";
 import { useMutation } from '@apollo/client';
 
 import { pttContext } from '../Containers/App';
+
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   appBar:{
@@ -126,13 +128,20 @@ export default function PrimarySearchAppBar() {
     setMyHashPassword,
     isLogIn,
     setIsLogIn,
+
+    simpleBoardSearch, setSimpleBoardSearch,
+    advBoardSearch, setAdvBoardSearch,
+    advTitleSearch, setAdvTitleSearch,
+    timeSearch, setTimeSearch,
+    ownerSearch, setOwnerSearch,
+
     } = useContext(pttContext)
 
+    const navigate = useNavigate();
   // insert ===========================
-  const [boardInput, setBoardInput] = useState([""])
-  const [titleInput, setTitleInput] = useState([""])
-  const [ownerInput, setOwnerInput] = useState([""])
-  const [time, setTime] = useState(3);
+  // const [splits_boards1, setSplits_boards1] = useState([""])
+  const [splits_boards, setSplits_boards] = useState("");
+
   const time_interval = [
     {time:6,name:"6小時內"},
     {time:12,name:"12小時內"},
@@ -140,14 +149,14 @@ export default function PrimarySearchAppBar() {
     {time:168,name:"一週內"}
   ]
 
-  const handleTimeChange = (event) => {
-    setTime(event.target.value);
-  };
 
-  const handleBasicSearch = () => {
-    var splits_boards = boardInput.split(" ");
-    console.log(splits_boards)
-    // return 
+
+
+  const handleBasicSearch =  () => {
+    var splits_boards2 = splits_boards.split(" ");
+    setSimpleBoardSearch(splits_boards2);
+    console.log(simpleBoardSearch)
+    navigate("/search/boards")
   }
   // Advance Search
   const [open, setOpen] = useState(false);
@@ -214,7 +223,10 @@ export default function PrimarySearchAppBar() {
         console.log("logout error...");
     }
 }
-
+  const handleAdvSubmit = ()=>{
+    // Change page to SearchBoard
+    navigate("/search/boards")
+  }
 
 
   // TODO:  Mutation in Search
@@ -376,8 +388,11 @@ export default function PrimarySearchAppBar() {
                 root: classes.inputRoot,
                 input: classes.inputInput,
               }}
-              value={boardInput}
-              onChange={(e) => setBoardInput(e.target.value)}
+              value={splits_boards}
+              onChange={(e) => {setSplits_boards(e.target.value);
+                console.log(simpleBoardSearch)
+
+              }}
               inputProps={{ 'aria-label': 'search' }}
             />
             {/* <div className={classes.searchIcon}>
@@ -385,6 +400,7 @@ export default function PrimarySearchAppBar() {
             </div> */}
 
             <Button onClick={handleOpen} >進階搜尋</Button>
+
             <Modal 
               width="500"
               open={open}
@@ -404,8 +420,8 @@ export default function PrimarySearchAppBar() {
                           fullWidth
                           placeholder="用空白間隔開關鍵字，如 B k"
                           id="board_search" 
-                          value={boardInput} 
-                          onChange={(e)=>setBoardInput(e.target.value)} 
+                          value={advBoardSearch} 
+                          onChange={(e)=>setAdvBoardSearch(e.target.value)} 
                           variant="outlined" 
                         />
                       </Row>
@@ -415,8 +431,8 @@ export default function PrimarySearchAppBar() {
                           fullWidth
                           // placeholder="用空白間隔開關鍵字，如 B k"
                           id="board_search" 
-                          value={ownerInput} 
-                          onChange={(e)=>setOwnerInput(e.target.value)} 
+                          value={ownerSearch} 
+                          onChange={(e)=>setOwnerSearch(e.target.value)} 
                           variant="outlined" 
                         />
                       </Row>
@@ -426,8 +442,8 @@ export default function PrimarySearchAppBar() {
                           fullWidth
                           placeholder="用空白間隔開關鍵字，如 B k"
                           id="title_search" 
-                          value={titleInput} 
-                          onChange={(e)=>setTitleInput(e.target.value)} 
+                          value={advTitleSearch} 
+                          onChange={(e)=>setAdvTitleSearch(e.target.value)} 
                           variant="outlined" 
                         />
                       </Row>
@@ -435,8 +451,8 @@ export default function PrimarySearchAppBar() {
                         <FormControl sx={{ m: 1, minWidth: 120 }}>
                         {/* <FormHelperText>Without label</FormHelperText>  */}
                           <Select
-                            value={time}
-                            onChange={handleTimeChange}
+                            value={timeSearch}
+                            onChange={(e)=>setTimeSearch(e.target.value)}
                             displayEmpty
                           >
                             {time_interval.map((item)=>(
@@ -448,7 +464,7 @@ export default function PrimarySearchAppBar() {
                     </div>
                   <div>
                     <Button onClick={handleClose} >取消</Button>
-                    <Button onClick={handleSubmit} >送出</Button>
+                    <Button onClick={()=>handleAdvSubmit()} >送出</Button>
                   </div>
                 </Card>
             </Modal>

@@ -43,6 +43,7 @@ export const GET_ARTICLE_QUERY = gql`
             owner
             create_time
             content
+            brdname
             location {
                 ip
                 country
@@ -149,8 +150,10 @@ query hotArticles{
         brdname
         title
         create_time
+        owner
         push
         boo
+        aid
     }
 }
 `;

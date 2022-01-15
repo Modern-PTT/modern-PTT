@@ -1,8 +1,5 @@
 import styled from 'styled-components';
 import ArticleCard from '../../Components/ArticleCard'
-import  {DataGrid}  from '@material-ui/data-grid';
-import Link from '@mui/material/Link';
-// import  graphql  from 'graphql';
 import { useParams, useHistory } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 import { GET_BOARDS_QUERY } from "../../graphql";
@@ -12,7 +9,7 @@ import { pttContext } from '../App';
 
 import Navbar from "../../Components/Navbar"
 import DashBoard from "../../Components/DashBoard"
-//query某看板後拿回的簡要文章列表
+
 
 
 const Wrapper = styled.div`
@@ -28,8 +25,9 @@ const Wrapper = styled.div`
 const SearchBoard =  ( ) =>{
 
   
-
-  const { simpleBoardSearch } = useContext(pttContext)
+  const { 
+    simpleBoardSearch 
+  } = useContext(pttContext)
   console.log(simpleBoardSearch);
 
   const [allBoards, setAllBoards] = useState('');
@@ -43,13 +41,7 @@ const SearchBoard =  ( ) =>{
   useEffect(() => {
     if(data) setAllBoards(data.boards);
   }, [data])
-  
-//set styled div
-const StyledDiv = styled.div`
-    height: 60vh;
-    width: 80%;
-    max-width: 1200px;
-`
+
 
   const columns = [
     {

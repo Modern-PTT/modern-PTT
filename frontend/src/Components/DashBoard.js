@@ -87,7 +87,7 @@ export default function SimpleList() {
           </Link>
         </ListItem>
 
-        <ListItem button id="all">
+        {/* <ListItem button id="all">
           <ListItemIcon>
             <InboxIcon />
           </ListItemIcon>
@@ -104,7 +104,7 @@ export default function SimpleList() {
           <Link href="/favArticles">
             <ListItemText primary="收藏文章" />
           </Link>
-        </ListItem>
+        </ListItem> */}
       </List>
       
       {/* <List component="nav" aria-label="secondary mailbox folders">

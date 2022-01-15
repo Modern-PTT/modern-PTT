@@ -31,9 +31,15 @@ function App() {
   const [username, setUsername] = useState(savedUsername || '')
   const [myHashPassword, setMyHashPassword] = useState(savedHashedPassword || '')
   const [isLogIn, setIsLogIn] = useState((savedUsername && savedHashedPassword)? true : false)
-
   const [favBoards, setFavBoards] = useState([])
   const [favArticles, setFavArticles] = useState([])
+
+  const [simpleBoardSearch, setSimpleBoardSearch] = useState("")
+
+  const [advTitleSearch, setAdvTitleSearch] = useState("")
+  const [timeSearch, setTimeSearch] = useState(3)
+  const [ownerSearch, setOwnerSearch] = useState([])
+  const [advBoardSearch, setAdvBoardSearch] = useState([])
 
 
   return (
@@ -43,7 +49,14 @@ function App() {
       myHashPassword, setMyHashPassword,
       isLogIn, setIsLogIn,
       favBoards, setFavBoards,
-      favArticles, setFavArticles
+      favArticles, setFavArticles,
+
+      simpleBoardSearch, setSimpleBoardSearch,
+
+      advBoardSearch, setAdvBoardSearch,
+      advTitleSearch, setAdvTitleSearch,
+      timeSearch, setTimeSearch,
+      ownerSearch, setOwnerSearch,
     }}>
       <BrowserRouter>
             <Routes>
