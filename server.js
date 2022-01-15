@@ -11,7 +11,7 @@ import { fileURLToPath } from "url";
 
 import * as db from "./backend/src/models";
 import Query from "./backend/src/resolvers/Query.js";
-import Mutation from './resolvers/Mutation';
+import Mutation from './backend/src/resolvers/Mutation';
 import timeScalar from './backend/src/resolvers/Time';
 import Board from './backend/src/resolvers/Board';
 import Article from './backend/src/resolvers/Article';
