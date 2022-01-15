@@ -11,7 +11,7 @@ import { pttContext } from '../Containers/App';
 import moment from 'moment';
 const useStyles = makeStyles({
   root: {
-    // minWidth: 700,
+    
   },
   bullet: {
     display: 'inline-block',
@@ -71,10 +71,6 @@ export default function ArticleCard( {item, showBrdname} ) {
     console.log(input)
     setFavArticles(favArticles.concat(input));
   }
-
-  // useEffect(() => {
-  //   console.log(favArticles)
-  // }, [favArticles])
 
   
   return (

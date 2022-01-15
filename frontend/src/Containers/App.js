@@ -75,7 +75,7 @@ function App() {
               <Route path='/:brdname' element={<Board/>}/>
               <Route path='/:brdname/:aid' element={<Article/>}/>
               <Route path='/:brdname/NewPost' element={<NewPost />}/>
-              <Route path='*' element={<NotFound/>}/>
+              <Route path='/404' element={<NotFound/>}/>
             </Routes> 
       </BrowserRouter>
     </pttContext.Provider>

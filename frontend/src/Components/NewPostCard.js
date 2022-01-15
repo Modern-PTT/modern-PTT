@@ -1,5 +1,7 @@
 // import Button from '@material-ui/core/Button';
 import {useState, useContext} from 'react'
+import { colors } from '../Containers/Effects/BgBubble';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 import styled from 'styled-components';
 import React from 'react';
@@ -33,31 +35,75 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
-  width: 700px;
   margin: auto;
 `;
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme)=>({
     root: {
-      minWidth: 700,
+      width: '95%',
+      padding: '30px 0',
+      [theme.breakpoints.up("1200")]:{
+        padding: '60px 0px',
+      }
     },
     bullet: {
-      display: 'flex',
       margin: '0 2px',
-      transform: 'scale(0.8)',
+      transform: 'scale(1)',
+    },
+    cardContainer:{
+
+      [theme.breakpoints.up("768")]:{
+        padding: '0 50px'
+      }
     },
     title: {
       fontSize: 14,
+      [theme.breakpoints.up("768")]:{
+        fontSize: 18,
+        width: '90%',
+      },
+      
     },
     pos: {
       marginBottom: 12,
     },
-  });
+    row:{
+      display: 'flex',
+      padding: '5px 0px',
+      [theme.breakpoints.up("768")]:{
+        padding: '20px 0px',
+      }
+    },
+    column:{
+      padding: '5px 0px',
+      [theme.breakpoints.up("768")]:{
+        margin: '20px 0px',
+      }
+    },
+    brdnameReadOnly:{
+      marginLeft: '.5rem',
+      color: 'black'
+    },
+    button:{
+      borderRadius: '10px',
+      backgroundColor: colors['dark-color'],
+      color: 'white'
+    },
+    buttonContainer:{
+      display: 'flex',
+      justifyContent: 'center',
+    },
+    form:{
+      padding: '30px 10px',
+      [theme.breakpoints.up("768")]:{
+        padding: '30px 50px',
+      }
+    }
+  }));
   
   const useTextStyles = makeStyles((theme) => ({
     root: {
       '& > *': {
-        margin: theme.spacing(1),
+        // margin: theme.spacing(1),
         // width: 'auto',
       },
     },
@@ -139,32 +185,19 @@ export default function NewPostCard() {
 
     return (
         <Wrapper>
-            <Card className={classes.root} variant="outlined" width="800">
-                <CardContent>
+            <Card className={classes.root} variant="outlined">
+                <CardContent className={classes.cardContainer}>
                 <Typography className={classes.title} color="textSecondary" gutterBottom>
-                    <Column>
-                        <>看板｜{brdname}</>
-                        <Divider />
-                        {/* <FormControl  width="300px">
-                            <InputLabel htmlFor="demo-customized-select-native">選擇主題</InputLabel>
-                            <Select
-                            id="demo-customized-select-native"
-                            // value={age}
-                            // onChange={handleChange}
-                            // input={value}
-                            >
-                            <option hight="80px" value={10}>[問卦]</option>
-                            <option hight="80px" value={20}>[新聞]</option>
-                            <option hight="80px" value={30}>[？？]</option>
-                            </Select>
-                        </FormControl> */}
-                    </Column>
+                  <Row className={classes.row}>
+                        <>看板</>
+                        <div className={classes.brdnameReadOnly + ' text-gradient'}>{brdname}</div>
+                  </Row>
 
                     <Divider />
 
                 </Typography>
                     <Typography className={classes.title} color="textSecondary" gutterBottom>
-                        <Column>
+                        <Column className={classes.column}>
                         <>標題</>
                         <form >
                             <TextField 
@@ -180,7 +213,7 @@ export default function NewPostCard() {
                 </CardContent>
                 <Divider />
 
-                <form className={classesText.root} noValidate autoComplete="off">
+                <form className={classes.form} noValidate autoComplete="off">
                 <TextField 
                     id="outlined-basic" 
                     variant="outlined" 
@@ -188,11 +221,11 @@ export default function NewPostCard() {
                     fullWidth
                     value={body}
                     onChange={(e) => handleChangeArticleBody(e.target.value)}
-                    rows={20}
+                    rows={15}
                     />
                 </form>
-                <CardActions>
-                    <Button size="small"
+                <CardActions className={classes.buttonContainer}>
+                    <Button size="small" className={classes.button}
                     onClick={()=>handleSubmit()}
                     >
                         發文</Button>

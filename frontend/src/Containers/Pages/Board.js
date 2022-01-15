@@ -2,10 +2,10 @@ import Button from '@material-ui/core/Button';
 import styled from 'styled-components';
 // import MessageBox from './old/MessageBox';
 import Article from '../../Components/Article';
-import ArticleCard from '../../Components/ArticleCard'
+import ArticleCard from '../../Components/News/ArticleCardPro'
 
 // import  graphql  from 'graphql';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation } from '@apollo/client';
 import { GET_BOARD_QUERY, UPDATE_FAV_ARTICLES_MUTATION } from "../../graphql";
 import { useState, useEffect, useContext } from 'react';
@@ -78,6 +78,7 @@ const Board =  () => {
     myHashPassword
   } = useContext(pttContext)
 
+  const navigate = useNavigate();
 
   const [articles, setArticles] = useState('');
 
@@ -97,7 +98,10 @@ const Board =  () => {
   }
 
   useEffect(() => {
-    if (data) setArticles(data.board.articles);
+    if(data){
+      if (data.board) setArticles(data.board.articles);
+      else navigate('/404')
+    }
   }, [data])
 
  

@@ -45,6 +45,7 @@ const StyledDiv = styled.div`
         transition: all .5s ease-in-out;
         padding-right: 40px;
         color: #333;
+        white-space: nowrap;
     }
     .input-search::placeholder{
         color: #333;
@@ -57,7 +58,7 @@ const StyledDiv = styled.div`
         height: 50px;
         border-style: none;
         font-size: 20px;
-        /* top: 10px; */
+        
         font-weight: bold;
         outline: none;
         cursor: pointer;
@@ -81,8 +82,16 @@ const StyledDiv = styled.div`
         border-bottom:1px solid #333;
         transition: all 500ms cubic-bezier(0, 0.110, 0.35, 1.4);
     }
+    .btn-search:focus ~ .advanced{
+        opacity: 0;
+        transform: scale(0);
+    }
     .btn-search:focus{
         top: 0px;
+    }
+    .input-search:focus ~ .advanced{
+        opacity: 0;
+        transform: scale(0);
     }
     .input-search:focus{
         width: 300px;
@@ -93,6 +102,8 @@ const StyledDiv = styled.div`
         transition: all 500ms cubic-bezier(0, 0.110, 0.35, 1.4);
     }
     .advanced{
+        white-space: nowrap;
+        transition: .2s;
     }
 
 `

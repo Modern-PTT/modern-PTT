@@ -1,5 +1,12 @@
 import styled from "styled-components";
 import { Link } from "@mui/material";
+import { LOG_OUT_MUTATION } from "../../graphql";
+import { useMutation } from '@apollo/client';
+import { pttContext } from '../../Containers/App';
+
+import { useContext } from 'react';
+import { useNavigate } from "react-router-dom";
+
 
 
 const StyledDiv = styled.div`
@@ -163,38 +170,88 @@ right: 10px;
 
 }
 `
+const LOCALSTORAGE_USERNAME = "saveMyUsername";
+const LOCALSTORAGE_HASHEDPW = "saveMyHashedPassword";
 
 const Burger = () => {
-    return ( <StyledDiv>
-<input type="checkbox" id="burger-toggle"/>
-<label htmlFor="burger-toggle" className="burger-menu">
-  <div className="line"></div>
-  <div className="line"></div>
-  <div className="line"></div>
-</label>
-<div className="menu">
-  <div className="menu-inner">
-    <ul className="menu-nav">
-      <li className="menu-nav-item"><Link className="menu-nav-link" href="/home"><span>
+  const navigate = useNavigate();
+  const {
+    username,
+    setUsername,
+    myHashPassword,
+    setMyHashPassword,
+    isLogIn,
+    setIsLogIn,
+  } = useContext(pttContext)
+  const [checkLogout] = useMutation(LOG_OUT_MUTATION);
+
+  const logout = async () => {
+
+    if (!username || !myHashPassword) {
+      console.log("username and hashed password cannot be null");
+      return;
+    }
+
+    const logoutResult = await checkLogout({
+      variables: {
+        username: username,
+        password: myHashPassword,
+      }
+    });
+
+    if (logoutResult.data?.logout) {
+      console.log("logout~~");
+      navigate('/home');
+      setIsLogIn(false);
+      setMyHashPassword("");
+      setUsername("");
+
+      localStorage.removeItem(LOCALSTORAGE_USERNAME);
+      localStorage.removeItem(LOCALSTORAGE_HASHEDPW);
+    } else {
+      console.log("logout error...");
+    }
+  }
+
+  return (<StyledDiv>
+    <input type="checkbox" id="burger-toggle" />
+    <label htmlFor="burger-toggle" className="burger-menu">
+      <div className="line"></div>
+      <div className="line"></div>
+      <div className="line"></div>
+    </label>
+    <div className="menu">
+      <div className="menu-inner">
+        <ul className="menu-nav">
+          {isLogIn ? <></> : <li className="menu-nav-item"><Link className="menu-nav-link" href="/login"><span>
+            <div>登入</div>
+          </span></Link></li>}
+          {isLogIn ? <></> : <li className="menu-nav-item"><Link className="menu-nav-link" href="/signup"><span>
+            <div>註冊</div>
+          </span></Link></li>}
+          <li className="menu-nav-item"><Link className="menu-nav-link" href="/home"><span>
             <div>首頁</div>
           </span></Link></li>
-      <li className="menu-nav-item"><Link className="menu-nav-link" href=""><span>
+          <li className="menu-nav-item"><Link className="menu-nav-link" href=""><span>
             <div>站內信</div>
           </span></Link></li>
-      <li className="menu-nav-item"><Link className="menu-nav-link" href="#"><span>
+          <li className="menu-nav-item"><Link className="menu-nav-link" href="#"><span>
             <div>我的通知</div>
           </span></Link></li>
-      <li className="menu-nav-item"><Link className="menu-nav-link" href="#"><span>
+          <li className="menu-nav-item"><Link className="menu-nav-link" href="#"><span>
             <div>個人檔案</div>
           </span></Link></li>
-      <li className="menu-nav-item"><Link className="menu-nav-link" href="#"><span>
+          <li className="menu-nav-item"><Link className="menu-nav-link" href="#"><span>
             <div>設定</div>
           </span></Link></li>
-    </ul>
-  </div>
-</div>
-    </StyledDiv> );
+          {isLogIn ? <li className="menu-nav-item"><Link className="menu-nav-link" href="#" onClick={logout}><span>
+            <div>登出</div>
+          </span></Link></li> : <></>}
+        </ul>
+      </div>
+    </div>
+  </StyledDiv>);
 }
- 
+
 export default Burger;
 

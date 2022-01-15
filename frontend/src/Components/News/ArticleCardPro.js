@@ -5,13 +5,14 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import Link from '@mui/material/Link';
 import {useState, useEffect, useContext} from 'react'
 import { pttContext } from '../../Containers/App';
+import moment from 'moment';
 
 import { MEDIA_QUERY_MD,MEDIA_QUERY_LG,MEDIA_QUERY_XL } from '../../css/Media_query';
 
 const Wrapper = styled.div`
   display: grid;
   grid-template: auto auto / auto auto;
-  grid-row-gap: 20px;
+  grid-row-gap: 10px;
   width: 100%;
   padding: 1.2rem;
   padding-left: 2rem;
@@ -24,13 +25,28 @@ const Wrapper = styled.div`
     width: 100%;
     font-size: 1.5rem;
     overflow: hidden;
+    grid-column: 1 / span 2;
+  }
+  .boardName{
+    font-size: 1rem;
+    color: rgba(0,0,0,0.8);
+  }
+  .title{
+    font-size: 1.2rem;
+    overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    grid-column: 1 / span 2;
+    width: 100%;
+  }
+  .owner{
+    font-size: .8rem;
+    color: rgba(0,0,0,0.6);
   }
   .date{
     font-size: .6rem;
+    color: rgba(0,0,0,0.6);
     align-self: flex-end;
+    justify-self: end;
   }
   .heart{
     justify-self: end;
@@ -50,9 +66,11 @@ const msgState = (input)=>{
   else if (input == "2")return "👎🏼"
   else return "-"
 }
+const showTime = (time)=>{
+  return moment(time).format('YYYY/MM/DD hh:mm:ss')
+}
 
-
-export default function ArticleCard({brdname,title,owner,create_time,aid,deleted}) {
+export default function ArticleCard({item, showBrdname}) {
   
 
   const {
@@ -71,7 +89,7 @@ export default function ArticleCard({brdname,title,owner,create_time,aid,deleted
 
   
   return (
-    (deleted)?
+    (item.deleted)?
     <Wrapper className="bordered">
       <div className="main deleted ">
         本文章已刪除
@@ -79,23 +97,24 @@ export default function ArticleCard({brdname,title,owner,create_time,aid,deleted
     </Wrapper>
     :
       <Wrapper className="bordered">
-        <Link underline="none" href="/home" className="main font-color-link ">
           <div className="boardName">
-            {brdname}
+          {item.push - item.boo}
+                        {(showBrdname)?<>{item.brdname}</>:<></>}
           </div>
+        <Link underline="none" href={`/${item.brdname}/${item.aid}`} className="main font-color-link ">
           <div className="title">
-            {title}
-          </div>
-          <div className="owner">
-            {owner}
+            {item.title}
           </div>
         </Link>
+          <div className="owner">
+            {item.owner}
+          </div>
         <div className="date">
-          {create_time}
+         {showTime(item.create_time)}
         </div>
-        <div className="heart">
+        {/* <div className="heart">
           <FavoriteIcon onClick={()=>AddLoveArticles(aid)}/>
-        </div>
+        </div> */}
       </Wrapper>
     
   );

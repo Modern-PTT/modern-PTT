@@ -200,9 +200,6 @@ const Login = () => {
             </Column>
 
         :<>
-        {/* You have been login as {username}
-            <Button variant="contained" onClick={()=>logout()}>test for logout</Button> */}
-        {/* {window.location.href="/home"} */}
         {navigate("/home")}
         </>
     );
