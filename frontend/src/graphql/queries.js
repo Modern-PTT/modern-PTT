@@ -39,6 +39,7 @@ export const GET_ARTICLE_QUERY = gql`
     query article ($aid: String!) {
         article(aid: $aid){
             aid
+            brdname
             title
             owner
             create_time
@@ -68,6 +69,7 @@ export const GET_ARTICLES_QUERY = gql`
     query articles ($input: articlesInput!) {
         articles(input: $input){
             title
+            aid
             brdname
             owner
             content
