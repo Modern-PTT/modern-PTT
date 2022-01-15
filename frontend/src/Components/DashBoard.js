@@ -65,7 +65,7 @@ export default function SimpleList({myLoveBoards, setMyLoveBoards}) {
           <ListItemIcon>
             <InboxIcon />
           </ListItemIcon>
-          <Link underline="none" href="allboards">
+          <Link underline="none" href="/allboards">
             <ListItemText primary="所有看板" />
           </Link>
         </ListItem>
@@ -73,7 +73,7 @@ export default function SimpleList({myLoveBoards, setMyLoveBoards}) {
           <ListItemIcon>
             <DraftsIcon />
           </ListItemIcon>
-          <Link underline="none" href="hotboards">
+          <Link underline="none" href="/hotboards">
             <ListItemText primary="熱門看板" />
           </Link>
         </ListItem>
@@ -82,7 +82,7 @@ export default function SimpleList({myLoveBoards, setMyLoveBoards}) {
           <ListItemIcon>
             <InboxIcon />
           </ListItemIcon>
-          <Link underline="none" href="lavboards">
+          <Link underline="none" href="/lavboards">
             <ListItemText primary="最愛看板" />
           </Link>
           </ListItem>
@@ -92,7 +92,7 @@ export default function SimpleList({myLoveBoards, setMyLoveBoards}) {
           <ListItemIcon>
             <DraftsIcon />
           </ListItemIcon>
-          <Link underline="none" href="myLoveArticles">
+          <Link underline="none" href="/myLoveArticles">
             <ListItemText primary="收藏文章" />
           </Link>
         </ListItem>
