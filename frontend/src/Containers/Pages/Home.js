@@ -63,15 +63,11 @@ const Home = () => {
         />
         <div className="contents">
             <DashBoard/>
-            {/* <BoardList
-                myLoveBoards={myLoveBoards}
-                setMyLoveBoards={setMyLoveBoards}
-            /> */}
 
             <Wrapper>
                 <BoardNameCard nowAtWhere="home" />
-                {/* <Button variant="contained">Default</Button> */}
-                <>{articles ? articles.map((item)=>(
+                <>{articles ? articles.map((item)=>{
+                    return
                     <ArticleCard
                         key={item.aid}
                         brdname={item.brdname}  
@@ -85,7 +81,7 @@ const Home = () => {
                         setMyLoveArticles={setMyLoveArticles}
                         number={item.push-item.boo}
                     />
-                )): ''}   
+                }): ''}   
                 </>
             </Wrapper>
         </div>

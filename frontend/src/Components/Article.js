@@ -161,7 +161,7 @@ export default function Article({article}) {
       
           <CardContent>
               {article.comments.map((item)=>(
-                  <Typography className={classes.title} color="textSecondary" gutterBottom key={item}>
+                  <Typography className={classes.title} color="textSecondary" gutterBottom key={item.cid}>
                   <Row align="center">
                       <>{msgState(item.type) }{item.owner} </> <>{item.location.ip}   {item.create_time}</>
                   </Row>
@@ -246,7 +246,7 @@ export default function Article({article}) {
                   {article.content.split("\n").map(e => (
                             <>
                               {e}
-                              <br />
+                              <br key={e}/>
                             </>
                   ))}
                 </Typography>
@@ -267,7 +267,7 @@ export default function Article({article}) {
                           {item.content.split("\n").map(e => (
                             <>
                               {e}
-                              <br />
+                              <br key={e}/>
                             </>
                           ))}
                         </>

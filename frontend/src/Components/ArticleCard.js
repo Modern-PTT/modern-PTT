@@ -104,7 +104,6 @@ export default function ArticleCard({brdname,title,owner,create_time,aid,deleted
       <Wrapper>
         <Card className={classes.root} variant="outlined">
             <CardContent>
-                    {/* <Typography className={classes.title} color="textSecondary" gutterBottom> */}
                     <Row justify="space-between">
                       <Link href={`/boards/${brdname}/${aid}`}>
                         <>{brdname} {title} {owner}</>
@@ -117,20 +116,10 @@ export default function ArticleCard({brdname,title,owner,create_time,aid,deleted
                             <FavoriteIcon />
                           </IconButton>
                         </Tooltip>
-                        {/* <Tooltip title="追蹤">
-                          <IconButton>
-                            <NotificationAddIcon />
-                          </IconButton>
-                        </Tooltip>
-                        <Button size="small" variant="contained" color="primary">追蹤</Button> */}
                       </div>
                     </Row>
-                    {/* </Typography> */}
 
             </CardContent>
-            {/* <CardActions>
-                <Button size="small">留言</Button>
-            </CardActions> */}
         </Card>
       </Wrapper>
     

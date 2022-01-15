@@ -48,6 +48,7 @@ const Board =  ({myLoveArticles, setMyLoveArticles}) =>{
             {/* <Button variant="contained">Default</Button> */}
             <>{articles ? articles.map((item)=>(
                 <ArticleCard
+                    key={item.aid}
                     brdname={item.brdname}
                     title={item.title}
                     owner={item.owner}
