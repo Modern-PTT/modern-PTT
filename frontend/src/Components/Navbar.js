@@ -139,8 +139,12 @@ export default function PrimarySearchAppBar() {
 
     const navigate = useNavigate();
   // insert ===========================
-  // const [splits_boards1, setSplits_boards1] = useState([""])
-  const [splits_boards, setSplits_boards] = useState("");
+  const [splits_boards, setSplits_boards] = useState([""])
+  const [boardInput, setBoardInput] = useState("");
+  const [titleInput, setTitleInput] = useState("");
+  const [timeInput, setTimeInput] = useState(240);
+  const [ownerInput, setOwnerInput] = useState("");
+
 
   const time_interval = [
     {time:6,name:"6小時內"},
@@ -155,8 +159,18 @@ export default function PrimarySearchAppBar() {
   const handleBasicSearch =  () => {
     var splits_boards2 = splits_boards.split(" ");
     setSimpleBoardSearch(splits_boards2);
-    console.log(simpleBoardSearch)
     navigate("/search/boards")
+  }
+
+  const handleAdvanceSearch =  () => {
+    var splits_boards = boardInput.split(" ");
+    var splits_title = titleInput.split(" ");
+
+    setAdvBoardSearch(splits_boards);
+    setAdvTitleSearch(splits_title);
+    setOwnerSearch(ownerInput);
+    setTimeSearch(timeInput);
+    navigate("/search/Articles")
   }
   // Advance Search
   const [open, setOpen] = useState(false);
@@ -223,10 +237,7 @@ export default function PrimarySearchAppBar() {
         console.log("logout error...");
     }
 }
-  const handleAdvSubmit = ()=>{
-    // Change page to SearchBoard
-    navigate("/search/boards")
-  }
+
 
 
   // TODO:  Mutation in Search
@@ -294,23 +305,7 @@ export default function PrimarySearchAppBar() {
     </Menu>
     )
   
-    
 
-  // const userMenu = (
-  //   <Menu
-  //     anchorEl={anchorEl}
-  //     anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-  //     id={menuId}
-  //     keepMounted
-  //     transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-  //     open={isMenuOpen}
-  //     onClose={()=>handleMenuClose}
-  //   >
-  //       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-  //       <MenuItem onClick={handleMenuClose}>Setting</MenuItem>
-  //       <MenuItem onClick={handleMenuClose} color="red">Log Out</MenuItem>
-  //   </Menu>
-  // );
   const mobileMenuId = 'primary-search-account-menu-mobile';
   const renderMobileMenu = (
     <Menu
@@ -390,7 +385,7 @@ export default function PrimarySearchAppBar() {
               }}
               value={splits_boards}
               onChange={(e) => {setSplits_boards(e.target.value);
-                console.log(simpleBoardSearch)
+                console.log(splits_boards)
 
               }}
               inputProps={{ 'aria-label': 'search' }}
@@ -420,8 +415,8 @@ export default function PrimarySearchAppBar() {
                           fullWidth
                           placeholder="用空白間隔開關鍵字，如 B k"
                           id="board_search" 
-                          value={advBoardSearch} 
-                          onChange={(e)=>setAdvBoardSearch(e.target.value)} 
+                          value={boardInput} 
+                          onChange={(e)=>setBoardInput(e.target.value)} 
                           variant="outlined" 
                         />
                       </Row>
@@ -429,10 +424,10 @@ export default function PrimarySearchAppBar() {
                         作者
                         <TextField  
                           fullWidth
-                          // placeholder="用空白間隔開關鍵字，如 B k"
+                          placeholder="輸入作者id"
                           id="board_search" 
-                          value={ownerSearch} 
-                          onChange={(e)=>setOwnerSearch(e.target.value)} 
+                          value={ownerInput} 
+                          onChange={(e)=>setOwnerInput(e.target.value)} 
                           variant="outlined" 
                         />
                       </Row>
@@ -442,8 +437,8 @@ export default function PrimarySearchAppBar() {
                           fullWidth
                           placeholder="用空白間隔開關鍵字，如 B k"
                           id="title_search" 
-                          value={advTitleSearch} 
-                          onChange={(e)=>setAdvTitleSearch(e.target.value)} 
+                          value={titleInput} 
+                          onChange={(e)=>setTitleInput(e.target.value)} 
                           variant="outlined" 
                         />
                       </Row>
@@ -451,8 +446,8 @@ export default function PrimarySearchAppBar() {
                         <FormControl sx={{ m: 1, minWidth: 120 }}>
                         {/* <FormHelperText>Without label</FormHelperText>  */}
                           <Select
-                            value={timeSearch}
-                            onChange={(e)=>setTimeSearch(e.target.value)}
+                            value={timeInput}
+                            onChange={(e)=>setTimeInput(e.target.value)}
                             displayEmpty
                           >
                             {time_interval.map((item)=>(
@@ -464,7 +459,7 @@ export default function PrimarySearchAppBar() {
                     </div>
                   <div>
                     <Button onClick={handleClose} >取消</Button>
-                    <Button onClick={()=>handleAdvSubmit()} >送出</Button>
+                    <Button onClick={()=>{handleAdvanceSearch();handleClose()}} >送出</Button>
                   </div>
                 </Card>
             </Modal>

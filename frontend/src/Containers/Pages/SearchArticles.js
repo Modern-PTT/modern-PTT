@@ -2,14 +2,14 @@ import styled from 'styled-components';
 import ArticleCard from '../../Components/ArticleCard'
 import { useParams, useHistory } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
-import { GET_BOARDS_QUERY } from "../../graphql";
+import { GET_ARTICLES_QUERY } from "../../graphql";
 import { useState, useEffect, useContext} from 'react';
 
 import { pttContext } from '../App';
 
 import Navbar from "../../Components/Navbar"
 import DashBoard from "../../Components/DashBoard"
-
+import BoardNameCard from '../../Components/BoardNameCard';
 
 
 const Wrapper = styled.div`
@@ -22,78 +22,72 @@ const Wrapper = styled.div`
   margin: auto;
 `;
 
-const SearchBoard =  ( ) =>{
+const SearchArticles =  ( ) =>{
 
   
   const { 
-    simpleBoardSearch 
+    advBoardSearch,
+    advTitleSearch,
+    ownerSearch,
+    timeSearch,
+    setAdvTitleSearch,
+    setTimeSearch,
+    setOwnerSearch,
+    setAdvBoardSearch
   } = useContext(pttContext)
-  console.log(simpleBoardSearch);
 
-  const [allBoards, setAllBoards] = useState('');
+  console.log(
+    advBoardSearch,    
+    advTitleSearch,
+    ownerSearch,  
+    timeSearch
+    );
 
-  const {data, error, loading} =  useQuery(GET_BOARDS_QUERY,{
+    const [articles, setArticles] = useState('');
+
+  const {data, error, loading} =  useQuery(GET_ARTICLES_QUERY,{
     variables: {
-      keywords: simpleBoardSearch,
+      input:{
+        brdname: advBoardSearch,
+        owner:ownerSearch,
+        title: advTitleSearch,
+        timerange: timeSearch,
+      }
     }
   })
   
   useEffect(() => {
-    if(data) setAllBoards(data.boards);
+    if(data) {
+      setArticles(data.articles);
+      setAdvTitleSearch([]);
+      setTimeSearch()
+      setOwnerSearch("");
+      setAdvBoardSearch([]);
+    }
   }, [data])
 
 
-  const columns = [
-    {
-      field: 'brdname',
-      headerName: 'BoardName',
-      flex: 1,
-      renderCell: (params) => (
-        <Link href={`/${params.value}`}>{params.value}</Link>
-      )
-    },
-    {
-      field: 'class',
-      headerName: 'class',
-      flex: .5
-    },
-    {
-      field: 'title',
-      headerName: 'title',
-      flex: 1
-    },
-    {
-      field: 'moderators',
-      headerName: 'moderators',
-      flex: .5
-    },
-    
-  ];
-    return(
-      <>
-        <Navbar/>
-        <div className="contents">
-            <DashBoard />
-        </div>
-        <Wrapper>
-                {/* <HotList/> */}
-                <StyledDiv>
-                  {allBoards?
-                    <DataGrid
-                    rows={allBoards}
-                    columns={columns}
-                    pageSize={10}
-                    getRowId={(row) => row.brdname}
-                    disableSelectionOnClick
-                  />
-                  :''
-                  }
 
-                </StyledDiv>
-          </Wrapper>
-    </>);
+  return(
+    <>
+      <Navbar />
+      <div className="contents">
+          <DashBoard />
+      </div>
+      {/* <BoardNameCard nowAtWhere={brdname}/> */}
+      <Wrapper>
+          <>{articles ? articles.map((item)=>(
+              <ArticleCard
+                  showBrdname={true}
+                  key={item.aid}
+                  item={item}
+              />
+          )): ''}  
+          </>
+        </Wrapper>
+  </>);
 
 }
 
-export default SearchBoard;
+export default SearchArticles;
 

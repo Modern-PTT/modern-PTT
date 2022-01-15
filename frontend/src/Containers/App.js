@@ -6,6 +6,7 @@ import favBoards from "./Pages/favBoards";
 import AllBoards from './Pages/AllBoards'
 import HotBoards from './Pages/HotBoards'
 import SearchBoards from './Pages/SearchBoards'
+import SearchArticles from './Pages/SearchArticles'
 import favArticles from "./Pages/favArticles";
 import Intro from "../Containers/Pages/Intro";
 import Home from '../Containers/Pages/Home'
@@ -34,11 +35,11 @@ function App() {
   const [favBoards, setFavBoards] = useState([])
   const [favArticles, setFavArticles] = useState([])
 
-  const [simpleBoardSearch, setSimpleBoardSearch] = useState("")
+  const [simpleBoardSearch, setSimpleBoardSearch] = useState([])
 
-  const [advTitleSearch, setAdvTitleSearch] = useState("")
-  const [timeSearch, setTimeSearch] = useState(3)
-  const [ownerSearch, setOwnerSearch] = useState([])
+  const [advTitleSearch, setAdvTitleSearch] = useState([])
+  const [timeSearch, setTimeSearch] = useState(6)
+  const [ownerSearch, setOwnerSearch] = useState("")
   const [advBoardSearch, setAdvBoardSearch] = useState([])
 
 
@@ -73,8 +74,8 @@ function App() {
                 {/* Home_熱門看板 */}
               <Route path='/favArticles' element={<favArticles/>}/>
               <Route path='/favBoards' element={<favBoards/>}/>
-
               <Route path='/search/boards' element={<SearchBoards/>}/>
+              <Route path='/search/articles' element={<SearchArticles/>}/>
               {/* <Route path='/search/articles' element={<Board/>}/> */}
               <Route path='/:brdname' element={<Board/>}/>
               <Route path='/:brdname/:aid' element={<Article/>}/>

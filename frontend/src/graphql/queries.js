@@ -65,9 +65,10 @@ export const GET_ARTICLE_QUERY = gql`
 
 // 4. query - 
 export const GET_ARTICLES_QUERY = gql`
-    query articles ($aid: String!) {
-        articles(aid: $aid){
+    query articles ($input: articlesInput!) {
+        articles(input: $input){
             title
+            brdname
             owner
             content
             location {
@@ -84,6 +85,8 @@ export const GET_ARTICLES_QUERY = gql`
                     }
                 create_time
             }
+            boo
+            push
         }
 }
 `;
