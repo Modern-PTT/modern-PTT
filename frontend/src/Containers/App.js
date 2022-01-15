@@ -35,8 +35,6 @@ function App() {
   const [favBoards, setFavBoards] = useState([])
   const [favArticles, setFavArticles] = useState([])
 
-  // const [myLoveBoards, setMyLoveBoards] = useState([])
-  // const [myLoveArticles, setMyLoveArticles] = useState([])
 
   return (
 

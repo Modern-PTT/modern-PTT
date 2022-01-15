@@ -8,10 +8,11 @@ import ArticleCard from '../../Components/ArticleCard'
 import { useParams, useHistory } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 import { GET_BOARD_ARTICLES_QUERY } from "../../graphql";
-import { useState, useEffect} from 'react';
+import { useState, useEffect, useContext} from 'react';
 
 import Navbar from "../../Components/Navbar"
 import DashBoard from "../../Components/DashBoard"
+import { pttContext } from '../App';
 //query某看板後拿回的簡要文章列表
 
 
@@ -25,21 +26,26 @@ const Wrapper = styled.div`
   margin: auto;
 `;
 
-const Board =  ({myLoveArticles, setMyLoveArticles, isLogIn, username, myHashPassword}) =>{
-  const [articles, setArticles] = useState('');
+const FavArticles =  () =>{
+  
+  const {
+    favArticles,
+    isLogIn
+  } = useContext(pttContext)
+    const [articles, setArticles] = useState('');
 
 //   const {brdname} = useParams()
 //   console.log(brdname)
   const {data, error, loading} =  useQuery(GET_BOARD_ARTICLES_QUERY,{
     variables: {
-      aid: myLoveArticles,
+      aid: favArticles,
     }
   })
   
   useEffect(() => {
     if(data) setArticles(data.board.articles);
-    console.log(myLoveArticles)
-  }, [myLoveArticles])
+    console.log(favArticles)
+  }, [favArticles])
 
 
     return(
@@ -58,8 +64,6 @@ const Board =  ({myLoveArticles, setMyLoveArticles, isLogIn, username, myHashPas
                     owner={item.owner}
                     create_time={item.create_time}
                     aid={item.aid}
-                    myLoveArticles={myLoveArticles}
-                    setMyLoveArticles={setMyLoveArticles}
                 />
             )): ''}  
             </>
@@ -68,5 +72,5 @@ const Board =  ({myLoveArticles, setMyLoveArticles, isLogIn, username, myHashPas
 
 }
 
-export default Board;
+export default FavArticles;
 

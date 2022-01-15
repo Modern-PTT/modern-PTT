@@ -36,6 +36,7 @@ query boards($keywords: [String!]){
 export const GET_ARTICLE_QUERY = gql`
     query article ($aid: String!) {
         article(aid: $aid){
+            aid
             title
             owner
             create_time

@@ -1,13 +1,14 @@
 import styled from 'styled-components';
 import { useQuery, useMutation } from '@apollo/client';
-import { GET_BOARDS_QUERY, UPDATE_FAV_ARTICLES_MUTATION } from "../../graphql";
-import { useState, useEffect} from 'react';
+import { GET_BOARDS_QUERY, UPDATE_FAV_BOARDS_MUTATION } from "../../graphql";
+import { useState, useEffect, useContext} from 'react';
 
 import  {DataGrid}  from '@material-ui/data-grid';
 import Link from '@mui/material/Link';
 
 import Navbar from "../../Components/Navbar"
 import DashBoard from "../../Components/DashBoard"
+import { pttContext } from '../App';
 // import HotList from '../../Components/HotList'
 //query某看板後拿回的簡要文章列表
 
@@ -30,9 +31,18 @@ const Wrapper = styled.div`
 `;
 
 
-const AllBoards =  ({myLoveArticles, setMyLoveArticles,isLogIn, username, myHashPassword}) =>{
+const AllBoards =  () =>{
+
+  const {
+    username, 
+    myHashPassword,
+    favBoards,
+    setFavBoards,
+    isLogin
+  } = useContext(pttContext)
+
   const [allBoards, setAllBoards] = useState('');
-  const [updateFavArticles] = useMutation(UPDATE_FAV_ARTICLES_MUTATION)
+  const [updateFavBoards] = useMutation(UPDATE_FAV_BOARDS_MUTATION)
   const {data, error, loading} =  useQuery(GET_BOARDS_QUERY)
 
   
@@ -41,23 +51,7 @@ const AllBoards =  ({myLoveArticles, setMyLoveArticles,isLogIn, username, myHash
   }, [data])
 
 
-  useEffect(() => {
-    if(username) {
-      var update = updateFavArticles({
-        variables:{
-          input:{
-            token:{
-              username: username,
-              password: myHashPassword
-            },
-            aids:  myLoveArticles
-          }
-        }
-      })
-    }
-    // if(update)alert("update myLoveArticles success!")
 
-  }, [myLoveArticles])
 
   const columns = [
     {
@@ -81,12 +75,16 @@ const AllBoards =  ({myLoveArticles, setMyLoveArticles,isLogIn, username, myHash
     {
       field: 'moderators',
       headerName: 'moderators',
-      flex: .5
-    }
+      flex: .5,
+      renderCell: (params) => (
+        <Link href={`/boards/${params.value}`}>{params.value}</Link>
+      )
+    },
+    
   ];
     return(
       <>
-        <Navbar isLogIn={isLogIn} />
+        <Navbar/>
         <div className="contents">
             <DashBoard />
         </div>

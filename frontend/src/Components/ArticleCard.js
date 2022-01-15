@@ -8,7 +8,7 @@ import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
-import { Divider } from '@material-ui/core';
+import { Divider, ListItem } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import Row from './Layout/Row';
 import Column from './Layout/Column';
@@ -86,9 +86,9 @@ export default function ArticleCard({brdname,title,owner,create_time,aid,deleted
     setFavArticles(favArticles.concat(input));
   }
 
-  useEffect(() => {
-    console.log(favArticles)
-  }, [favArticles])
+  // useEffect(() => {
+  //   console.log(favArticles)
+  // }, [favArticles])
 
   
   return (
@@ -107,16 +107,16 @@ export default function ArticleCard({brdname,title,owner,create_time,aid,deleted
                     {/* <Typography className={classes.title} color="textSecondary" gutterBottom> */}
                     <Row justify="space-between">
                       <Link href={`/boards/${brdname}/${aid}`}>
-                        <>{brdname} {title} {owner}</>
+                        <>{}{brdname}{title} {owner}</>
                       </Link>
 
                       <>{create_time}</>
                       <div>
-                      <Tooltip title="收藏">
+                      {/* <Tooltip title="收藏">
                           <IconButton onClick={()=>AddLoveArticles(aid)}>
                             <FavoriteIcon />
                           </IconButton>
-                        </Tooltip>
+                        </Tooltip> */}
                         {/* <Tooltip title="追蹤">
                           <IconButton>
                             <NotificationAddIcon />

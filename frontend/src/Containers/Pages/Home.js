@@ -53,14 +53,7 @@ const Home = () => {
     return (<>
 
 
-        <Navbar 
-            username={username}
-            setUsername={setUsername}
-            myHashPassword={myHashPassword}
-            setMyHashPassword={setMyHashPassword}
-            isLogIn={isLogIn}
-            setIsLogIn={setIsLogIn}
-        />
+        <Navbar />
         <div className="contents">
             <DashBoard/>
             {/* <BoardList
@@ -69,21 +62,11 @@ const Home = () => {
             /> */}
 
             <Wrapper>
-                <BoardNameCard nowAtWhere="home" />
                 {/* <Button variant="contained">Default</Button> */}
                 <>{articles ? articles.map((item)=>(
                     <ArticleCard
                         key={item.aid}
-                        brdname={item.brdname}  
-                        title={item.title}
-                        owner={item.owner}
-                        create_time={showTime(item.create_time)}
-                        aid={item.aid}
-                        class={item.class}
-                        deleted={item.deleted}
-                        myLoveArticles={myLoveArticles}
-                        setMyLoveArticles={setMyLoveArticles}
-                        number={item.push-item.boo}
+                        item={item}
                     />
                 )): ''}   
                 </>

@@ -19,7 +19,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-
+import DeleteIcon from '@mui/icons-material/Delete';
 
 // import Message from '../hooks/Message';
 import ThumbUpAltOutlinedIcon from '@mui/icons-material/ThumbUpAltOutlined';
@@ -32,7 +32,9 @@ import Tooltip from '@mui/material/Tooltip';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { useMutation } from '@apollo/client';
 import { 
+  GET_ARTICLE_QUERY,
   CREATE_COMMENT_MUTATION, 
+  DELETE_ARTICLE_MUTATION,
   UPDATE_ARTICLE_MUTATION,
   MODIFY_COMMENT_MUTATION } from "../graphql";
 
@@ -85,11 +87,11 @@ const msgState = (input)=>{
 
 
 
-export default function Article({article}) {
+export default function Article({item}) {
   const {
     username,
     myHashPassword,
-    isLogin } = useContext(pttContext)
+    isLogIn } = useContext(pttContext)
 
   const classes = useStyles();
   const classesText = useTextStyles();
@@ -102,29 +104,30 @@ export default function Article({article}) {
   // Edit Comment Part
   const [commentType, setCommentType] = useState(3)
   const [inputcomment, setInputComment] = useState('')
-  const [inputaid, setInputaid]=useState(article.aid)
+  // const [inputaid, setInputaid]=useState(item.aid)
   const [createComment] = useMutation(CREATE_COMMENT_MUTATION);
 
   // Edit Article Part
-  const [editTitle, setEditTitle] = useState(article.title)
-  const [editContent, setEditContent] = useState(article.content)
-  const [open, setOpen] = useState(false);
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+  const [editTitle, setEditTitle] = useState(item.title)
+  const [editContent, setEditContent] = useState(item.content)
+  const [editOpen, setEditOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
 
-  const handleClose = () => {
-    setOpen(false);
-  };
+  const handleEditOpen = () => {setEditOpen(true);};
+  const handleEditClose = () => {setEditOpen(false);};
 
-  const handelEdit = () => {
+  const handleDeleteOpen = () => {setDeleteOpen(true);};
+  const handleDeleteClose = () => {setDeleteOpen(false);};
+
+  const updateEdit = () =>{
 
   }
 
+
   const EditCard = ()=>{
     return(
-      <Dialog open={open} onClose={handleClose}>
-          <DialogTitle>{article.username}</DialogTitle>
+      <Dialog open={editOpen} onClose={handleEditClose}>
+          <DialogTitle>{item.username}</DialogTitle>
           <DialogContent>
             <DialogContentText>
               標題
@@ -151,106 +154,165 @@ export default function Article({article}) {
               onChange={(e)=>setEditContent(e.target.value)}
               variant="standard"
             />
-            {/* {article.comments.map((item)=>(
-              <DialogContentText>
-              {item.owner}{item.owner}
-              </DialogContentText>
-            ))} */}
-          <Divider />
 
-      
           <CardContent>
-              {article.comments.map((item)=>(
-                  <Typography className={classes.title} color="textSecondary" gutterBottom key={item}>
-                  <Row align="center">
-                      <>{msgState(item.type) }{item.owner} </> <>{item.location.ip}   {item.create_time}</>
-                  </Row>
-                  {item.body}
-                  </Typography>
-              
-              ))}
+          {item.comments.map((item)=>(
+              <Typography className={classes.title} color="textSecondary" gutterBottom key={item.cid}>             
+                <Row align="center">
+                    <>{msgState(item.type)}
+                      {item.owner}
+                      {item.content.split("\n").map(e => (
+                        <>
+                          {e}
+                          <br />
+                        </>
+                      ))}
+                    </>
+                    <>
+                      {item.location.ip}
+                      {showTime(item.create_time)}
+                    </>
+                </Row>
+                {item.body}
+              </Typography>
+            ))}
           </CardContent>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose}>取消</Button>
-            <Button onClick={()=>{handleClose();handelEdit();}}>更改</Button>
+            <Button onClick={handleEditClose}>取消</Button>
+            <Button onClick={()=>{handleEditClose();updateEdit();}}>更改</Button>
           </DialogActions>
         </Dialog>
     )
   }
-    
+  
+  const DeleteCard = () => {
+    return (
+      <div>
+        <Button variant="outlined" onClick={handleDeleteOpen}>
+          Open alert dialog
+        </Button>
+        <Dialog
+          open={deleteOpen}
+          onClose={handleDeleteClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">
+            {"Use Google's location service?"}
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              Let Google help apps determine location. This means sending anonymous
+              location data to Google, even when no apps are running.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleDeleteClose}>取消</Button>
+            <Button onClick={()=>sendDelete()} autoFocus color="red">
+              刪除
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </div>
+    );
+  }
 
-  const submitComment = () =>{
-      var submit = createComment({
+  const [deleteArticle] = useMutation(DELETE_ARTICLE_MUTATION)
+  const sendDelete = async () => {
+    var delete1 = await deleteArticle({
+      variables:{
+        input:{
+          token: {
+            username: username,
+            password: myHashPassword,
+          },
+          aid: item.aid,
+        }
+      }
+    })
+    if(delete1.data) return "delete"
+
+  }
+
+  const submitComment = async () =>{
+    
+    if(inputcomment!== ""){
+      var submit = await createComment({
         variables:{
           input:{
             token: {
               username: username,
               password: myHashPassword,
             },
-            aid: "M.1642183234.A.2D6",
+            aid: item.aid,
             type: commentType,
             content: inputcomment,
           }
-        }
+        },refetchQueries:[GET_ARTICLE_QUERY]
       })
       if(submit.data) {
-        alert("Comment submit")
-        console.log(submit)
+        setInputComment("");
       }
       else alert("Comment failed")
+    }
   }
   
-  // var username = "amy"
-  // var myHashPassword = "$2a$10$FUeuUN9JDCOmpVW324HKoOPpl7vKQ3tWeT6tCaLzvEoUQCKi9Fd/G"
-  // const isOwner = compare();
   return (
       <Wrapper>
         <Card className={classes.root} variant="outlined">
             <CardContent>
                     {/* <Typography className={classes.title} color="textSecondary" gutterBottom> */}
                       <Row justify="space-between" align="center">
-                        <div>標題｜{article.title}</div>
+                        <div>標題｜{item.title}</div>
                         <div>
-                          {(username==article.owner)?
-                            <Tooltip title="編輯">
+                          {(username==item.owner)?
+                          <>
+                            <Tooltip title="刪除">
                               <IconButton>
-                                <EditIcon onClick={()=>{handleClickOpen();console.log("door open");}}/>
+                                <DeleteIcon onClick={()=>{handleDeleteOpen();console.log("door open");}}/>
                               </IconButton>
                             </Tooltip>
+                            <Tooltip title="編輯">
+                              <IconButton>
+                                <EditIcon onClick={()=>{handleEditOpen();console.log("door open");}}/>
+                              </IconButton>
+                            </Tooltip>
+                          </>
+
                           :<></>}
                           <EditCard/>
 
-                          {isLogin?
+                          {/* {isLogIn?
                           <Tooltip title="收藏">
                             <IconButton>
                               <FavoriteIcon />
                             </IconButton>
                           </Tooltip>
-                          :<></>}
+                          :<></>} */}
 
 
                         </div>
                       </Row>
 
                 <Typography className={classes.title} color="textSecondary" gutterBottom>
-                    作者｜{article.owner}
+                    作者｜{item.owner}
                 </Typography>
                 <Typography className={classes.title} color="textSecondary" gutterBottom>
-                    時間｜{showTime(article.create_time)}
+                    時間｜{showTime(item.create_time)}
                 </Typography>
                 <p></p>
                 <Divider />
                 <p></p>
                 <Typography className={classes.title} color="textSecondary" gutterBottom >
-                  {article.content.split("\n").map(e => (
+                  {item.content.split("\n").map(e => (
                             <>
                               {e}
                               <br />
                             </>
                   ))}
                 </Typography>
-                <Typography className={classes.title} color="textSecondary" gutterBottom l>
+                <Typography className={classes.title} color="textSecondary" gutterBottom >
                   {/* {data.url} */}
                 </Typography>
 
@@ -259,8 +321,8 @@ export default function Article({article}) {
 
     
             <CardContent>
-                {article.comments.map((item)=>(
-                    <Typography className={classes.title} color="textSecondary" gutterBottom> key={item.cid}
+                {item.comments.map((item)=>(
+                    <Typography className={classes.title} color="textSecondary" gutterBottom key={item.cid}> 
                     <Row align="center">
                         <>{msgState(item.type)}
                           {item.owner}
@@ -281,7 +343,7 @@ export default function Article({article}) {
                 
                 ))}
             </CardContent>
-            {isLogin?
+            {(isLogIn)?
               <Row justify="space-around"align="center">
                 <div>
                   <ThumbUpAltOutlinedIcon onClick={()=>{setCommentType(1);console.log(1);}}/>
@@ -299,11 +361,11 @@ export default function Article({article}) {
                     }}
                     />
                 </form>
-                {/* <CardActions > */}
+                <CardActions >
                   <Row justify="flex-end">
                     <Button size="small" onClick={()=>submitComment()}>留言</Button>
                   </Row>
-                {/* </CardActions> */}
+                </CardActions>
               </Row>
             :<></>}
 

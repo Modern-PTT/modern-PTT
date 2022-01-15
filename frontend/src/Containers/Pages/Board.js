@@ -6,13 +6,15 @@ import ArticleCard from '../../Components/ArticleCard'
 
 // import  graphql  from 'graphql';
 import { useParams, useHistory } from 'react-router-dom';
-import { useQuery, useMutation, useContext } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/client';
 import { GET_BOARD_QUERY, UPDATE_FAV_ARTICLES_MUTATION } from "../../graphql";
-import { useState, useEffect} from 'react';
+import { useState, useEffect, useContext} from 'react';
 import moment from 'moment';
 
 import Navbar from "../../Components/Navbar"
 import DashBoard from "../../Components/DashBoard"
+
+import { pttContext } from '../App'
 //query某看板後拿回的簡要文章列表
 
 
@@ -26,7 +28,17 @@ const Wrapper = styled.div`
   margin: auto;
 `;
 
-const Board =  ({myLoveArticles, setMyLoveArticles, isLogIn, username, myHashPassword}) =>{
+const Board =  () => {
+
+  const {
+    favArticles, 
+    setFavArticles, 
+    isLogIn, 
+    username, 
+    myHashPassword
+  } = useContext(pttContext)
+
+
   const [articles, setArticles] = useState('');
 
   const [updateFavArticles] = useMutation(UPDATE_FAV_ARTICLES_MUTATION)
@@ -56,17 +68,16 @@ const Board =  ({myLoveArticles, setMyLoveArticles, isLogIn, username, myHashPas
             username: username,
             password: myHashPassword
           },
-          aids:  myLoveArticles
+          aids:  favArticles
         }
       }
     })
-    // if(update)alert("update myLoveArticles success!")
 
-  }, [myLoveArticles])
+  }, [favArticles])
 
     return(
       <>
-        <Navbar isLogIn={isLogIn} />
+        <Navbar />
         <div className="contents">
             <DashBoard />
         </div>
@@ -76,13 +87,6 @@ const Board =  ({myLoveArticles, setMyLoveArticles, isLogIn, username, myHashPas
                 <ArticleCard
                     key={item.aid}
                     item={item}
-                    create_time={showTime(item.create_time)}
-                    brdname={item.brdname}
-                    title={item.title}
-                    owner={item.owner}
-                    // create_time={item.create_time}
-                    aid={item.aid}
-                    deleted={item.deleted}
                 />
             )): ''}  
             </>
