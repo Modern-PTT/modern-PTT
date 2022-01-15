@@ -5,13 +5,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Row from './Layout/Row';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
-import FavoriteIcon from '@mui/icons-material/Favorite';
 import Link from '@mui/material/Link';
-import {useState, useEffect, useContext} from 'react'
+import {useContext} from 'react'
 import { pttContext } from '../Containers/App';
-
+import moment from 'moment';
 const useStyles = makeStyles({
   root: {
     // minWidth: 700,
@@ -53,8 +50,11 @@ const msgState = (input)=>{
   else return "-"
 }
 
+const showTime = (time)=>{
+  return moment(time).format('YYYY/MM/DD hh:mm:ss')
+}
 
-export default function ArticleCard({brdname,title,owner,create_time,aid,deleted}) {
+export default function ArticleCard( {item, showBrdname} ) {
   
 
   const {
@@ -72,13 +72,13 @@ export default function ArticleCard({brdname,title,owner,create_time,aid,deleted
     setFavArticles(favArticles.concat(input));
   }
 
-  useEffect(() => {
-    console.log(favArticles)
-  }, [favArticles])
+  // useEffect(() => {
+  //   console.log(favArticles)
+  // }, [favArticles])
 
   
   return (
-    (deleted)?
+    (item.deleted)?
     <Wrapper>
       <Card className={classes.root} variant="outlined">
           <CardContent>
@@ -91,17 +91,29 @@ export default function ArticleCard({brdname,title,owner,create_time,aid,deleted
         <Card className={classes.root} variant="outlined">
             <CardContent>
                     <Row justify="space-between">
-                      <Link underline="none" href={`/boards/${brdname}/${aid}`}>
-                        <>{brdname} {title} {owner}</>
-                      </Link>
+                      
+                        <>{item.push - item.boo}
+                        {(showBrdname)?<>{item.brdname}</>:<></>}
 
-                      <>{create_time}</>
+                        <Link underline="none" href={`/${item.brdname}/${item.aid}`}>
+                        {item.title}
+                          </Link> 
+                        {item.owner}</>
+
+
+                      <>{showTime(item.create_time)}</>
                       <div>
-                      <Tooltip title="收藏">
+                      {/* <Tooltip title="收藏">
                           <IconButton onClick={()=>AddLoveArticles(aid)}>
                             <FavoriteIcon />
                           </IconButton>
+                        </Tooltip> */}
+                        {/* <Tooltip title="追蹤">
+                          <IconButton>
+                            <NotificationAddIcon />
+                          </IconButton>
                         </Tooltip>
+                        <Button size="small" variant="contained" color="primary">追蹤</Button> */}
                       </div>
                     </Row>
 

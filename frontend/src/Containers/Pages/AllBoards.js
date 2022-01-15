@@ -1,13 +1,16 @@
 import styled from 'styled-components';
 import { useQuery, useMutation } from '@apollo/client';
-import { GET_BOARDS_QUERY, UPDATE_FAV_ARTICLES_MUTATION } from "../../graphql";
-import { useState, useEffect } from 'react';
+import { GET_BOARDS_QUERY, UPDATE_FAV_BOARDS_MUTATION } from "../../graphql";
+import { useState, useEffect, useContext} from 'react';
 
 import { DataGrid } from '@material-ui/data-grid';
 import Link from '@mui/material/Link';
 
 import Navbar from "../../Components/News/NavbarPro"
 import DashBoard from "../../Components/DashBoard"
+import { pttContext } from '../App';
+// import HotList from '../../Components/HotList'
+//query某看板後拿回的簡要文章列表
 
 import { MEDIA_QUERY_MD ,MEDIA_QUERY_XL } from '../../css/Media_query';
 
@@ -58,33 +61,25 @@ const StyledDiv = styled.div`
 `
 
 
-const AllBoards = ({ myLoveArticles, setMyLoveArticles, isLogIn, username, myHashPassword }) => {
-  const [allBoards, setAllBoards] = useState('');
-  const [updateFavArticles] = useMutation(UPDATE_FAV_ARTICLES_MUTATION)
-  const { data, error, loading } = useQuery(GET_BOARDS_QUERY)
+const AllBoards =  () =>{
 
+  const {
+    username, 
+    myHashPassword,
+    favBoards,
+    setFavBoards,
+    isLogin
+  } = useContext(pttContext)
+
+  const [allBoards, setAllBoards] = useState('');
+  const [updateFavBoards] = useMutation(UPDATE_FAV_BOARDS_MUTATION)
+  const {data, error, loading} =  useQuery(GET_BOARDS_QUERY)
 
   useEffect(() => {
     if (data) setAllBoards(data.boards);
   }, [data])
 
 
-  useEffect(() => {
-    if (username) {
-      var update = updateFavArticles({
-        variables: {
-          input: {
-            token: {
-              username: username,
-              password: myHashPassword
-            },
-            aids: myLoveArticles
-          }
-        }
-      })
-    }
-
-  }, [myLoveArticles])
 
   const columns = [
     {
@@ -92,7 +87,7 @@ const AllBoards = ({ myLoveArticles, setMyLoveArticles, isLogIn, username, myHas
       headerName: '看板',
       flex: 1,
       renderCell: (params) => (
-        <Link underline="none" href={`/boards/${params.value}`}>{params.value}</Link>
+        <Link underline="none" href={`/${params.value}`}>{params.value}</Link>
       )
     },
     {
@@ -109,7 +104,8 @@ const AllBoards = ({ myLoveArticles, setMyLoveArticles, isLogIn, username, myHas
       field: 'moderators',
       headerName: '版主',
       flex: .5
-    }
+    },
+    
   ];
   return (
     <>

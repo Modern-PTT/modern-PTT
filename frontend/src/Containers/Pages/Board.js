@@ -6,13 +6,17 @@ import ArticleCard from '../../Components/ArticleCard'
 
 // import  graphql  from 'graphql';
 import { useParams, useHistory } from 'react-router-dom';
-import { useQuery, useMutation, useContext } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/client';
 import { GET_BOARD_QUERY, UPDATE_FAV_ARTICLES_MUTATION } from "../../graphql";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import moment from 'moment';
 
 import Navbar from "../../Components/News/NavbarPro"
 import DashBoard from "../../Components/DashBoard"
+import BoardNameCard from '../../Components/BoardNameCard';
+
+import { pttContext } from '../App'
+//query某看板後拿回的簡要文章列表
 
 import { MEDIA_QUERY_MD, MEDIA_QUERY_XL } from '../../css/Media_query';
 
@@ -63,18 +67,18 @@ const StyledDiv = styled.div`
 `
 
 
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 500px;
-  width: 800px;
-  margin: auto;
-`;
+
+const Board =  () => {
+
+  const {
+    favArticles, 
+    setFavArticles, 
+    isLogIn, 
+    username, 
+    myHashPassword
+  } = useContext(pttContext)
 
 
-const Board = ({ myLoveArticles, setMyLoveArticles, isLogIn, username, myHashPassword }) => {
   const [articles, setArticles] = useState('');
 
   const [updateFavArticles] = useMutation(UPDATE_FAV_ARTICLES_MUTATION)
@@ -96,20 +100,7 @@ const Board = ({ myLoveArticles, setMyLoveArticles, isLogIn, username, myHashPas
     if (data) setArticles(data.board.articles);
   }, [data])
 
-  useEffect(() => {
-    var update = updateFavArticles({
-      variables: {
-        input: {
-          token: {
-            username: username,
-            password: myHashPassword
-          },
-          aids: myLoveArticles
-        }
-      }
-    })
-
-  }, [myLoveArticles])
+ 
 
   return (
     <>
@@ -122,13 +113,7 @@ const Board = ({ myLoveArticles, setMyLoveArticles, isLogIn, username, myHashPas
             <ArticleCard
               key={item.aid}
               item={item}
-              create_time={showTime(item.create_time)}
-              brdname={item.brdname}
-              title={item.title}
-              owner={item.owner}
-              // create_time={item.create_time}
-              aid={item.aid}
-              deleted={item.deleted}
+             
             />
           )) : ''}
         </div>

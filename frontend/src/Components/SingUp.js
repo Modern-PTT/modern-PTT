@@ -208,7 +208,7 @@ const SingUp = () => {
 
             </FormControl>
             <Row>
-                <Link href="login">
+                <Link href="/login">
                     <Button variant="outlined">回登入</Button>
                 </Link>
                 <Button variant="contained" onClick={()=>sendSignUp()}>送出</Button>
@@ -216,7 +216,7 @@ const SingUp = () => {
         </Column>
         :<>
             <h1>Welcome to NEW PTT</h1>
-            <Link href="home">
+            <Link href="/home">
                 <Button variant="outlined">進入新世界</Button>
             </Link>
         </>

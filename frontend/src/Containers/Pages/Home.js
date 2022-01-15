@@ -9,6 +9,7 @@ import moment from "moment";
 import Button from '@mui/material/Button';
 import styled from 'styled-components';
 import BoardNameCard from '../../Components/BoardNameCard'
+import { pttContext } from "../App";
 
 import ArticleCard from "../../Components/News/ArticleCardPro";
 import { MEDIA_QUERY_XL } from "../../css/Media_query";
@@ -49,13 +50,22 @@ const StyledDiv = styled.div`
     }
     
 `
-const Home = ({myLoveBoards, setMyLoveBoards, myLoveArticles, setMyLoveArticles,username,
-    setUsername,
-    myHashPassword,
-    setMyHashPassword,
-    isLogIn,
-    setIsLogIn}) => {
+const Home = () => {
 
+    const {
+        myLoveBoards, 
+        setMyLoveBoards, 
+        myLoveArticles, 
+        setMyLoveArticles,
+        //for login btn
+        username,
+        setUsername,
+        myHashPassword,
+        setMyHashPassword,
+        isLogIn,
+        setIsLogIn,
+    } = useContext(pttContext)
+    
     const [articles, setArticles] = useState('');
     const {data, error, loading} =  useQuery(GET_HOTARTICLES)
     
@@ -81,18 +91,11 @@ const Home = ({myLoveBoards, setMyLoveBoards, myLoveArticles, setMyLoveArticles,
                 {/* <BoardNameCard nowAtWhere="home" /> */}
                 <>{articles ? articles.map((item)=>(
                     <ArticleCard
-                        brdname={item.brdname}  
-                        title={item.title}
-                        owner={item.owner}
-                        create_time={showTime(item.create_time)}
-                        aid={item.aid}
-                        class={item.class}
-                        deleted={item.deleted}
-                        myLoveArticles={myLoveArticles}
-                        setMyLoveArticles={setMyLoveArticles}
-                        number={item.push-item.boo}
-                    />
-                )): ''}   
+                        showBrdname={true}
+                        key={item.aid}
+                        item={item}
+                    />)
+                ): ''}   
                 </>
             </div>
         </StyledDiv>

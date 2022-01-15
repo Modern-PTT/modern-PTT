@@ -25,7 +25,7 @@ const Wrapper = styled.div`
   margin: auto;
 `;
 
-const Board =  ({myLoveArticles, setMyLoveArticles,isLogIn,username,myHashPassword}) =>{
+const Board =  () =>{
   const [articles, setArticles] = useState('');
 
   const {aid, brdname} = useParams()
@@ -47,7 +47,7 @@ const Board =  ({myLoveArticles, setMyLoveArticles,isLogIn,username,myHashPasswo
 
     return(
       <>
-        <Navbar  />
+        <Navbar/>
         <div className="contents">
             <DashBoard />
         </div>
@@ -55,11 +55,7 @@ const Board =  ({myLoveArticles, setMyLoveArticles,isLogIn,username,myHashPasswo
             {/* {console.log(data.article)} */}
             {(data)?
             <Article
-                article={data.article}
-                myLoveArticles={myLoveArticles}
-                setMyLoveArticles={setMyLoveArticles}
-                username={username}
-                myHashPassword={myHashPassword}
+                item={data.article}
             />:<></>}
         </Wrapper>
     </>);

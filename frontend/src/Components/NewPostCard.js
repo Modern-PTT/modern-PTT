@@ -22,7 +22,7 @@ import Select from '@material-ui/core/Select';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import InputBase from '@material-ui/core/InputBase';
 
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import { CREATE_ARTICLE_MUTATION } from "../graphql";
 
@@ -75,40 +75,39 @@ export default function NewPostCard() {
     
     const {
       username,
-      myHashPassword} = useContext(pttContext)
+      myHashPassword
+    } = useContext(pttContext)
   
+
+    const navigate = useNavigate();
+
+
     const classes = useStyles();
     const classesText = useTextStyles();
     const bull = <span className={classes.bullet}>•</span>;
     const {brdname} = useParams()
+
     //about send NewPost
     const [body,setBody] = useState('')
     const [title,setTitle] = useState('')
 
-    // const user_token = {
-    // var username = "newuser"
-    // var password = "$2b$10$ip6zuKhR4sm4qkv25HoURObkBHBHAeXzeKHl1UyAV3OTzIKkRVvDa"
-      // }
-
     const [sendPost, { data, loading, error }] = useMutation(CREATE_ARTICLE_MUTATION);
 
 
-    // const [articleInput,setArticleInput] = useState('')
-
     const handleChangeArticleBody=(input)=>{
         setBody(input)
-        console.log("body: "+body)
+        // console.log("body: "+body)
     }
 
     const handleChangeArticleTitle=(input)=>{
     setTitle(input)
-    console.log("title: "+title)
+    // console.log("title: "+title)
     }  
 
-    const handleSubmit = ()=>{
-        if(!title || !body) alert("title and body can't be bull")
+    const handleSubmit = async ()=>{
+        if(!title || !body) alert("title and body can't be null")
         else {
-          sendPost({
+          const returnSubmit = await sendPost({
               variables:{
                 input:{
                   token: {
@@ -121,11 +120,11 @@ export default function NewPostCard() {
                   }
                 },
               });
-          console.log(data)
-          if(data){
+          if(returnSubmit){
             setBody('')
             setTitle('')
-            alert("New Post is published.")
+            navigate(`/${brdname}`)
+            // alert("New Post is published.")
           } else{
             alert("New Post is denied.")
           }
@@ -144,9 +143,9 @@ export default function NewPostCard() {
                 <CardContent>
                 <Typography className={classes.title} color="textSecondary" gutterBottom>
                     <Column>
-                        <>看板</>
+                        <>看板｜{brdname}</>
                         <Divider />
-                        <FormControl  width="300px">
+                        {/* <FormControl  width="300px">
                             <InputLabel htmlFor="demo-customized-select-native">選擇主題</InputLabel>
                             <Select
                             id="demo-customized-select-native"
@@ -158,7 +157,7 @@ export default function NewPostCard() {
                             <option hight="80px" value={20}>[新聞]</option>
                             <option hight="80px" value={30}>[？？]</option>
                             </Select>
-                        </FormControl>
+                        </FormControl> */}
                     </Column>
 
                     <Divider />
@@ -166,12 +165,10 @@ export default function NewPostCard() {
                 </Typography>
                     <Typography className={classes.title} color="textSecondary" gutterBottom>
                         <Column>
-                        {/* <Row justify="space-between" align="center"> */}
                         <>標題</>
                         <form >
                             <TextField 
                             fullWidth
-                            // width="600"
                             value={title}
                             onChange={(e) => handleChangeArticleTitle(e.target.value)}
                             />
@@ -179,7 +176,6 @@ export default function NewPostCard() {
                         </Column>
 
                     </Typography>
-                    {/* <Divider /> */}
 
                 </CardContent>
                 <Divider />
@@ -190,7 +186,6 @@ export default function NewPostCard() {
                     variant="outlined" 
                     multiline
                     fullWidth
-                    // width= '500px'
                     value={body}
                     onChange={(e) => handleChangeArticleBody(e.target.value)}
                     rows={20}
