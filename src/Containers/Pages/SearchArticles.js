@@ -64,13 +64,6 @@ const SearchArticles = () => {
     setAdvBoardSearch
   } = useContext(pttContext)
 
-  // console.log(
-  //   advBoardSearch,
-  //   advTitleSearch,
-  //   ownerSearch,
-  //   timeSearch
-  // );
-
   const [articles, setArticles] = useState('');
 
   const { data, error, loading } = useQuery(GET_ARTICLES_QUERY, {

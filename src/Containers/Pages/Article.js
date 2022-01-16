@@ -1,7 +1,7 @@
 import Button from '@material-ui/core/Button';
 import styled from 'styled-components';
 // import MessageBox from './old/MessageBox';
-import Article from '../../Components/News/ArticlePro';
+import Article from '../../Components/News/ArticleEdit';
 import BoardNameCard from '../../Components/BoardNameCard';
 
 // import  graphql  from 'graphql';
@@ -29,7 +29,7 @@ const StyledDiv = styled.div`
     .wrapper{
         width: 100%;
         border: solid 1px rgba(0,0,0,0.1);
-        padding: 100px 10px;
+        padding: 10px 10px;
         overflow: scroll;
         height: 90vh;
 

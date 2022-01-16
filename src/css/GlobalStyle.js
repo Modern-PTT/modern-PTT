@@ -14,7 +14,6 @@ const GlobalStyle = createGlobalStyle`
           padding: 20px;
           display: grid;
           grid-row-gap: 20px;
-          /* width: 90%; */
           justify-content: center;
           *{
             text-align: center;
@@ -34,7 +33,7 @@ const GlobalStyle = createGlobalStyle`
       color: #1976d2;
     }
     .bordered{
-      border: solid 1px rgba(0,0,0,0.3);
+      border: solid 1px rgba(0,0,0,0.1);
       border-radius: 10px;
     }
     .background-gradient{

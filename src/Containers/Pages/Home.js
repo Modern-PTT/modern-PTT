@@ -13,6 +13,7 @@ import { pttContext } from "../App";
 
 import ArticleCard from "../../Components/News/ArticleCardPro";
 import { MEDIA_QUERY_XL } from "../../css/Media_query";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -78,6 +79,11 @@ const Home = () => {
       if(data) console.log(data)
     }, [data])
 
+
+    const navigate = useNavigate();
+    const openUserPage  = ()=>{
+        navigate("/info")
+    }
 
     return (<>
         <NavbarPro />
