@@ -406,8 +406,8 @@ export default function Article({ item }) {
         })
         if (delete1.data) {
             console.log("Post is deleted.")
-            // navigate(`/${brdname}`)
-            navigate("/home")
+            navigate(`/${item.brdname}`)
+            // navigate("/home")
         }
 
     }
