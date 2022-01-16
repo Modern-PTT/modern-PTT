@@ -213,9 +213,9 @@ const WrapperDel = styled.div`
 
 
 const msgState = (input, isInput=false) => {
-    if (input === 1 && isInput) return <ThumbUpAltOutlinedIcon/>
-    else if (input === 1 ) return <ThumbUpAltOutlinedIcon color='success'/>
-    else if (input === 2) return <ThumbDownOutlinedIcon />
+    if (input == 1 && isInput) return <ThumbUpAltOutlinedIcon/>
+    else if (input == 1 ) return <ThumbUpAltOutlinedIcon color='success'/>
+    else if (input == 2) return <ThumbDownOutlinedIcon />
     else return <ArrowRightAltIcon />
 }
 
@@ -455,7 +455,6 @@ export default function Article({ item }) {
     }
     const toggleIconClass=(e)=>{
         let el = e.target;
-        console.log(el);
         el.classList.toggle('active');
     }
     return (
@@ -537,9 +536,9 @@ export default function Article({ item }) {
                 {(isLogIn) ?
                     <div className='input'>
                         <div className='input-state'>
-                            <ThumbUpAltOutlinedIcon onClick={(e) => { setCommentType(1); console.log(1); toggleIconClass(e);}} />
-                            <ThumbDownOutlinedIcon onClick={(e) => { setCommentType(2); console.log(2); toggleIconClass(e);}} />
-                            <ArrowRightAltIcon onClick={(e) => { setCommentType(3); console.log(3); toggleIconClass(e);}} />
+                            <ThumbUpAltOutlinedIcon onClick={(e) => { setCommentType(1); toggleIconClass(e);}} />
+                            <ThumbDownOutlinedIcon onClick={(e) => { setCommentType(2); toggleIconClass(e);}} />
+                            <ArrowRightAltIcon onClick={(e) => { setCommentType(3); toggleIconClass(e);}} />
                         </div>
                         <form className='input-content' noValidate autoComplete="off">
                             <TextField
