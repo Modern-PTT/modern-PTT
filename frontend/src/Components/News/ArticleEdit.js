@@ -213,9 +213,9 @@ const WrapperDel = styled.div`
 
 
 const msgState = (input, isInput=false) => {
-    if (input == 1 && isInput) return <ThumbUpAltOutlinedIcon/>
-    else if (input == 1 ) return <ThumbUpAltOutlinedIcon color='success'/>
-    else if (input == 2) return <ThumbDownOutlinedIcon />
+    if (input === 1 && isInput) return <ThumbUpAltOutlinedIcon/>
+    else if (input === 1 ) return <ThumbUpAltOutlinedIcon color='success'/>
+    else if (input === 2) return <ThumbDownOutlinedIcon />
     else return <ArrowRightAltIcon />
 }
 

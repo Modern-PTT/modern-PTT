@@ -19,18 +19,23 @@
 - [ ] 收藏文章
 
 ## Localhost Install
-請先確認 `wp1101/final` 的任何資料夾底下皆沒有 `node_modules` 資料夾，若有請先刪除再進行後續動作。
+請先確認此 repo 資料夾底下皆沒有 `node_modules` 資料夾，若有請先刪除再進行後續動作。
+
+### 建議使用版本
+- node version: 14.18.1
+- npm version: 6.14.15
+    - npm version 若為 7 以上可能無法成功安裝，可將 npm 降級或是使用 `npx -p npm@6 npm install`
 
 ### 資料庫串接
 
-- clone 此 repo 後，進入此資料夾 (`wp1101/final`)，新增 `.env` 檔案  
+- clone 此 repo 後，進入此資料夾新增 `.env` 檔案  
     ```
     MONGO_URL=mongodb+srv://...
     PORT=80
     ```
 - 申請 MongoDB Altas 帳號，將 connection string 貼到 `.env` 檔案
 ### 資料匯入
-- 至 `wp1101/final/backend/src/mongo.js` 檔案，將第 24 行的 `dataInit()` 去掉註解
+- 至 `/backend/src/mongo.js` 檔案，將第 24 行的 `dataInit()` 去掉註解
 ### Build & Run
 ```bash
 $ npm install
