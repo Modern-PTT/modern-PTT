@@ -77,7 +77,7 @@ const HotBoards = ({ isLogIn }) => {
       headerName: 'BoardName',
       flex: 1,
       renderCell: (params) => (
-        <Link href={`/${params.value}`}>{params.value}</Link>
+        <Link underline="none" href={`/${params.value}`}>{params.value}</Link>
       )
     },
     {
