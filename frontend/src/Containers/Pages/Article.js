@@ -1,7 +1,7 @@
 import Button from '@material-ui/core/Button';
 import styled from 'styled-components';
 // import MessageBox from './old/MessageBox';
-import Article from '../../Components/News/ArticlePro';
+import Article from '../../Components/News/ArticleEdit';
 import BoardNameCard from '../../Components/BoardNameCard';
 
 // import  graphql  from 'graphql';
