@@ -9,7 +9,7 @@ import Button from '@material-ui/core/Button';
 import { Divider } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import { useState, useContext } from 'react';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 
 import Dialog from '@mui/material/Dialog';
@@ -208,6 +208,9 @@ const Wrapper = styled.div`
     }
   `;
 
+const WrapperDel = styled.div`
+`
+
 
 const msgState = (input, isInput=false) => {
     if (input == 1 && isInput) return <ThumbUpAltOutlinedIcon/>
@@ -246,6 +249,113 @@ const useStyles = makeStyles({
     },
 });
 
+const EditCard = ({
+    item,
+    editOpen,
+    setEditOpen,
+    editTitle,
+    setEditTitle,
+    editContent,
+    setEditContent,
+    classes,
+    updateEdit,
+}) => {
+    return (
+        <Dialog open={editOpen} onClose={() => setEditOpen(false)}>
+            <DialogTitle>{item.username}</DialogTitle>
+            <DialogContent>
+                <DialogContentText style={{ fontSize: '1.2rem' }} >
+                    標題
+                </DialogContentText>
+                <TextField
+                    autoFocus
+                    margin="dense"
+                    id="editTitle"
+                    type="editTitle"
+                    fullWidth
+                    value={editTitle}
+                    onChange={(e) => { setEditTitle(e.target.value); }}
+                    variant="standard"
+                />
+                <DialogContentText style={{ fontSize: '1.2rem', marginTop: '1rem' }}>
+                    內文
+                </DialogContentText>
+                <form className='input-content' noValidate autoComplete="off" style={{ marginTop: '.5rem' }}>
+                    <TextField
+                        id="outlined-basic"
+                        variant="outlined"
+                        fullWidth
+                        value={editContent}
+                        onChange={(e) => { setEditContent(e.target.value); }}
+                    />
+                </form>
+
+                <CardContent className={classes.comments} style={{ overflow: 'hidden' }}>
+                    {item.comments.map((item) => (
+                        <div className={classes.commentsComment} key={item.cid}>
+                            <div className={classes.commentsCommentState}>
+                                {msgState(item.type)}
+                            </div>
+                            <div className={classes.commentsCommentOwner}>
+                                {item.owner}
+                            </div>
+                            <div className={classes.commentsCommentContent}>
+                                {item.content.split("\n").map(e => (
+                                    <>
+                                        {e}
+                                        <br key={e} />
+                                    </>
+                                ))}
+                            </div>
+                            <div className={classes.commentsCommentIp}>
+                                {item.location.ip}
+                            </div>
+                            <div className={classes.commentsCommentCreateTime}>
+                                {showTime(item.create_time)}
+                            </div>
+                            {item.body}
+                        </div>
+                    ))}
+                </CardContent>
+            </DialogContent>
+            <DialogActions  style={{padding: '30px'}}>
+                <Button onClick={() => setEditOpen(false)}>取消</Button>
+                <Button style={{ color: Styles.colors.font.danger }} onClick={() => { setEditOpen(false); updateEdit(); }}>更改</Button>
+            </DialogActions>
+        </Dialog>
+    )
+}
+
+const DeleteCard = ({deleteOpen, setDeleteOpen, sendDelete}) => {
+    return (
+        <WrapperDel>
+            <Dialog
+                open={deleteOpen}
+                onClose={() => setDeleteOpen(false)}
+                aria-labelledby="delete-title"
+                aria-describedby="delete-description"
+                style={{ padding: '80px', margin: 0 }}
+            >
+                <DialogContent style={{ width: 'fit-content' }}>
+                    <DialogContentText id="alert-dialog-description" style={{ width: 'fit-content' }}>
+                        <h1 className='sure' style={{ color: Styles.colors.font.danger, width: '100%', fontSize: '1.8rem' }}> 確定刪除文章？</h1>
+                        <p> 此步驟無法恢復</p>
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setDeleteOpen(false)}>取消</Button>
+                    <Button style={{ color: Styles.colors.font.danger }} onClick={() => sendDelete()} autoFocus color="#dc3545">
+                        刪除
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        </WrapperDel>
+    );
+}
+
+const showTime = (time) => {
+    return moment(time).tz("Asia/Taipei").format('YYYY/MM/DD HH:mm:ss')
+}
 
 
 export default function Article({ item }) {
@@ -260,10 +370,6 @@ export default function Article({ item }) {
     const classes = useStyles();
 
     const navigate = useNavigate();
-
-    const showTime = (time) => {
-        return moment(time).format('YYYY/MM/DD hh:mm:ss')
-    }
 
     // Edit Comment Part
     const [commentType, setCommentType] = useState(3)
@@ -282,104 +388,6 @@ export default function Article({ item }) {
     const handleEditOpen = () => { setEditOpen(true); };
 
     const handleDeleteOpen = () => { setDeleteOpen(true); };
-
-    
-    const EditCard = () => {
-        return (
-            <Dialog open={editOpen} onClose={() => setEditOpen(false)}>
-                <DialogTitle>{item.username}</DialogTitle>
-                <DialogContent>
-                    <DialogContentText style={{ fontSize: '1.2rem' }} >
-                        標題
-                    </DialogContentText>
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="editTitle"
-                        type="editTitle"
-                        fullWidth
-                        value={editTitle}
-                        onChange={(e) => { setEditTitle(e.target.value); }}
-                        variant="standard"
-                    />
-                    <DialogContentText style={{ fontSize: '1.2rem', marginTop: '1rem' }}>
-                        內文
-                    </DialogContentText>
-                    <form className='input-content' noValidate autoComplete="off" style={{ marginTop: '.5rem' }}>
-                        <TextField
-                            id="outlined-basic"
-                            variant="outlined"
-                            fullWidth
-                            value={editContent}
-                            onChange={(e) => { setEditContent(e.target.value); }}
-                        />
-                    </form>
-
-                    <CardContent className={classes.comments} style={{ overflow: 'scroll' }}>
-                        {item.comments.map((item) => (
-                            <div className={classes.commentsComment} key={item.cid}>
-                                <div className={classes.commentsCommentState}>
-                                    {msgState(item.type)}
-                                </div>
-                                <div className={classes.commentsCommentOwner}>
-                                    {item.owner}
-                                </div>
-                                <div className={classes.commentsCommentContent}>
-                                    {item.content.split("\n").map(e => (
-                                        <>
-                                            {e}
-                                            <br key={e} />
-                                        </>
-                                    ))}
-                                </div>
-                                <div className={classes.commentsCommentIp}>
-                                    {item.location.ip}
-                                </div>
-                                <div className={classes.commentsCommentCreateTime}>
-                                    {showTime(item.create_time)}
-                                </div>
-                                {item.body}
-                            </div>
-                        ))}
-                    </CardContent>
-                </DialogContent>
-                <DialogActions  style={{padding: '30px'}}>
-                    <Button onClick={() => setEditOpen(false)}>取消</Button>
-                    <Button style={{ color: Styles.colors.font.danger }} onClick={() => { setEditOpen(false); updateEdit(); }}>更改</Button>
-                </DialogActions>
-            </Dialog>
-        )
-    }
-
-
-    const WrapperDel = styled.div`
-    `
-    const DeleteCard = () => {
-        return (
-            <WrapperDel>
-                <Dialog
-                    open={deleteOpen}
-                    onClose={() => setDeleteOpen(false)}
-                    aria-labelledby="delete-title"
-                    aria-describedby="delete-description"
-                    style={{ padding: '80px', margin: 0 }}
-                >
-                    <DialogContent style={{ width: 'fit-content' }}>
-                        <DialogContentText id="alert-dialog-description" style={{ width: 'fit-content' }}>
-                            <h1 className='sure' style={{ color: Styles.colors.font.danger, width: '100%', fontSize: '1.8rem' }}> 確定刪除文章？</h1>
-                            <p> 此步驟無法恢復</p>
-                        </DialogContentText>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={() => setDeleteOpen(false)}>取消</Button>
-                        <Button style={{ color: Styles.colors.font.danger }} onClick={() => sendDelete()} autoFocus color="#dc3545">
-                            刪除
-                        </Button>
-                    </DialogActions>
-                </Dialog>
-            </WrapperDel>
-        );
-    }
 
     const [deleteArticle] = useMutation(DELETE_ARTICLE_MUTATION)
     const sendDelete = async () => {
@@ -466,8 +474,18 @@ export default function Article({ item }) {
                         </div>
                         : <></>}
 
-                    <DeleteCard />
-                    <EditCard />
+                    <EditCard item={item}
+                                editOpen={editOpen}
+                                setEditOpen={setEditOpen}
+                                editTitle={editTitle}
+                                setEditTitle={setEditTitle}
+                                editContent={editContent}
+                                setEditContent={setEditContent}
+                                classes={classes}
+                                updateEdit={updateEdit}/>
+                    <DeleteCard deleteOpen={deleteOpen}
+                                setDeleteOpen={setDeleteOpen}
+                                sendDelete={sendDelete}/>
                     <div className="post-detail">
                         <div className="post-owner">
                             {item.owner}

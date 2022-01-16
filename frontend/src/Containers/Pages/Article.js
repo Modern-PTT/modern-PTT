@@ -29,7 +29,7 @@ const StyledDiv = styled.div`
     .wrapper{
         width: 100%;
         border: solid 1px rgba(0,0,0,0.1);
-        padding: 100px 10px;
+        padding: 10px 10px;
         overflow: scroll;
         height: 90vh;
 
