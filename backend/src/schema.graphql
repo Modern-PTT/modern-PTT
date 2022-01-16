@@ -44,7 +44,7 @@ type Comment {
   cid: ID!                      # (super key)
   deleted: Boolean!
   
-  type: String!                 # 推 (1) 、噓 (2) 、箭頭 (3)
+  type: Int!                    # 推 (1) 、噓 (2) 、箭頭 (3)
   owner: String!                # 留言者 (username)
   content: String!              # support only plaintext (Limit: 1000 chars?)
   reply: String                 # reply from article owner
