@@ -59,8 +59,8 @@ server.installSubscriptionHandlers(httpServer);
 mongo.connect();
 
 httpServer.listen(port, () => {
-  const DYNO_URL = "https://modern-ptt.herokuapp.com/";
-  wakeUpDyno(DYNO_URL);
+  // const DYNO_URL = "https://modern-ptt.herokuapp.com/";
+  // wakeUpDyno(DYNO_URL);
   console.log(`🚀 Server Ready at ${port}! 🚀`);
   console.log(`Graphql Port at ${port}${server.subscriptionsPath}`);
 });
